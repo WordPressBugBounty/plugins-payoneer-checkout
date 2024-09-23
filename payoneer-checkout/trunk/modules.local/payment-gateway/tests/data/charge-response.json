@@ -1,0 +1,127 @@
+{
+  "links": {
+    "redirect": "https://api.sandbox.oscato.com/redirect/123abc456def",
+    "payout": "https://api.sandbox.oscato.com/api/charges/123abc456def/payout",
+    "self": "https://api.sandbox.oscato.com/api/charges/123abc456def"
+  },
+  "timestamp": "2021-10-27T07:54:46.800+0000",
+  "operation": "CHARGE",
+  "resultCode": "00000.TESTPSP.000",
+  "resultInfo": "Approved",
+  "pspCode": "TESTPSP",
+  "returnCode": {
+    "name": "OK",
+    "source": "PSP"
+  },
+  "status": {
+    "code": "{{status.code}}",
+    "reason": "{{status.reason}}"
+  },
+  "interaction": {
+    "code": "PROCEED",
+    "reason": "OK"
+  },
+  "clearing": {
+    "amount": {{payment.amount}},
+    "currency": "{{currency}}"
+  },
+  "identification": {
+    "longId": "{{identification.longId}}",
+    "shortId": "12345-67890",
+    "transactionId": "{{identification.transactionId}}",
+    "pspId": "MASTERCARD.DEBIT.1234567890"
+  },
+  "redirect": {
+    "url": "https://example.com",
+    "method": "GET",
+    "parameters": [
+      {
+        "name": "shortId",
+        "value": "12345-67890"
+      },
+      {
+        "name": "interactionReason",
+        "value": "OK"
+      },
+      {
+        "name": "resultCode",
+        "value": "00000.TESTPSP.000"
+      },
+      {
+        "name": "longId",
+        "value": "{{identification.longId}}"
+      },
+      {
+        "name": "transactionId",
+        "value": "{{identification.transactionId}}"
+      },
+      {
+        "name": "interactionCode",
+        "value": "PROCEED"
+      },
+      {
+        "name": "amount",
+        "value": "{{amount}}"
+      },
+      {
+        "name": "reference",
+        "value": "Shop 101/20-03-2017"
+      },
+      {
+        "name": "currency",
+        "value": "{{}}"
+      }
+    ],
+    "type": "RETURN"
+  },
+  "customer": {
+    "number": "42",
+    "email": "example@example.com",
+    "birthday": "1984-12-20T23:00:00.000+0000"
+  },
+  "network": "MASTERCARD",
+  "maskedAccount": {
+    "displayLabel": "55 *** 0004    07 | 2025",
+    "holderName": "Maria Mustermann",
+    "number": "55 *** 0004",
+    "expiryMonth": 7,
+    "expiryYear": 2025
+  },
+  "accountInfo": {
+    "bin": "550000",
+    "bankName": "HYUNDAICARD CO., LTD.",
+    "brandName": "MCI CREDIT",
+    "country": "KR",
+    "type": "CREDIT",
+    "ownerType": "CONSUMER"
+  },
+  "pspReference": {
+    "id": "MASTERCARD.DEBIT.1234567890"
+  },
+  "payment": {
+    "reference": "Shop 101/20-03-2017",
+    "amount": {{payment.amount}},
+    "currency": "{{payment.currency}}",
+    "invoiceId": "{{payment.invoiceId}}"
+  },
+  "clientInfo": {
+    "ip": "12.34.567.8",
+    "ipv6": "0000:1111:2222:3333:4444:5555:+6666:7777",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0\n",
+    "acceptHeader": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "cookieId": "string",
+    "deviceId": "12a3b4567890c123",
+    "headers": [
+      {
+        "name": "string",
+        "value": "string"
+      }
+    ],
+    "javaEnabled": true,
+    "language": "string",
+    "colorDepth": 0,
+    "timezone": "string",
+    "browserScreenHeight": 0,
+    "browserScreenWidth": 0
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "links": {
+    "self": "https://api.sandbox.oscato.com/api/payouts/{{identification.longId}}",
+    "customer": "https://api.sandbox.oscato.com/api/customers/123abc456def"
+  },
+  "timestamp": "2022-01-24T11:49:59.752+0000",
+  "operation": "PAYOUT",
+  "resultCode": "00000.TESTPSP.000",
+  "resultInfo": "Approved",
+  "pspCode": "TESTPSP",
+  "returnCode": {
+    "name": "OK",
+    "source": "PSP"
+  },
+  "status": {
+    "code": "paid_out",
+    "reason": "refund_credited"
+  },
+  "interaction": {
+    "code": "PROCEED",
+    "reason": "OK"
+  },
+  "clearing": {
+    "amount": {{payment.amount}},
+    "currency": "{{payment.currency}}"
+  },
+  "identification": {
+    "longId": "{{identification.longId}}",
+    "shortId": "12345-67890",
+    "transactionId": "{{identification.transactionId}}",
+    "pspId": "MASTERCARD.REFUND.1641899078604"
+  },
+  "network": "MASTERCARD",
+  "maskedAccount": {
+    "displayLabel": "55 *** 4444    07 | 2025",
+    "holderName": "John Doee",
+    "number": "55 *** 4444",
+    "expiryMonth": 7,
+    "expiryYear": 2025
+  },
+  "pspReference": {
+    "id": "MASTERCARD.REFUND.1234567890"
+  },
+  "payment": {
+    "reference": "Shop 101/20-03-2017",
+    "amount": {{payment.amount}},
+    "currency": "{{payment.currency}}",
+    "invoiceId": "{{payment.invoiceId}}"
+  },
+  "products": [
+    {
+      "code": "32",
+      "name": "Beanie with Logo",
+      "amount": {{payment.amount}},
+      "currency": "{{payment.currency}}",
+      "quantity": 1,
+      "productDescriptionUrl": "http://payoneer-checkout.loc/?product=beanie-with-logo",
+      "productImageUrl": "http://payoneer-checkout.loc/wp-content/uploads/2021/08/beanie-with-logo-1-450x450.jpg",
+      "description": "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.",
+      "type": "PHYSICAL"
+    }
+  ],
+  "clientInfo": {
+    "ip": "12.34.567.89",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0\n",
+    "acceptHeader": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "cookieId": "string",
+    "deviceId": "12a34b56c78d90e",
+    "headers": [
+      {
+        "name": "string",
+        "value": "string"
+      }
+    ],
+    "javaEnabled": true,
+    "language": "string",
+    "colorDepth": 0,
+    "timezone": "string",
+    "browserScreenHeight": 0,
+    "browserScreenWidth": 0
+  }
+}

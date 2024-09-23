@@ -1,0 +1,20 @@
+GET http://payoneer-checkout.loc/wp-json/inpsyde/payoneer-checkout/listener/notifications
+    ?transactionId=tr-1641298191
+    &resultCode=00000.OPTILE.000
+    &statusCode=charged
+    &reasonCode=debited
+    &entity=payment
+    &referenceId=427a2bc8-216f-4a89-bf15-1edf90b800b8
+    &longId=427a2bc8-216f-4a89-bf15-1edf90b800b8
+    &shortId=07999-56867
+    &timestamp=2012-03-21T12:27:24.791+01:00
+    &network=VISA
+    &amount=18.00
+    &currency=USD
+    &reference=payment_reference_from_provider
+    &pspCode=test-psp-code-123
+    &interactionCode=PROCEED
+    &interactionReason=OK
+    &notificationId=2255968806107622
+Authorization: W&RR%d7o1EFnqcDIdEqZQuSZN57lmHJS
+

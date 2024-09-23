@@ -1,0 +1,33 @@
+{
+  "name": "inpsyde/payoneer-template",
+  "description": "Payoneer templating",
+  "type": "inpsyde-module",
+  "license": "GPL-2.0-or-later",
+  "autoload": {
+    "psr-4": {
+      "Inpsyde\\PayoneerForWoocommerce\\Template\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Inpsyde\\PayoneerForWoocommerce\\Template\\Tests\\": "tests/php"
+    }
+  },
+  "authors": [
+    {
+      "name": "Inpsyde GmbH",
+      "email": "hello@inpsyde.com"
+    }
+  ],
+  "require": {
+    "php": "^7.2 | ^8.0",
+    "psr/container": "^1.0",
+    "inpsyde/modularity": "^1.3.0"
+  },
+  "require-dev": {
+    "inpsyde/php-coding-standards": "^1.0-beta9",
+    "vimeo/psalm": "^4.6",
+    "phpunit/phpunit": "^8.0 | ^9.0",
+    "symfony/polyfill-php80": "^1.19"
+  }
+}

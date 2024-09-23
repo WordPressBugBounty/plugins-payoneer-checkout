@@ -1,0 +1,21 @@
+{
+  "name": "payoneer-checkout-checkout",
+  "version": "0.0.0",
+  "description": "Checkout module for the Payoneer Checkout plugin",
+  "directories": {
+    "test": "tests"
+  },
+  "devDependencies": {
+    "@inpsyde/prettier-config": "^0.1.0",
+    "prettier": "2.4.1"
+  },
+  "author": "Inpsyde",
+  "license": "GPL-2.0-or-later",
+
+  "prettier": "@inpsyde/prettier-config",
+
+  "scripts": {
+    "prettier": "npx prettier ./assets/js/payoneer-checkout.js --write"
+  }
+
+}

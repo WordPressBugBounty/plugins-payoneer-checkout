@@ -1,0 +1,22 @@
+#networkForm, .op-payment-widget-container {
+    background-color: /*{{checkout_css_background_color}}*/;
+    color: /*{{checkout_css_text_color}}*/;
+    font-size: /*{{checkout_css_font_size}}*/;
+    font-weight: /*{{checkout_css_font_weight}}*/;
+    letter-spacing: /*{{checkout_css_letter_spacing}}*/;
+    line-height: /*{{checkout_css_line_height}}*/;
+    padding: /*{{checkout_css_padding}}*/;
+    text-align: /*{{checkout_css_align_text}}*/;
+    text-transform: /*{{checkout_css_transform_text}}*/;
+}
+
+#networkForm ::placeholder, .op-payment-widget-container ::placeholder {
+    color: /*{{checkout_css_placeholders_color}}*/;
+    opacity: 1;
+}
+
+#networkForm ::-ms-input-placeholder, .op-payment-widget-container ::-ms-input-placeholder {
+    color: /*{{checkout_css_placeholders_color}}*/;
+}
+
+/*{{extra_css}}*/
