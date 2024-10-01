@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment;
 
+use Syde\Vendor\Inpsyde\PaymentGateway\PaymentRequestValidatorInterface;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\CheckoutContext;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionProvider;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Api\Gateway\PaymentRequestValidatorInterface;
 class ListUrlPaymentRequestValidator implements PaymentRequestValidatorInterface
 {
     /**
@@ -26,7 +26,13 @@ class ListUrlPaymentRequestValidator implements PaymentRequestValidatorInterface
         $this->listSessionProvider = $listSessionProvider;
         $this->validator = $validator;
     }
-    public function assertIsValid(\WC_Order $wcOrder, \WC_Payment_Gateway $gateway): void
+    /**
+     * @psalm-suppress ParamNameMismatch
+     *
+     * @todo Remove psalm param suppression when PaymentRequestValidatorInterface::assertIsValid
+     *      second param name is changed from 'param' to gateway.
+     */
+    public function assertIsValid(\WC_Order $order, \WC_Payment_Gateway $gateway): void
     {
         $postedListUrl = filter_input(\INPUT_POST, $this->inputName, \FILTER_SANITIZE_URL);
         $currentListUrl = $this->listSessionProvider->provide(new CheckoutContext())->getLinks()['self'];
@@ -36,6 +42,6 @@ class ListUrlPaymentRequestValidator implements PaymentRequestValidatorInterface
                 __('It seems your payment has expired. Please try again', 'payoneer-checkout')
             );
         }
-        $this->validator && $this->validator->assertIsValid($wcOrder, $gateway);
+        $this->validator && $this->validator->assertIsValid($order, $gateway);
     }
 }

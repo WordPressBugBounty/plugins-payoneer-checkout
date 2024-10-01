@@ -6,6 +6,7 @@ namespace Syde\Vendor;
 use Syde\Vendor\Dhii\Services\Factories\Constructor;
 use Syde\Vendor\Dhii\Services\Factory;
 use Syde\Vendor\Dhii\Validator\CallbackValidator;
+use Syde\Vendor\Inpsyde\PaymentGateway\PaymentRequestValidatorInterface;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Api\Api\BasicTokenProviderFactory;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Api\Api\BasicTokenProviderFactoryInterface;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Api\Api\PayoneerFactoryInterface;
@@ -20,7 +21,6 @@ use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Api\Gateway\Factory\Product\Produ
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Api\Gateway\Factory\Product\ShippingItemBasedProductFactory;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Api\Gateway\Factory\Product\WcOrderBasedProductsFactory;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Api\Gateway\Factory\SecurityHeader\SecurityHeaderFactory;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Api\Gateway\PaymentRequestValidatorInterface;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Api\Gateway\WcProductSerializer\WcProductSerializer;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\Exception\CommandExceptionInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Callback\CallbackInterface;
@@ -75,7 +75,13 @@ return static function (): array {
     }), 'inpsyde_payoneer_api.fee_item_based_product_factory' => new Constructor(FeeItemBasedProductFactory::class, ['inpsyde_payment_gateway.product_factory', 'inpsyde_payment_gateway.quantity_normalizer']), 'inpsyde_payoneer_api.product_item_based_product_factory' => new Constructor(ProductItemBasedProductFactory::class, ['inpsyde_payment_gateway.product_factory', 'inpsyde_payment_gateway.quantity_normalizer', 'inpsyde_payment_gateway.price_decimals', 'inpsyde_payment_gateway.product_tax_code_provider']), 'inpsyde_payoneer_api.shipping_item_based_product_factory' => new Constructor(ShippingItemBasedProductFactory::class, ['inpsyde_payment_gateway.product_factory', 'inpsyde_payment_gateway.quantity_normalizer']), 'inpsyde_payoneer_api.wc_order_based_products_factory' => new Constructor(WcOrderBasedProductsFactory::class, ['inpsyde_payoneer_api.product_item_based_product_factory', 'inpsyde_payoneer_api.shipping_item_based_product_factory', 'inpsyde_payoneer_api.fee_item_based_product_factory', 'inpsyde_payment_gateway.order_item_types_for_product']), 'inpsyde_payoneer_api.security_header_factory' => new Constructor(SecurityHeaderFactory::class, ['inpsyde_payment_gateway.header_factory', 'inpsyde_payment_gateway.webhooks.security_header_name']), 'inpsyde_payoneer_api.wc_product_serializer' => new Constructor(WcProductSerializer::class), 'inpsyde_payoneer_api.payment_request_validator' => static function (): PaymentRequestValidatorInterface {
         return new class implements PaymentRequestValidatorInterface
         {
-            public function assertIsValid(\WC_Order $wcOrder, \WC_Payment_Gateway $gateway): void
+            /**
+             * @psalm-suppress ParamNameMismatch
+             *
+             * @todo Remove psalm param suppression when PaymentRequestValidatorInterface::assertIsValid
+             *      second param name is changed from 'param' to gateway.
+             */
+            public function assertIsValid(\WC_Order $order, \WC_Payment_Gateway $gateway): void
             {
             }
         };

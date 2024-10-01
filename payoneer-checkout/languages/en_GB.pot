@@ -217,8 +217,8 @@ msgid "Embedded (default): customers get a payment page that's embedded in your 
 msgstr ""
 
 #. translators: This implies that we have a bug in the code. Merchant/Customer cannot fix it and should ideally never see it
-#: modules.local/embedded-payment/src/ListUrlPaymentRequestValidator.php:48
-#: modules/inpsyde/payoneer-embedded-payment/src/ListUrlPaymentRequestValidator.php:48
+#: modules.local/embedded-payment/src/ListUrlPaymentRequestValidator.php:54
+#: modules/inpsyde/payoneer-embedded-payment/src/ListUrlPaymentRequestValidator.php:54
 msgid "It seems your payment has expired. Please try again"
 msgstr ""
 
@@ -301,60 +301,60 @@ msgstr ""
 msgid "The description that customers see at checkout"
 msgstr ""
 
-#: modules.local/payment-methods/inc/services.php:88
-#: modules/inpsyde/payoneer-payment-methods/inc/services.php:88
+#: modules.local/payment-methods/inc/services.php:86
+#: modules/inpsyde/payoneer-payment-methods/inc/services.php:86
 msgid "Payoneer Checkout - Credit / Debit cards"
 msgstr ""
 
-#: modules.local/payment-methods/inc/services.php:92
-#: modules/inpsyde/payoneer-payment-methods/inc/services.php:92
+#: modules.local/payment-methods/inc/services.php:90
+#: modules/inpsyde/payoneer-payment-methods/inc/services.php:90
 msgid "Pay with"
 msgstr ""
 
-#: modules.local/payment-methods/inc/services.php:118
-#: modules.local/payment-methods/inc/services.php:163
-#: modules.local/payment-methods/inc/services.php:209
-#: modules/inpsyde/payoneer-payment-methods/inc/services.php:118
-#: modules/inpsyde/payoneer-payment-methods/inc/services.php:163
-#: modules/inpsyde/payoneer-payment-methods/inc/services.php:209
+#: modules.local/payment-methods/inc/services.php:116
+#: modules.local/payment-methods/inc/services.php:161
+#: modules.local/payment-methods/inc/services.php:207
+#: modules/inpsyde/payoneer-payment-methods/inc/services.php:116
+#: modules/inpsyde/payoneer-payment-methods/inc/services.php:161
+#: modules/inpsyde/payoneer-payment-methods/inc/services.php:207
 msgid "Test:"
 msgstr ""
 
-#: modules.local/payment-methods/inc/services.php:136
-#: modules/inpsyde/payoneer-payment-methods/inc/services.php:136
+#: modules.local/payment-methods/inc/services.php:134
+#: modules/inpsyde/payoneer-payment-methods/inc/services.php:134
 msgid "Payoneer Checkout - Hosted payment page"
 msgstr ""
 
-#: modules.local/payment-methods/inc/services.php:181
-#: modules/inpsyde/payoneer-payment-methods/inc/services.php:181
+#: modules.local/payment-methods/inc/services.php:179
+#: modules/inpsyde/payoneer-payment-methods/inc/services.php:179
 msgid "Payoneer Checkout - Afterpay"
 msgstr ""
 
-#: modules.local/payment-methods/inc/services.php:227
-#: modules/inpsyde/payoneer-payment-methods/inc/services.php:227
+#: modules.local/payment-methods/inc/services.php:225
+#: modules/inpsyde/payoneer-payment-methods/inc/services.php:225
 msgid "Pay"
 msgstr ""
 
-#: modules.local/payment-methods/inc/services.php:245
-#: modules/inpsyde/payoneer-payment-methods/inc/services.php:245
+#: modules.local/payment-methods/inc/services.php:243
+#: modules/inpsyde/payoneer-payment-methods/inc/services.php:243
 msgid "Payoneer Checkout is the next generation of payment processing platforms."
 msgstr ""
 
 #. translators: %1$s, %2$s, %3$s and %4$s are replaced with opening and closing 'a' tags.
-#: modules.local/payment-methods/inc/services.php:251
-#: modules/inpsyde/payoneer-payment-methods/inc/services.php:251
+#: modules.local/payment-methods/inc/services.php:249
+#: modules/inpsyde/payoneer-payment-methods/inc/services.php:249
 msgid "By using Payoneer Checkout, you agree to the %1$sTerms of Service%2$s and %3$sPrivacy policy%4$s."
 msgstr ""
 
 #. translators: %1$s, %2$s, %3$s, %4$s, %5$s and %6$s is replaced with the opening and closing 'a' tags.
-#: modules.local/payment-methods/inc/services.php:274
-#: modules/inpsyde/payoneer-payment-methods/inc/services.php:274
+#: modules.local/payment-methods/inc/services.php:272
+#: modules/inpsyde/payoneer-payment-methods/inc/services.php:272
 msgid "Before you begin read How to %1$sConnect WooCommerce%2$s to Payoneer Checkout. Make sure you have a Payoneer Account. If you don't, see %3$sRegister for Checkout%4$s. You can get your %5$sauthentication data%6$s in the Payoneer Account."
 msgstr ""
 
 #. translators: %1$s is replaced with transaction Long ID
-#: modules.local/payment-methods/inc/services.php:594
-#: modules/inpsyde/payoneer-payment-methods/inc/services.php:594
+#: modules.local/payment-methods/inc/services.php:592
+#: modules/inpsyde/payoneer-payment-methods/inc/services.php:592
 msgid "Refunded by Payoneer Checkout - long ID: %1$s"
 msgstr ""
 

@@ -2,6 +2,10 @@
 
 = [next-version] - yyyy-mm-dd =
 
+= [3.2.3] - 2024-10-01 =
+* Fixed
+  * payment session ID validation
+  * missing string translations
 
 = [3.2.2] - 2024-08-22 =
 * Fixed

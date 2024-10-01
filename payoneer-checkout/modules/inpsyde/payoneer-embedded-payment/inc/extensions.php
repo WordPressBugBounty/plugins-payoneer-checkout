@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Syde\Vendor;
 
+use Syde\Vendor\Inpsyde\PaymentGateway\PaymentRequestValidatorInterface;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\AjaxOrderPay\OrderPayload;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\ListUrlPaymentRequestValidator;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\PaymentFieldsRendererFactory;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionManager;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Api\Gateway\PaymentRequestValidatorInterface;
 use Syde\Vendor\Psr\Container\ContainerInterface;
 return static function (): array {
     return [

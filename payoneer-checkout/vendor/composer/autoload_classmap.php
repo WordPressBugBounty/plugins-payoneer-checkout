@@ -293,7 +293,6 @@ return array(
     'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Api\\Gateway\\Factory\\Product\\WcOrderBasedProductsFactoryInterface' => $baseDir . '/modules/inpsyde/payoneer-api/src/Gateway/Factory/Product/WcOrderBasedProductsFactoryInterface.php',
     'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Api\\Gateway\\Factory\\SecurityHeader\\SecurityHeaderFactory' => $baseDir . '/modules/inpsyde/payoneer-api/src/Gateway/Factory/SecurityHeader/SecurityHeaderFactory.php',
     'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Api\\Gateway\\Factory\\SecurityHeader\\SecurityHeaderFactoryInterface' => $baseDir . '/modules/inpsyde/payoneer-api/src/Gateway/Factory/SecurityHeader/SecurityHeaderFactoryInterface.php',
-    'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Api\\Gateway\\PaymentRequestValidatorInterface' => $baseDir . '/modules/inpsyde/payoneer-api/src/Gateway/PaymentRequestValidatorInterface.php',
     'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Api\\Gateway\\WcProductSerializer\\WcProductSerializer' => $baseDir . '/modules/inpsyde/payoneer-api/src/Gateway/WcProductSerializer/WcProductSerializer.php',
     'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Api\\Gateway\\WcProductSerializer\\WcProductSerializerInterface' => $baseDir . '/modules/inpsyde/payoneer-api/src/Gateway/WcProductSerializer/WcProductSerializerInterface.php',
     'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Checkout\\Authentication\\TokenGenerator' => $baseDir . '/modules/inpsyde/payoneer-payment-gateway-checkout/src/Authentication/TokenGenerator.php',

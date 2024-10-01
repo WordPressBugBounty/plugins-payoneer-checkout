@@ -9,9 +9,7 @@ use Syde\Vendor\Dhii\Services\Factories\Value;
 use Syde\Vendor\Dhii\Services\Factory;
 use Syde\Vendor\Inpsyde\PaymentGateway\GatewayIconsRendererInterface;
 use Syde\Vendor\Inpsyde\PaymentGateway\PaymentFieldsRendererInterface;
-use Syde\Vendor\Inpsyde\PaymentGateway\PaymentGateway;
 use Syde\Vendor\Inpsyde\PaymentGateway\PaymentProcessorInterface;
-use Syde\Vendor\Inpsyde\PaymentGateway\PaymentRequestValidatorInterface;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Api\Gateway\CommandFactory\WcOrderBasedUpdateCommandFactoryInterface;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Checkout\Authentication\TokenGeneratorInterface;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Checkout\GatewayIconsRenderer\GatewayIconsRenderer;
@@ -199,16 +197,8 @@ return static function (): array {
         'payment_gateway.payoneer-checkout.form_fields' => new Alias('payoneer_settings.settings_fields'),
         'payment_gateway.payoneer-hosted.form_fields' => new Alias('payment_gateway.payoneer-checkout.form_fields'),
         'payment_gateway.payoneer-afterpay.form_fields' => new Alias('payment_gateway.payoneer-checkout.form_fields'),
-        'payment_gateway.payoneer-checkout.payment_request_validator' => static function (): PaymentRequestValidatorInterface {
-            return new class implements PaymentRequestValidatorInterface
-            {
-                public function assertIsValid(\WC_Order $order, PaymentGateway $param): void
-                {
-                    //We have nothing to validate here so far.
-                }
-            };
-        },
-        'payment_gateway.payoneer-hosted.payment_request_validator' => new Alias('payment_gateway.payoneer-checkout.payment_request_validator'),
+        'payment_gateway.payoneer-checkout.payment_request_validator' => new Alias('inpsyde_payoneer_api.payment_request_validator'),
+        'payment_gateway.payoneer-hosted.payment_request_validator' => new Alias('inpsyde_payoneer_api.payment_request_validator'),
         'payment_gateway.payoneer-afterpay.payment_request_validator' => new Alias('payment_gateway.payoneer-checkout.payment_request_validator'),
         'payment_gateway.payoneer-checkout.gateway_icons_renderer' => static function (ContainerInterface $container): GatewayIconsRendererInterface {
             $iconElements = $container->get('checkout.gateway_icon_elements_cards.enabled');
