@@ -71,12 +71,14 @@ $properties = Properties\PluginProperties::new('/path/to/plugin-main-file.php');
 
 Additionally, PluginProperties will have the following public API:
 
+- `PluginProperties::pluginMainFile(): string` - returns the Plugin main file.
 - `PluginProperties::network(): bool` - returns if the Plugin is only network-wide usable.
 - `PluginProperties::isActive(): bool` - returns if the current Plugin is active.
 - `PluginProperties::isNetworkActive(): bool` - returns if the current Plugin is network-wide active.
 - `PluginProperties::isMuPlugin(): bool` - returns if the current Plugin is a must-use Plugin.
 
-
+Please note that our usage of `get_plugin_data` opts out of translations and HTML-safe text processing (via `wptexturize`) offered by default.
+These functions should not be used before the 'init' hook which may be too late for some applications.
 
 ## ThemeProperties
 
@@ -102,7 +104,7 @@ Additionally, ThemeProperties will have the following public API:
 
 ## LibraryProperties
 
-For libraries, you can use the LibraryProperties which give you context based on your composer.json. You can boostrap your standalone-library like following:
+For libraries, you can use the LibraryProperties which give you context based on your composer.json. You can bootstrap your standalone-library like following:
 
 ```php
 use Inpsyde\Modularity\Properties;

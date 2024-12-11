@@ -22,7 +22,7 @@ class ChargedPaymentHandler implements OrderPaymentWebhookHandlerInterface
      */
     public function accepts(WP_REST_Request $request, WC_Order $order): bool
     {
-        return (string) $request->get_param('statusCode') === 'charged';
+        return (string) $request->get_param('statusCode') === 'charged' && (string) $request->get_param('reasonCode') === 'debited';
     }
     /**
      * Handle a notification about payment successfully charged.

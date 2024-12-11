@@ -28,7 +28,6 @@ use UnexpectedValueException;
 class SettingsModule implements ServiceModule, ExecutableModule
 {
     use ModuleClassNameIdTrait;
-    protected array $payoneerSections = [];
     /**
      * @inheritDoc
      * @phpcs:disable Inpsyde.CodeQuality.LineLength.TooLong
@@ -48,7 +47,6 @@ class SettingsModule implements ServiceModule, ExecutableModule
      */
     public function run(ContainerInterface $container): bool
     {
-        $this->payoneerSections = $container->get('payoneer-settings.settings-tabs');
         $paymentGatewayIds = $container->get('payment_gateways');
         $this->registerAssets($container);
         add_action('woocommerce_init', function () use ($container) {
@@ -72,12 +70,10 @@ class SettingsModule implements ServiceModule, ExecutableModule
         $this->setUpProcessingMerchants($container);
         assert(is_array($paymentGatewayIds));
         $this->setUpTriggeringSettingsSaving();
-        /** @var array<string, string> $tabs */
-        $tabs = $container->get('payoneer-settings.settings-tabs');
         $this->setUpSettingsPageRendering($container);
-        $this->setUpDisplayingSections($tabs);
+        $this->setUpDisplayingSections($container);
         $this->setUpMergeGatewaySettings($container);
-        $this->setUpAdminPageStyle();
+        $this->setUpAdminPageStyle($container);
         $this->setUpLinkToGeneralTabIfNotConnected($container);
         $this->setUpPaymentSettingsPageStyle($container);
         return \true;
@@ -247,7 +243,9 @@ class SettingsModule implements ServiceModule, ExecutableModule
                 //For gateways sections settings fields are rendered automatically by WC.
                 return;
             }
-            if (!$this->isPayoneerSection()) {
+            /** @var array<string, string> $payoneerSections */
+            $payoneerSections = $container->get('payoneer-settings.settings-tabs');
+            if (!$this->isPayoneerSection($payoneerSections)) {
                 return;
             }
             $this->getMainGateway()->admin_options();
@@ -262,7 +260,7 @@ class SettingsModule implements ServiceModule, ExecutableModule
     /**
      * @param array<string, string> $payoneerSections
      */
-    protected function setUpDisplayingSections(array $payoneerSections): void
+    protected function setUpDisplayingSections(ContainerInterface $container): void
     {
         add_filter(
             'woocommerce_get_sections_checkout',
@@ -271,21 +269,23 @@ class SettingsModule implements ServiceModule, ExecutableModule
              *
              * @return mixed|string[]
              */
-            function ($currentSections) use ($payoneerSections) {
-                if (!$this->isPayoneerSection()) {
+            function ($currentSections) use ($container) {
+                /** @var array<string, string> $payoneerSections */
+                $payoneerSections = $container->get('payoneer-settings.settings-tabs');
+                if (!$this->isPayoneerSection($payoneerSections)) {
                     return $currentSections;
                 }
                 return $payoneerSections;
             }
         );
     }
-    protected function isPayoneerSection(): bool
+    protected function isPayoneerSection(array $payoneerSections): bool
     {
         /** @psalm-var array<string, mixed> $GLOBALS */
         if (!isset($GLOBALS['current_section'])) {
             return \false;
         }
-        return array_key_exists((string) $GLOBALS['current_section'], $this->payoneerSections);
+        return array_key_exists((string) $GLOBALS['current_section'], $payoneerSections);
     }
     /**
      * Processes incoming merchant data.
@@ -528,10 +528,12 @@ STYLE
 , ['style' => []]);
         });
     }
-    public function setUpAdminPageStyle(): void
+    public function setUpAdminPageStyle(ContainerInterface $container): void
     {
-        add_action('admin_head', function (): void {
-            if (!$this->isPayoneerSection()) {
+        add_action('admin_head', function () use ($container): void {
+            /** @var array<string, string> $payoneerSections */
+            $payoneerSections = $container->get('payoneer-settings.settings-tabs');
+            if (!$this->isPayoneerSection($payoneerSections)) {
                 return;
             }
             $currentSection = sanitize_key((string) $GLOBALS['current_section']);

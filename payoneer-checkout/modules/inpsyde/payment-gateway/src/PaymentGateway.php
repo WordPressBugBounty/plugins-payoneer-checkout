@@ -4,6 +4,8 @@
 // phpcs:disable Inpsyde.CodeQuality.NoAccessors.NoGetter
 // phpcs:disable Inpsyde.CodeQuality.ArgumentTypeDeclaration.NoArgumentType
 // phpcs:disable Inpsyde.CodeQuality.ReturnTypeDeclaration.NoReturnType
+// phpcs:disable Inpsyde.CodeQuality.NestingLevel.High
+// phpcs:disable NeutronStandard.Functions.DisallowCallUserFunc.CallUserFunc
 declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\PaymentGateway;
 
@@ -37,15 +39,14 @@ use WP_Error;
 class PaymentGateway extends WC_Payment_Gateway
 {
     protected const TRANSACTION_URL_TEMPLATE_FIELD_NAME = '_transaction_url_template';
-    /**
-     * @var ContainerInterface
-     */
-    protected $serviceLocator;
+    protected ContainerInterface $serviceLocator;
+    protected I18n $i18n;
     public function __construct(string $id, ContainerInterface $serviceLocator)
     {
         $this->id = $id;
         $this->serviceLocator = $serviceLocator;
         $this->supports = $this->locateWithFallback('supports', ['products']);
+        $this->i18n = $serviceLocator->get('payment_gateways.i18n');
         $this->init_settings();
         unset($this->order_button_text);
         unset($this->method_title);
@@ -156,25 +157,18 @@ class PaymentGateway extends WC_Payment_Gateway
     }
     /**
      * @inheritDoc
+     * @throws Exception
      */
     public function process_refund($orderId, $amount = \null, $reason = '')
     {
         $order = wc_get_order($orderId);
         if (!$order instanceof WC_Order) {
-            return new WP_Error('order_not_found', sprintf(
-                /* translators: %1$s is replaced with the actual order ID. */
-                __('Failed to process the refund: the order with ID %1$s not found', 'payoneer-checkout'),
-                $orderId
-            ));
+            return new WP_Error('refund_order_not_found', $this->i18n->translate('refund_order_not_found', $this->id, ['orderId' => $orderId]));
         }
         $amount = floatval($amount);
         $refundProcessor = $this->locate('refund_processor');
         assert($refundProcessor instanceof RefundProcessorInterface);
-        try {
-            $refundProcessor->refundOrderPayment($order, $amount, $reason);
-        } catch (Exception $exception) {
-            return new WP_Error('failed_to_refund_order_payment', __('Failed to refund the order payment', 'payoneer-checkout'));
-        }
+        $refundProcessor->refundOrderPayment($order, $amount, $reason);
         return \true;
     }
     /**
@@ -194,9 +188,7 @@ class PaymentGateway extends WC_Payment_Gateway
             echo $renderer->renderFields();
         } catch (\Throwable $exception) {
             do_action($this->id . '_payment_fields_failure', ['exception' => $exception]);
-            // Print a generic error message right in the gateway fields
-            /* translators: Placeholder text if payment fields failed to render */
-            esc_html_e('Payment method not available. Please select another payment method.', 'payoneer-checkout');
+            echo esc_html($this->i18n->translate('payment_method_not_available', $this->id));
         }
     }
     /**

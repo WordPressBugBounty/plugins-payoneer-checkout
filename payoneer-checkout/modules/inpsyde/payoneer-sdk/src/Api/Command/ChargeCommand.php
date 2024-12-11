@@ -84,4 +84,11 @@ class ChargeCommand extends AbstractPaymentCommand implements ChargeCommandInter
         $newThis->longId = $longId;
         return $newThis;
     }
+    /**
+     * @inheritDoc
+     */
+    public function getLongId(): ?string
+    {
+        return $this->longId;
+    }
 }

@@ -3,24 +3,13 @@
 declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\Modularity\Properties;
 
-/**
- * Class PluginProperties
- *
- * @package Inpsyde\Modularity\Properties
- *
- * @psalm-suppress PossiblyFalseArgument, InvalidArgument
- */
 class PluginProperties extends BaseProperties
 {
-    /**
-     * Custom properties for Plugins.
-     */
+    // Custom properties for Plugins
     public const PROP_NETWORK = 'network';
+    public const PROP_REQUIRES_PLUGINS = 'requiresPlugins';
     /**
-     * Available methods of Properties::__call()
-     * from plugin headers.
-     *
-     * @link https://developer.wordpress.org/reference/functions/get_plugin_data/
+     * @see https://developer.wordpress.org/reference/functions/get_plugin_data/
      */
     protected const HEADERS = [
         self::PROP_AUTHOR => 'Author',
@@ -35,26 +24,15 @@ class PluginProperties extends BaseProperties
         self::PROP_REQUIRES_PHP => 'RequiresPHP',
         // additional headers
         self::PROP_NETWORK => 'Network',
+        self::PROP_REQUIRES_PLUGINS => 'RequiresPlugins',
     ];
-    /**
-     * @var string
-     */
-    private $pluginFile;
-    /**
-     * @var bool|null
-     */
-    protected $isMu;
-    /**
-     * @var bool|null
-     */
-    protected $isActive;
-    /**
-     * @var bool|null
-     */
-    protected $isNetworkActive;
+    private string $pluginMainFile;
+    private string $pluginBaseName;
+    protected ?bool $isMu = null;
+    protected ?bool $isActive = null;
+    protected ?bool $isNetworkActive = null;
     /**
      * @param string $pluginMainFile
-     *
      * @return PluginProperties
      */
     public static function new(string $pluginMainFile): PluginProperties
@@ -62,8 +40,6 @@ class PluginProperties extends BaseProperties
         return new self($pluginMainFile);
     }
     /**
-     * PluginProperties constructor.
-     *
      * @param string $pluginMainFile
      */
     protected function __construct(string $pluginMainFile)
@@ -71,28 +47,46 @@ class PluginProperties extends BaseProperties
         if (!function_exists('get_plugin_data')) {
             require_once \ABSPATH . 'wp-admin/includes/plugin.php';
         }
-        $pluginData = get_plugin_data($pluginMainFile);
+        // $markup = false, to avoid an incorrect early wptexturize call.
+        // $translate = false, to avoid loading translations too early
+        // @see https://core.trac.wordpress.org/ticket/49965
+        // @see https://core.trac.wordpress.org/ticket/34114
+        $pluginData = (array) get_plugin_data($pluginMainFile, \false, \false);
         $properties = Properties::DEFAULT_PROPERTIES;
         // Map pluginData to internal structure.
         foreach (self::HEADERS as $key => $pluginDataKey) {
             $properties[$key] = $pluginData[$pluginDataKey] ?? '';
             unset($pluginData[$pluginDataKey]);
         }
+        /** @var array<string, mixed> $properties */
         $properties = array_merge($properties, $pluginData);
-        $this->pluginFile = $pluginMainFile;
-        $baseName = plugin_basename($pluginMainFile);
+        $this->pluginMainFile = wp_normalize_path($pluginMainFile);
+        $this->pluginBaseName = plugin_basename($pluginMainFile);
         $basePath = plugin_dir_path($pluginMainFile);
         $baseUrl = plugins_url('/', $pluginMainFile);
-        parent::__construct($baseName, $basePath, $baseUrl, $properties);
+        parent::__construct($this->pluginBaseName, $basePath, $baseUrl, $properties);
+    }
+    /**
+     * @return string
+     */
+    public function pluginMainFile(): string
+    {
+        return $this->pluginMainFile;
     }
     /**
      * @return bool
-     *
-     * @psalm-suppress PossiblyFalseArgument
      */
     public function network(): bool
     {
         return (bool) $this->get(self::PROP_NETWORK, \false);
+    }
+    /**
+     * @return array
+     */
+    public function requiresPlugins(): array
+    {
+        $value = $this->get(self::PROP_REQUIRES_PLUGINS);
+        return $value && is_string($value) ? explode(',', $value) : [];
     }
     /**
      * @return bool
@@ -103,7 +97,7 @@ class PluginProperties extends BaseProperties
             if (!function_exists('is_plugin_active')) {
                 require_once \ABSPATH . 'wp-admin/includes/plugin.php';
             }
-            $this->isActive = is_plugin_active($this->pluginFile);
+            $this->isActive = is_plugin_active($this->pluginBaseName);
         }
         return $this->isActive;
     }
@@ -116,7 +110,7 @@ class PluginProperties extends BaseProperties
             if (!function_exists('is_plugin_active_for_network')) {
                 require_once \ABSPATH . 'wp-admin/includes/plugin.php';
             }
-            $this->isNetworkActive = is_plugin_active_for_network($this->pluginFile);
+            $this->isNetworkActive = is_plugin_active_for_network($this->pluginBaseName);
         }
         return $this->isNetworkActive;
     }
@@ -126,12 +120,8 @@ class PluginProperties extends BaseProperties
     public function isMuPlugin(): bool
     {
         if ($this->isMu === null) {
-            /**
-             * @psalm-suppress UndefinedConstant
-             * @psalm-suppress MixedArgument
-             */
             $muPluginDir = wp_normalize_path(\WPMU_PLUGIN_DIR);
-            $this->isMu = strpos($this->pluginFile, $muPluginDir) === 0;
+            $this->isMu = strpos($this->pluginMainFile, $muPluginDir) === 0;
         }
         return $this->isMu;
     }

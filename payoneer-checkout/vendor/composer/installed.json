@@ -624,17 +624,17 @@
         },
         {
             "name": "inpsyde\/assets",
-            "version": "2.8.3",
-            "version_normalized": "2.8.3.0",
+            "version": "2.9.0",
+            "version_normalized": "2.9.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/inpsyde\/assets.git",
-                "reference": "f198d7d8b726132851413a6a9b4918e02c077a4b"
+                "reference": "2b2d2ac359383e24284388bf54a6ff4f122d3c67"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/inpsyde\/assets\/zipball\/f198d7d8b726132851413a6a9b4918e02c077a4b",
-                "reference": "f198d7d8b726132851413a6a9b4918e02c077a4b",
+                "url": "https:\/\/api.github.com\/repos\/inpsyde\/assets\/zipball\/2b2d2ac359383e24284388bf54a6ff4f122d3c67",
+                "reference": "2b2d2ac359383e24284388bf54a6ff4f122d3c67",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -652,13 +652,13 @@
             "require-dev": {
                 "brain\/monkey": "^2.5.0",
                 "inpsyde\/php-coding-standards": "^1",
-                "johnpbloch\/wordpress-core": ">=6.0",
+                "johnpbloch\/wordpress-core": ">=6.2",
                 "mikey179\/vfsstream": "^1.6.8",
-                "php-stubs\/wordpress-stubs": ">=6.0@stable",
+                "php-stubs\/wordpress-stubs": ">=6.2@stable",
                 "phpunit\/phpunit": "^8.5.14 || ^9.0",
                 "vimeo\/psalm": "@stable"
             },
-            "time": "2022-12-16T13:23:02+00:00",
+            "time": "2024-11-28T11:55:20+00:00",
             "type": "library",
             "extra": {
                 "wordpress-install-dir": "vendor\/wordpress\/wordpress"
@@ -694,7 +694,7 @@
             "description": "Package to manage assets in WordPress.",
             "support": {
                 "issues": "https:\/\/github.com\/inpsyde\/assets\/issues",
-                "source": "https:\/\/github.com\/inpsyde\/assets\/tree\/2.8.3"
+                "source": "https:\/\/github.com\/inpsyde\/assets\/tree\/2.9.0"
             },
             "install-path": "..\/inpsyde\/assets"
         },
@@ -780,17 +780,17 @@
         },
         {
             "name": "inpsyde\/modularity",
-            "version": "1.5.1",
-            "version_normalized": "1.5.1.0",
+            "version": "1.11.0",
+            "version_normalized": "1.11.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/inpsyde\/modularity.git",
-                "reference": "3bbff6197aabbc4df25b5f386f521bedc71aff2e"
+                "reference": "c79bb3682f55e1a2ece67f36e70d04fa2ab8c65d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/inpsyde\/modularity\/zipball\/3bbff6197aabbc4df25b5f386f521bedc71aff2e",
-                "reference": "3bbff6197aabbc4df25b5f386f521bedc71aff2e",
+                "url": "https:\/\/api.github.com\/repos\/inpsyde\/modularity\/zipball\/c79bb3682f55e1a2ece67f36e70d04fa2ab8c65d",
+                "reference": "c79bb3682f55e1a2ece67f36e70d04fa2ab8c65d",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -801,19 +801,19 @@
             },
             "require": {
                 "ext-json": "*",
-                "php": ">=7.2",
-                "psr\/container": "~1.0"
+                "php": ">=7.4 <8.4",
+                "psr\/container": "^1.1.0 || ^2"
             },
             "require-dev": {
                 "brain\/monkey": "^2.6.1",
-                "inpsyde\/php-coding-standards": "^1",
-                "johnpbloch\/wordpress-core": ">=5.8",
-                "mikey179\/vfsstream": "^v1.6.10",
-                "php-stubs\/wordpress-stubs": ">=5.8@stable",
-                "phpunit\/phpunit": "^8.5.21",
-                "vimeo\/psalm": "^4.13.1"
+                "inpsyde\/php-coding-standards": "^2@dev",
+                "inpsyde\/wp-stubs-versions": "dev-latest",
+                "mikey179\/vfsstream": "^v1.6.11",
+                "phpunit\/phpunit": "^9.6.19",
+                "roots\/wordpress-no-content": "@dev",
+                "vimeo\/psalm": "^5.24.0"
             },
-            "time": "2022-03-09T13:59:27+00:00",
+            "time": "2024-11-28T09:34:00+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -832,47 +832,32 @@
             ],
             "authors": [
                 {
-                    "name": "Inpsyde GmbH",
-                    "email": "hello@inpsyde.com",
-                    "homepage": "https:\/\/inpsyde.com\/",
+                    "name": "Syde GmbH",
+                    "email": "hello@syde.com",
+                    "homepage": "https:\/\/syde.com\/",
                     "role": "Company"
-                },
-                {
-                    "name": "Christian Leucht",
-                    "email": "c.leucht@inpsyde.com",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Pablo Kauffman",
-                    "email": "p.kauffman@inpsyde.com",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Giuseppe Mazzapica",
-                    "email": "g.mazzapica@inpsyde.com",
-                    "role": "Developer"
                 }
             ],
             "description": "Modular PSR-11 implementation for WordPress plugins, themes or libraries.",
             "support": {
                 "issues": "https:\/\/github.com\/inpsyde\/modularity\/issues",
-                "source": "https:\/\/github.com\/inpsyde\/modularity\/tree\/1.5.1"
+                "source": "https:\/\/github.com\/inpsyde\/modularity\/tree\/1.11.0"
             },
             "install-path": "..\/inpsyde\/modularity"
         },
         {
             "name": "inpsyde\/payment-gateway",
-            "version": "1.3.2",
-            "version_normalized": "1.3.2.0",
+            "version": "1.6.0",
+            "version_normalized": "1.6.0.0",
             "source": {
                 "type": "git",
                 "url": "git@github.com:inpsyde\/payment-gateway.git",
-                "reference": "63bc5ad5e56197ae71cfbad7be95dc249f570101"
+                "reference": "64fb27854774effaea4dd1a3826979bab75de337"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/inpsyde\/payment-gateway\/zipball\/63bc5ad5e56197ae71cfbad7be95dc249f570101",
-                "reference": "63bc5ad5e56197ae71cfbad7be95dc249f570101",
+                "url": "https:\/\/api.github.com\/repos\/inpsyde\/payment-gateway\/zipball\/64fb27854774effaea4dd1a3826979bab75de337",
+                "reference": "64fb27854774effaea4dd1a3826979bab75de337",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -898,7 +883,7 @@
                 "phpunit\/phpunit": "^8.0 | ^9.0",
                 "vimeo\/psalm": "^4.3"
             },
-            "time": "2024-07-12T08:39:52+00:00",
+            "time": "2024-11-19T13:36:31+00:00",
             "type": "inpsyde-module",
             "extra": {
                 "hooks": {
@@ -987,15 +972,15 @@
                 }
             ],
             "support": {
-                "source": "https:\/\/github.com\/inpsyde\/payment-gateway\/tree\/1.3.2",
+                "source": "https:\/\/github.com\/inpsyde\/payment-gateway\/tree\/1.6.0",
                 "issues": "https:\/\/github.com\/inpsyde\/payment-gateway\/issues"
             },
             "install-path": "..\/..\/modules\/inpsyde\/payment-gateway"
         },
         {
             "name": "inpsyde\/payoneer-admin-banner",
-            "version": "dev-fix\/PN-932-HPOS-incompatibility-order-stays-in-pending",
-            "version_normalized": "dev-fix\/PN-932-HPOS-incompatibility-order-stays-in-pending",
+            "version": "dev-fix\/missing-translations",
+            "version_normalized": "dev-fix\/missing-translations",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/admin-banner",
@@ -1046,8 +1031,8 @@
         },
         {
             "name": "inpsyde\/payoneer-analytics",
-            "version": "dev-fix\/PN-932-HPOS-incompatibility-order-stays-in-pending",
-            "version_normalized": "dev-fix\/PN-932-HPOS-incompatibility-order-stays-in-pending",
+            "version": "dev-fix\/missing-translations",
+            "version_normalized": "dev-fix\/missing-translations",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/analytics",
@@ -1095,8 +1080,8 @@
         },
         {
             "name": "inpsyde\/payoneer-api",
-            "version": "dev-fix\/PN-932-HPOS-incompatibility-order-stays-in-pending",
-            "version_normalized": "dev-fix\/PN-932-HPOS-incompatibility-order-stays-in-pending",
+            "version": "dev-fix\/missing-translations",
+            "version_normalized": "dev-fix\/missing-translations",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/api",
@@ -1144,8 +1129,8 @@
         },
         {
             "name": "inpsyde\/payoneer-embedded-payment",
-            "version": "dev-fix\/PN-932-HPOS-incompatibility-order-stays-in-pending",
-            "version_normalized": "dev-fix\/PN-932-HPOS-incompatibility-order-stays-in-pending",
+            "version": "dev-fix\/missing-translations",
+            "version_normalized": "dev-fix\/missing-translations",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/embedded-payment",
@@ -1198,8 +1183,8 @@
         },
         {
             "name": "inpsyde\/payoneer-hosted-payment",
-            "version": "dev-fix\/PN-932-HPOS-incompatibility-order-stays-in-pending",
-            "version_normalized": "dev-fix\/PN-932-HPOS-incompatibility-order-stays-in-pending",
+            "version": "dev-fix\/missing-translations",
+            "version_normalized": "dev-fix\/missing-translations",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/hosted-payment",
@@ -1251,8 +1236,8 @@
         },
         {
             "name": "inpsyde\/payoneer-list-session",
-            "version": "dev-fix\/PN-932-HPOS-incompatibility-order-stays-in-pending",
-            "version_normalized": "dev-fix\/PN-932-HPOS-incompatibility-order-stays-in-pending",
+            "version": "dev-fix\/missing-translations",
+            "version_normalized": "dev-fix\/missing-translations",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/list-session",
@@ -1293,8 +1278,8 @@
         },
         {
             "name": "inpsyde\/payoneer-migrator",
-            "version": "dev-fix\/PN-932-HPOS-incompatibility-order-stays-in-pending",
-            "version_normalized": "dev-fix\/PN-932-HPOS-incompatibility-order-stays-in-pending",
+            "version": "dev-fix\/missing-translations",
+            "version_normalized": "dev-fix\/missing-translations",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/migration",
@@ -1341,8 +1326,8 @@
         },
         {
             "name": "inpsyde\/payoneer-page-detector",
-            "version": "dev-fix\/PN-932-HPOS-incompatibility-order-stays-in-pending",
-            "version_normalized": "dev-fix\/PN-932-HPOS-incompatibility-order-stays-in-pending",
+            "version": "dev-fix\/missing-translations",
+            "version_normalized": "dev-fix\/missing-translations",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/page-detector",
@@ -1389,8 +1374,8 @@
         },
         {
             "name": "inpsyde\/payoneer-payment-gateway-checkout",
-            "version": "dev-fix\/PN-932-HPOS-incompatibility-order-stays-in-pending",
-            "version_normalized": "dev-fix\/PN-932-HPOS-incompatibility-order-stays-in-pending",
+            "version": "dev-fix\/missing-translations",
+            "version_normalized": "dev-fix\/missing-translations",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/checkout",
@@ -1440,16 +1425,16 @@
         },
         {
             "name": "inpsyde\/payoneer-payment-methods",
-            "version": "dev-fix\/PN-932-HPOS-incompatibility-order-stays-in-pending",
-            "version_normalized": "dev-fix\/PN-932-HPOS-incompatibility-order-stays-in-pending",
+            "version": "dev-fix\/missing-translations",
+            "version_normalized": "dev-fix\/missing-translations",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/payment-methods",
-                "reference": "5d7f40a15497654e0ec7d6d6655b6662c2094ee9"
+                "reference": "5ce35ddeeb2f88faea898b97d6ebc2988874eb84"
             },
             "require": {
                 "dhii\/services": "^0.1.1-alpha2",
-                "inpsyde\/modularity": "<1.6.0",
+                "inpsyde\/modularity": "@stable",
                 "php": "^7.4 | ^8.0",
                 "psr\/container": "^1.0"
             },
@@ -1491,17 +1476,17 @@
         },
         {
             "name": "inpsyde\/payoneer-sdk",
-            "version": "v2.10.0",
-            "version_normalized": "2.10.0.0",
+            "version": "v2.11.0",
+            "version_normalized": "2.11.0.0",
             "source": {
                 "type": "git",
                 "url": "git@github.com:inpsyde\/payoneer-sdk.git",
-                "reference": "e75dcaef0c87dc05b0ddac91f6b9ddfbbc54c92a"
+                "reference": "51c85ea9283b2e88b4a2769595280a7dfb665ccd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/inpsyde\/payoneer-sdk\/zipball\/e75dcaef0c87dc05b0ddac91f6b9ddfbbc54c92a",
-                "reference": "e75dcaef0c87dc05b0ddac91f6b9ddfbbc54c92a",
+                "url": "https:\/\/api.github.com\/repos\/inpsyde\/payoneer-sdk\/zipball\/51c85ea9283b2e88b4a2769595280a7dfb665ccd",
+                "reference": "51c85ea9283b2e88b4a2769595280a7dfb665ccd",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1538,7 +1523,7 @@
                 "vimeo\/psalm": "^4.0",
                 "webmozart\/path-util": "^2.3@stable"
             },
-            "time": "2024-04-10T08:42:24+00:00",
+            "time": "2024-11-27T12:09:43+00:00",
             "type": "inpsyde-module",
             "installation-source": "dist",
             "autoload": {
@@ -1563,15 +1548,15 @@
             ],
             "description": "Payoneer SDK module for inpsyde\/modularity.",
             "support": {
-                "source": "https:\/\/github.com\/inpsyde\/payoneer-sdk\/tree\/v2.10.0",
+                "source": "https:\/\/github.com\/inpsyde\/payoneer-sdk\/tree\/v2.11.0",
                 "issues": "https:\/\/github.com\/inpsyde\/payoneer-sdk\/issues"
             },
             "install-path": "..\/..\/modules\/inpsyde\/payoneer-sdk"
         },
         {
             "name": "inpsyde\/payoneer-settings",
-            "version": "dev-fix\/PN-932-HPOS-incompatibility-order-stays-in-pending",
-            "version_normalized": "dev-fix\/PN-932-HPOS-incompatibility-order-stays-in-pending",
+            "version": "dev-fix\/missing-translations",
+            "version_normalized": "dev-fix\/missing-translations",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/settings",
@@ -1619,8 +1604,8 @@
         },
         {
             "name": "inpsyde\/payoneer-status-report",
-            "version": "dev-fix\/PN-932-HPOS-incompatibility-order-stays-in-pending",
-            "version_normalized": "dev-fix\/PN-932-HPOS-incompatibility-order-stays-in-pending",
+            "version": "dev-fix\/missing-translations",
+            "version_normalized": "dev-fix\/missing-translations",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/status-report",
@@ -1666,8 +1651,8 @@
         },
         {
             "name": "inpsyde\/payoneer-third-party-compat",
-            "version": "dev-fix\/PN-932-HPOS-incompatibility-order-stays-in-pending",
-            "version_normalized": "dev-fix\/PN-932-HPOS-incompatibility-order-stays-in-pending",
+            "version": "dev-fix\/missing-translations",
+            "version_normalized": "dev-fix\/missing-translations",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/third-party-compat",
@@ -1706,8 +1691,8 @@
         },
         {
             "name": "inpsyde\/payoneer-webhooks",
-            "version": "dev-fix\/PN-932-HPOS-incompatibility-order-stays-in-pending",
-            "version_normalized": "dev-fix\/PN-932-HPOS-incompatibility-order-stays-in-pending",
+            "version": "dev-fix\/missing-translations",
+            "version_normalized": "dev-fix\/missing-translations",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/webhooks",
@@ -1759,8 +1744,8 @@
         },
         {
             "name": "inpsyde\/payoneer-websdk",
-            "version": "dev-fix\/PN-932-HPOS-incompatibility-order-stays-in-pending",
-            "version_normalized": "dev-fix\/PN-932-HPOS-incompatibility-order-stays-in-pending",
+            "version": "dev-fix\/missing-translations",
+            "version_normalized": "dev-fix\/missing-translations",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/websdk",
@@ -1809,8 +1794,8 @@
         },
         {
             "name": "inpsyde\/payoneer-wp",
-            "version": "dev-fix\/PN-932-HPOS-incompatibility-order-stays-in-pending",
-            "version_normalized": "dev-fix\/PN-932-HPOS-incompatibility-order-stays-in-pending",
+            "version": "dev-fix\/missing-translations",
+            "version_normalized": "dev-fix\/missing-translations",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/wp",
@@ -1936,17 +1921,17 @@
         },
         {
             "name": "inpsyde\/wp-context",
-            "version": "1.5.0",
-            "version_normalized": "1.5.0.0",
+            "version": "1.5.1",
+            "version_normalized": "1.5.1.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/inpsyde\/wp-context.git",
-                "reference": "1f61ccb539e287e2688dfdf86dea0448c18fc8c6"
+                "reference": "1350ada72517f5d374bff9409b4ea5a02377ec1a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/inpsyde\/wp-context\/zipball\/1f61ccb539e287e2688dfdf86dea0448c18fc8c6",
-                "reference": "1f61ccb539e287e2688dfdf86dea0448c18fc8c6",
+                "url": "https:\/\/api.github.com\/repos\/inpsyde\/wp-context\/zipball\/1350ada72517f5d374bff9409b4ea5a02377ec1a",
+                "reference": "1350ada72517f5d374bff9409b4ea5a02377ec1a",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1966,7 +1951,7 @@
                 "phpunit\/phpunit": "~7.5.20 || ^8",
                 "vimeo\/psalm": "^4.27.0"
             },
-            "time": "2023-01-09T06:27:09+00:00",
+            "time": "2024-10-16T10:44:18+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -2026,24 +2011,24 @@
             ],
             "description": "A single-class utility to check the running context in WordPress sites.",
             "support": {
-                "source": "https:\/\/github.com\/inpsyde\/wp-context\/tree\/1.5.0",
+                "source": "https:\/\/github.com\/inpsyde\/wp-context\/tree\/1.5.1",
                 "issues": "https:\/\/github.com\/inpsyde\/wp-context\/issues"
             },
             "install-path": "..\/inpsyde\/wp-context"
         },
         {
             "name": "nyholm\/psr7",
-            "version": "1.8.1",
-            "version_normalized": "1.8.1.0",
+            "version": "1.8.2",
+            "version_normalized": "1.8.2.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/Nyholm\/psr7.git",
-                "reference": "aa5fc277a4f5508013d571341ade0c3886d4d00e"
+                "reference": "a71f2b11690f4b24d099d6b16690a90ae14fc6f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/Nyholm\/psr7\/zipball\/aa5fc277a4f5508013d571341ade0c3886d4d00e",
-                "reference": "aa5fc277a4f5508013d571341ade0c3886d4d00e",
+                "url": "https:\/\/api.github.com\/repos\/Nyholm\/psr7\/zipball\/a71f2b11690f4b24d099d6b16690a90ae14fc6f3",
+                "reference": "a71f2b11690f4b24d099d6b16690a90ae14fc6f3",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -2069,7 +2054,7 @@
                 "phpunit\/phpunit": "^7.5 || ^8.5 || ^9.4",
                 "symfony\/error-handler": "^4.4"
             },
-            "time": "2023-11-13T09:31:12+00:00",
+            "time": "2024-09-09T07:06:30+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -2104,7 +2089,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/Nyholm\/psr7\/issues",
-                "source": "https:\/\/github.com\/Nyholm\/psr7\/tree\/1.8.1"
+                "source": "https:\/\/github.com\/Nyholm\/psr7\/tree\/1.8.2"
             },
             "funding": [
                 {
@@ -2620,17 +2605,17 @@
         },
         {
             "name": "symfony\/polyfill-php80",
-            "version": "v1.30.0",
-            "version_normalized": "1.30.0.0",
+            "version": "v1.31.0",
+            "version_normalized": "1.31.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/polyfill-php80.git",
-                "reference": "77fa7995ac1b21ab60769b7323d600a991a90433"
+                "reference": "60328e362d4c2c802a54fcbf04f9d3fb892b4cf8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/polyfill-php80\/zipball\/77fa7995ac1b21ab60769b7323d600a991a90433",
-                "reference": "77fa7995ac1b21ab60769b7323d600a991a90433",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/polyfill-php80\/zipball\/60328e362d4c2c802a54fcbf04f9d3fb892b4cf8",
+                "reference": "60328e362d4c2c802a54fcbf04f9d3fb892b4cf8",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -2640,9 +2625,9 @@
                 ]
             },
             "require": {
-                "php": ">=7.1"
+                "php": ">=7.2"
             },
-            "time": "2024-05-31T15:07:36+00:00",
+            "time": "2024-09-09T11:45:10+00:00",
             "type": "library",
             "extra": {
                 "thanks": {
@@ -2689,7 +2674,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/polyfill-php80\/tree\/v1.30.0"
+                "source": "https:\/\/github.com\/symfony\/polyfill-php80\/tree\/v1.31.0"
             },
             "funding": [
                 {

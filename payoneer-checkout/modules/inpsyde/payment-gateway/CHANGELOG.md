@@ -1,3 +1,51 @@
+# [1.6.0](https://github.com/inpsyde/payment-gateway/compare/1.5.2...1.6.0) (2024-11-19)
+
+
+### Features
+
+* Filterable checkout components ([#34](https://github.com/inpsyde/payment-gateway/issues/34)) ([76f8c16](https://github.com/inpsyde/payment-gateway/commit/76f8c1626f3360b9763c6210393a6f7a40a0ccd7)), closes [#35](https://github.com/inpsyde/payment-gateway/issues/35)
+
+## [1.5.2](https://github.com/inpsyde/payment-gateway/compare/1.5.1...1.5.2) (2024-11-13)
+
+
+### Bug Fixes
+
+* allow node 22 ([1a28fdd](https://github.com/inpsyde/payment-gateway/commit/1a28fdd38be46459d1c63cd99192d9f2bc22e25d))
+* allow node 22 ([93a85e6](https://github.com/inpsyde/payment-gateway/commit/93a85e69eb329620dc636180298253ac18742a66))
+
+## [1.5.1](https://github.com/inpsyde/payment-gateway/compare/1.5.0...1.5.1) (2024-09-23)
+
+
+### Bug Fixes
+
+* Fix PaymentGatewayBlocks::$gateway type. ([#31](https://github.com/inpsyde/payment-gateway/issues/31)) ([58cd64c](https://github.com/inpsyde/payment-gateway/commit/58cd64cb64bc11fcd1a89d9aa0690d90738162a4))
+
+# [1.5.0](https://github.com/inpsyde/payment-gateway/compare/1.4.1...1.5.0) (2024-09-20)
+
+
+### Bug Fixes
+
+* code style, remove PaymentGatewayBlocks::$name type ([32ed490](https://github.com/inpsyde/payment-gateway/commit/32ed490e73414383c6f6eb34529a483468afb56c))
+
+
+### Features
+
+* Allow to interrupt refund with a message ([e5c6e10](https://github.com/inpsyde/payment-gateway/commit/e5c6e10d06b228483b8725cfbd41686fb0c5b776))
+
+## [1.4.1](https://github.com/inpsyde/payment-gateway/compare/1.4.0...1.4.1) (2024-09-18)
+
+
+### Bug Fixes
+
+* use variable in process_refund() ([afabd5c](https://github.com/inpsyde/payment-gateway/commit/afabd5cc6e08a830238af5067500df3fb462644f))
+
+# [1.4.0](https://github.com/inpsyde/payment-gateway/compare/1.3.2...1.4.0) (2024-09-13)
+
+
+### Features
+
+* [PROD-169] Implement l10n for errors & order notes ([#26](https://github.com/inpsyde/payment-gateway/issues/26)) ([7806c79](https://github.com/inpsyde/payment-gateway/commit/7806c798bc1a6e450f91d703fc94f7c07e8aea96)), closes [#1](https://github.com/inpsyde/payment-gateway/issues/1) [#2](https://github.com/inpsyde/payment-gateway/issues/2)
+
 ## [1.3.2](https://github.com/inpsyde/payment-gateway/compare/1.3.1...1.3.2) (2024-07-12)
 
 

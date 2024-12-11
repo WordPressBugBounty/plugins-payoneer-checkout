@@ -74,4 +74,18 @@ abstract class AbstractPaymentCommand extends AbstractCommand implements Payment
         }
         return $serializedProducts;
     }
+    /**
+     * @return PaymentInterface|null
+     */
+    public function getPayment(): ?PaymentInterface
+    {
+        return $this->payment;
+    }
+    /**
+     * @return ProductInterface[]
+     */
+    public function getProducts(): array
+    {
+        return $this->products;
+    }
 }

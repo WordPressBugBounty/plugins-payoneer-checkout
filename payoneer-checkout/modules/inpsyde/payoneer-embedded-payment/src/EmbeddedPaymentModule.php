@@ -32,11 +32,11 @@ class EmbeddedPaymentModule implements ExecutableModule, ServiceModule, Extendin
      */
     public function run(ContainerInterface $container): bool
     {
-        $isEnabled = (bool) $container->get('embedded_payment.is_enabled');
-        if (!$isEnabled) {
-            return \true;
-        }
         add_action('payoneer-checkout.init_checkout', function () use ($container): void {
+            $isEnabled = (bool) $container->get('embedded_payment.is_enabled');
+            if (!$isEnabled) {
+                return;
+            }
             $this->setupModuleActions($container);
         });
         return \true;

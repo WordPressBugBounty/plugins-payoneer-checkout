@@ -2,10 +2,19 @@
 
 = [next-version] - yyyy-mm-dd =
 
-= [3.2.3] - 2024-10-01 =
+= [3.2.4] - 2024-12-11 =
+* Fixed:
+  * Fix incorrect webSDK integration
+  * Reduce call UPDATE on less important fields
+  * Remove modules.local directory in the public version of the plugin
+  * Fix order status change in pre-dispute flow
+
+Added missing translations
+
+[3.2.3] – 2024-10-01
 * Fixed
-  * payment session ID validation
-  * missing string translations
+  * Payment session ID validation
+  * Missing string translations
 
 = [3.2.2] - 2024-08-22 =
 * Fixed

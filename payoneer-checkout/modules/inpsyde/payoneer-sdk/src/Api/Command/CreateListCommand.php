@@ -132,6 +132,13 @@ class CreateListCommand extends AbstractPaymentCommand implements CreateListComm
         return $newThis;
     }
     /**
+     * @return string[]
+     */
+    public function getViews(): array
+    {
+        return $this->views;
+    }
+    /**
      * @inheritDoc
      */
     public function withAddedViews(array $views): ListCommandInterface
@@ -293,5 +300,45 @@ class CreateListCommand extends AbstractPaymentCommand implements CreateListComm
         $newThis = clone $this;
         $newThis->ttl = $ttl;
         return $newThis;
+    }
+    public function getDivision(): ?string
+    {
+        return $this->division;
+    }
+    public function getCallback(): ?CallbackInterface
+    {
+        return $this->callback;
+    }
+    public function getCountry(): ?string
+    {
+        return $this->country;
+    }
+    public function getCustomer(): ?CustomerInterface
+    {
+        return $this->customer;
+    }
+    public function getStyle(): ?StyleInterface
+    {
+        return $this->style;
+    }
+    public function getOperationType(): ?string
+    {
+        return $this->operationType;
+    }
+    public function getIntegrationType(): ?string
+    {
+        return $this->integrationType;
+    }
+    public function isAllowDelete(): bool
+    {
+        return $this->allowDelete;
+    }
+    public function getSystem(): ?SystemInterface
+    {
+        return $this->system;
+    }
+    public function getTtl(): ?int
+    {
+        return $this->ttl;
     }
 }

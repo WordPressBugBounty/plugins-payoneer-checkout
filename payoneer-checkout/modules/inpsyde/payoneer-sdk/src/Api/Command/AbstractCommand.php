@@ -70,6 +70,13 @@ abstract class AbstractCommand implements CommandInterface
         return $newThis;
     }
     /**
+     * @inheritDoc
+     */
+    public function getTransactionId(): ?string
+    {
+        return $this->transactionId;
+    }
+    /**
      * Does something with a response.
      *
      * @param ResponseInterface $response The response.

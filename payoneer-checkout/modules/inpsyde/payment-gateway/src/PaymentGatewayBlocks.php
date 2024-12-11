@@ -12,9 +12,13 @@ use Syde\Vendor\Psr\Container\ContainerInterface;
 use WC_Payment_Gateways;
 class PaymentGatewayBlocks extends AbstractPaymentMethodType
 {
-    private $container;
+    private ContainerInterface $container;
+    /**
+     * phpcs:disable SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
+     * @var string
+     */
     protected $name;
-    private $gateway = null;
+    private ?PaymentGateway $gateway = null;
     public function __construct(ContainerInterface $container, string $gatewayId)
     {
         $this->container = $container;
@@ -35,9 +39,6 @@ class PaymentGatewayBlocks extends AbstractPaymentMethodType
      */
     public function get_payment_method_script_handles()
     {
-        if (function_exists('wp_set_script_translations')) {
-            //wp_set_script_translations( 'wc-dummy-payments-blocks', 'woocommerce-gateway-dummy', WC_Dummy_Payments::plugin_abspath() . 'languages/' );
-        }
         $scriptPath = '/js/frontend/blocks.js';
         $scriptAssetPath = $this->container->get('payment_gateways.assets_path') . '/js/frontend/blocks.asset.php';
         $scriptAsset = file_exists($scriptAssetPath) ? require $scriptAssetPath : ['dependencies' => [], 'version' => '0.1.0'];

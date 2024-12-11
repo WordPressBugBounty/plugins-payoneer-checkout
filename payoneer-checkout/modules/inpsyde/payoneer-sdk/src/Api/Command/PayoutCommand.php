@@ -84,4 +84,11 @@ class PayoutCommand extends AbstractPaymentCommand implements PayoutCommandInter
         $newThis->longId = $longId;
         return $newThis;
     }
+    /**
+     * @inheritDoc
+     */
+    public function getLongId(): ?string
+    {
+        return $this->longId;
+    }
 }

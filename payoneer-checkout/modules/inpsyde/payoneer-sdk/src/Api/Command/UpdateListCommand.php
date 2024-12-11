@@ -231,4 +231,50 @@ class UpdateListCommand extends AbstractPaymentCommand implements UpdateListComm
         $newThis->longId = $longId;
         return $newThis;
     }
+    /**
+     * @inheritDoc
+     */
+    public function getLongId(): ?string
+    {
+        return $this->longId;
+    }
+    /**
+     * @inheritDoc
+     */
+    public function getCallback(): ?CallbackInterface
+    {
+        return $this->callback;
+    }
+    /**
+     * @inheritDoc
+     */
+    public function getCustomer(): ?CustomerInterface
+    {
+        return $this->customer;
+    }
+    /**
+     * @inheritDoc
+     */
+    public function getCountry(): ?string
+    {
+        return $this->country;
+    }
+    /**
+     * @inheritDoc
+     */
+    public function getViews(): array
+    {
+        return $this->views;
+    }
+    /**
+     * @inheritDoc
+     */
+    public function getDivision(): ?string
+    {
+        return $this->division;
+    }
+    public function getSystem(): ?SystemInterface
+    {
+        return $this->system;
+    }
 }

@@ -35,4 +35,9 @@ interface CreateListCommandInterface extends ListCommandInterface
      * @return $this
      */
     public function withTtl(int $ttl): self;
+    public function getStyle(): ?StyleInterface;
+    public function getOperationType(): ?string;
+    public function getIntegrationType(): ?string;
+    public function isAllowDelete(): bool;
+    public function getTtl(): ?int;
 }

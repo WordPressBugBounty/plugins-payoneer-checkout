@@ -46,6 +46,6 @@ class CheckoutHashProvider implements HashProviderInterface
         /**
          * We have to retrieve a cart, a country and a currency in the runtime to have actual information.
          */
-        return [$cart->get_total('edit'), get_woocommerce_currency(), $customer->get_billing_country(), $customer->get_shipping_country(), $customer->get_billing_state(), $customer->get_shipping_state(), $customer->get_billing_postcode(), $customer->get_shipping_postcode(), $customer->get_billing_address(), $customer->get_shipping_address(), $customer->get_billing_address_2(), $customer->get_shipping_address_2()];
+        return [$cart->get_total('edit'), get_woocommerce_currency(), $customer->get_billing_country(), $customer->get_shipping_country()];
     }
 }

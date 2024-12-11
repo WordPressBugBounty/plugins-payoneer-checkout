@@ -57,12 +57,7 @@ class CheckoutModule implements ServiceModule, ExecutableModule, ExtendingModule
         $this->registerClearingListIfHppFallbackFlagSet($container);
         $this->registerClearingListOnFailedOrderPayment($container);
         $this->registerMovingListToCreatedOrder($container);
-        $liveMode = (bool) $container->get('inpsyde_payment_gateway.is_live_mode');
-        $notificationReceived = (bool) $container->get('checkout.notification_received');
-        $settingsPageUrl = (string) $container->get('inpsyde_payment_gateway.settings_page_url');
-        if (!$liveMode && !$notificationReceived) {
-            $this->addLiveModeNotice($settingsPageUrl);
-        }
+        $this->registerAddingLiveModeNotice($container);
         $notificationReceivedOptionName = (string) $container->get('checkout.notification_received.option_name');
         $this->addIncomingWebhookListener($notificationReceivedOptionName);
         $this->addCreateListSessionFailedListener($container);
@@ -452,9 +447,15 @@ class CheckoutModule implements ServiceModule, ExecutableModule, ExtendingModule
      *
      * @return void
      */
-    protected function addLiveModeNotice(string $settingsPageUrl): void
+    protected function registerAddingLiveModeNotice(ContainerInterface $container): void
     {
-        add_action('all_admin_notices', static function () use ($settingsPageUrl): void {
+        add_action('all_admin_notices', static function () use ($container): void {
+            $liveMode = (bool) $container->get('inpsyde_payment_gateway.is_live_mode');
+            $notificationReceived = (bool) $container->get('checkout.notification_received');
+            if ($liveMode || $notificationReceived) {
+                return;
+            }
+            $settingsPageUrl = (string) $container->get('inpsyde_payment_gateway.settings_page_url');
             $class = 'notice notice-warning';
             $aTagOpening = sprintf('<a href="%1$s">', $settingsPageUrl);
             $disableTestMode = sprintf(

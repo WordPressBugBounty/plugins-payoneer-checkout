@@ -147,7 +147,7 @@ return static function (string $rootPath): array {
         'core.event_name_application_boot_ready' => static function (ContainerInterface $container): string {
             /** @var Package $plugin */
             $plugin = $container->get('core.plugin_instance');
-            return $plugin->hookName((string) $plugin::ACTION_READY);
+            return $plugin->hookName((string) $plugin::ACTION_BOOTED);
         },
         'core.event_name_application_boot_failed' => static function (ContainerInterface $container): string {
             /** @var Package $plugin */

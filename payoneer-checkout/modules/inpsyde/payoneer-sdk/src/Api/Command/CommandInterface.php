@@ -31,4 +31,8 @@ interface CommandInterface
      * @return static
      */
     public function withApiClient(ApiClientInterface $apiClient): self;
+    /**
+     * Return currently configured transaction ID.
+     */
+    public function getTransactionId(): ?string;
 }

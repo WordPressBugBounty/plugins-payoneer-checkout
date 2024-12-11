@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit27febe80c0b92ea7cc8dea64c0c637cc
+class ComposerStaticInita664a5c9308577dba94a791b78ce8ca7
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -465,6 +465,7 @@ class ComposerStaticInit27febe80c0b92ea7cc8dea64c0c637cc
         'Syde\\Vendor\\Inpsyde\\Modularity\\Container\\ContainerConfigurator' => __DIR__ . '/..' . '/inpsyde/modularity/src/Container/ContainerConfigurator.php',
         'Syde\\Vendor\\Inpsyde\\Modularity\\Container\\PackageProxyContainer' => __DIR__ . '/..' . '/inpsyde/modularity/src/Container/PackageProxyContainer.php',
         'Syde\\Vendor\\Inpsyde\\Modularity\\Container\\ReadOnlyContainer' => __DIR__ . '/..' . '/inpsyde/modularity/src/Container/ReadOnlyContainer.php',
+        'Syde\\Vendor\\Inpsyde\\Modularity\\Container\\ServiceExtensions' => __DIR__ . '/..' . '/inpsyde/modularity/src/Container/ServiceExtensions.php',
         'Syde\\Vendor\\Inpsyde\\Modularity\\Module\\ExecutableModule' => __DIR__ . '/..' . '/inpsyde/modularity/src/Module/ExecutableModule.php',
         'Syde\\Vendor\\Inpsyde\\Modularity\\Module\\ExtendingModule' => __DIR__ . '/..' . '/inpsyde/modularity/src/Module/ExtendingModule.php',
         'Syde\\Vendor\\Inpsyde\\Modularity\\Module\\FactoryModule' => __DIR__ . '/..' . '/inpsyde/modularity/src/Module/FactoryModule.php',
@@ -479,6 +480,7 @@ class ComposerStaticInit27febe80c0b92ea7cc8dea64c0c637cc
         'Syde\\Vendor\\Inpsyde\\Modularity\\Properties\\ThemeProperties' => __DIR__ . '/..' . '/inpsyde/modularity/src/Properties/ThemeProperties.php',
         'Syde\\Vendor\\Inpsyde\\PaymentGateway\\Fields\\ContentField' => __DIR__ . '/../..' . '/modules/inpsyde/payment-gateway/src/Fields/ContentField.php',
         'Syde\\Vendor\\Inpsyde\\PaymentGateway\\GatewayIconsRendererInterface' => __DIR__ . '/../..' . '/modules/inpsyde/payment-gateway/src/GatewayIconsRendererInterface.php',
+        'Syde\\Vendor\\Inpsyde\\PaymentGateway\\I18n' => __DIR__ . '/../..' . '/modules/inpsyde/payment-gateway/src/I18n.php',
         'Syde\\Vendor\\Inpsyde\\PaymentGateway\\NoopPaymentProcessor' => __DIR__ . '/../..' . '/modules/inpsyde/payment-gateway/src/NoopPaymentProcessor.php',
         'Syde\\Vendor\\Inpsyde\\PaymentGateway\\NoopPaymentRequestValidator' => __DIR__ . '/../..' . '/modules/inpsyde/payment-gateway/src/NoopPaymentRequestValidator.php',
         'Syde\\Vendor\\Inpsyde\\PaymentGateway\\NoopRefundProcessor' => __DIR__ . '/../..' . '/modules/inpsyde/payment-gateway/src/NoopRefundProcessor.php',
@@ -952,9 +954,9 @@ class ComposerStaticInit27febe80c0b92ea7cc8dea64c0c637cc
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit27febe80c0b92ea7cc8dea64c0c637cc::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit27febe80c0b92ea7cc8dea64c0c637cc::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit27febe80c0b92ea7cc8dea64c0c637cc::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInita664a5c9308577dba94a791b78ce8ca7::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInita664a5c9308577dba94a791b78ce8ca7::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInita664a5c9308577dba94a791b78ce8ca7::$classMap;
 
         }, null, ClassLoader::class);
     }

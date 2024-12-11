@@ -71,4 +71,40 @@ interface ListCommandInterface extends PaymentCommandInterface
      * @return static
      */
     public function withSystem(SystemInterface $system): self;
+    /**
+     * Return currently configured callback.
+     *
+     * @return CallbackInterface|null
+     */
+    public function getCallback(): ?CallbackInterface;
+    /**
+     * Return currently configured customer.
+     *
+     * @return CustomerInterface|null
+     */
+    public function getCustomer(): ?CustomerInterface;
+    /**
+     * Return currently configured country.
+     *
+     * @return string|null
+     */
+    public function getCountry(): ?string;
+    /**
+     * Return currently configured views.
+     *
+     * @return array
+     */
+    public function getViews(): array;
+    /**
+     * Return currently configured division.
+     *
+     * @return string|null
+     */
+    public function getDivision(): ?string;
+    /**
+     * Return currently configured system.
+     *
+     * @return SystemInterface|null
+     */
+    public function getSystem(): ?SystemInterface;
 }

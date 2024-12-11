@@ -26,4 +26,16 @@ interface PaymentCommandInterface extends CommandInterface
      * @return static Created new instance.
      */
     public function withProducts(array $products): self;
+    /**
+     * Return currently configured payment.
+     *
+     * @return PaymentInterface|null
+     */
+    public function getPayment(): ?PaymentInterface;
+    /**
+     * Return currently configured products.
+     *
+     * @return ProductInterface[]
+     */
+    public function getProducts(): array;
 }

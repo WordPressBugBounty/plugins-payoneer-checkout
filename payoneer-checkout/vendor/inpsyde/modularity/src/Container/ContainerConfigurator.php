@@ -3,43 +3,32 @@
 declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\Modularity\Container;
 
-use Syde\Vendor\Psr\Container\ContainerExceptionInterface;
 use Syde\Vendor\Psr\Container\ContainerInterface;
+/**
+ * @psalm-import-type Service from \Inpsyde\Modularity\Module\ServiceModule
+ * @psalm-import-type ExtendingService from \Inpsyde\Modularity\Module\ExtendingModule
+ */
 class ContainerConfigurator
 {
+    /** @var array<string, Service> */
+    private array $services = [];
+    /** @var array<string, bool> */
+    private array $factoryIds = [];
+    private ServiceExtensions $extensions;
+    private ?ContainerInterface $compiledContainer = null;
+    /** @var ContainerInterface[] */
+    private array $containers = [];
     /**
-     * @var array<string, callable(ContainerInterface $container):mixed>
-     */
-    private $services = [];
-    /**
-     * @var array<string, bool>
-     */
-    private $factoryIds = [];
-    /**
-     * @var array<string, array<callable(mixed $service, ContainerInterface $container):mixed>>
-     */
-    private $extensions = [];
-    /**
-     * @var ContainerInterface[]
-     */
-    private $containers = [];
-    /**
-     * @var null|ContainerInterface
-     */
-    private $compiledContainer;
-    /**
-     * ContainerConfigurator constructor.
-     *
      * @param ContainerInterface[] $containers
      */
-    public function __construct(array $containers = [])
+    public function __construct(array $containers = [], ?ServiceExtensions $extensions = null)
     {
         array_map([$this, 'addContainer'], $containers);
+        $this->extensions = $extensions ?? new ServiceExtensions();
     }
     /**
-     * Allowing to add child containers.
-     *
      * @param ContainerInterface $container
+     * @return void
      */
     public function addContainer(ContainerInterface $container): void
     {
@@ -47,7 +36,7 @@ class ContainerConfigurator
     }
     /**
      * @param string $id
-     * @param callable(ContainerInterface $container):mixed $factory
+     * @param Service $factory
      */
     public function addFactory(string $id, callable $factory): void
     {
@@ -58,30 +47,25 @@ class ContainerConfigurator
     }
     /**
      * @param string $id
-     * @param callable(ContainerInterface $container):mixed $service
-     *
+     * @param Service $service
      * @return void
      */
     public function addService(string $id, callable $service): void
     {
-        if ($this->hasService($id)) {
-            /*
-             * We are being intentionally permissive here,
-             * allowing a simple workflow for *intentional* overrides
-             * while accepting the (small?) risk of *accidental* overrides
-             * that could be hard to notice and debug.
-             */
-            /*
-             * Clear a factory flag in case it was a factory.
-             * If needs be, it will get re-added after this function completes.
-             */
-            unset($this->factoryIds[$id]);
-        }
+        /*
+         * We are being intentionally permissive here,
+         * allowing a simple workflow for *intentional* overrides
+         * while accepting the (small?) risk of *accidental* overrides
+         * that could be hard to notice and debug.
+         *
+         * Clear a factory flag in case it was a factory.
+         * If needs be, it will get re-added after this function completes.
+         */
+        unset($this->factoryIds[$id]);
         $this->services[$id] = $service;
     }
     /**
      * @param string $id
-     *
      * @return bool
      */
     public function hasService(string $id): bool
@@ -98,34 +82,29 @@ class ContainerConfigurator
     }
     /**
      * @param string $id
-     * @param callable(mixed $service, ContainerInterface $container):mixed $extender
-     *
+     * @param ExtendingService $extender
      * @return void
      */
     public function addExtension(string $id, callable $extender): void
     {
-        if (!isset($this->extensions[$id])) {
-            $this->extensions[$id] = [];
-        }
-        $this->extensions[$id][] = $extender;
+        $this->extensions->add($id, $extender);
     }
     /**
      * @param string $id
-     *
      * @return bool
      */
     public function hasExtension(string $id): bool
     {
-        return isset($this->extensions[$id]);
+        return $this->extensions->has($id);
     }
     /**
-     * Returns a read only version of this Container.
-     *
      * @return ContainerInterface
+     *
+     * @psalm-assert ContainerInterface $this->compiledContainer
      */
     public function createReadOnlyContainer(): ContainerInterface
     {
-        if (!$this->compiledContainer) {
+        if ($this->compiledContainer === null) {
             $this->compiledContainer = new ReadOnlyContainer($this->services, $this->factoryIds, $this->extensions, $this->containers);
         }
         return $this->compiledContainer;

@@ -2,4 +2,4 @@
 
 namespace Syde\Vendor;
 
-return array('dependencies' => array('jquery', 'regenerator-runtime'), 'version' => 'b5ed24a56b3a0544bef0');
+return array('dependencies' => array('jquery', 'regenerator-runtime'), 'version' => '6b28ab00bfe9c3527be1');

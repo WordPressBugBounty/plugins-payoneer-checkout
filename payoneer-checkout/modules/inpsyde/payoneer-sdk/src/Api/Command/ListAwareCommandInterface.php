@@ -13,4 +13,10 @@ interface ListAwareCommandInterface extends CommandInterface
      * @return static
      */
     public function withLongId(string $longId): self;
+    /**
+     * Get currently configured longId.
+     *
+     * @return string|null
+     */
+    public function getLongId(): ?string;
 }

@@ -6,10 +6,9 @@ namespace Syde\Vendor\Inpsyde\PaymentGateway;
 use Syde\Vendor\Psr\Container\ContainerInterface;
 class PaymentGatewayValidator
 {
-    /** @var array $requiredServices */
-    private $requiredServices;
-    /** @var ContainerInterface $container */
-    private $container;
+    /** @var string[] */
+    private array $requiredServices;
+    private ContainerInterface $container;
     public function __construct(ContainerInterface $container, array $requiredServices)
     {
         $this->container = $container;

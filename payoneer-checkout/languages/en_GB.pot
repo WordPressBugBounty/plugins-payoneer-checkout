@@ -16,9 +16,9 @@ msgstr ""
 #. Plugin Name of the plugin
 #. translators: Title of the settings tab
 #: payoneer-checkout.php
-#: modules.local/settings/inc/services.php:570
+#: modules.local/settings/inc/services.php:569
 #: modules.local/status-report/src/StatusReportModule.php:59
-#: modules/inpsyde/payoneer-settings/inc/services.php:570
+#: modules/inpsyde/payoneer-settings/inc/services.php:569
 #: modules/inpsyde/payoneer-status-report/src/StatusReportModule.php:59
 msgid "Payoneer Checkout"
 msgstr ""
@@ -162,19 +162,19 @@ msgid "Select the payment flow for every transaction."
 msgstr ""
 
 #. translators: When detecting an ABORT interaction code upon redirecting to the cancelUrl
-#: modules.local/checkout/src/CheckoutModule.php:424
-#: modules/inpsyde/payoneer-payment-gateway-checkout/src/CheckoutModule.php:424
+#: modules.local/checkout/src/CheckoutModule.php:417
+#: modules/inpsyde/payoneer-payment-gateway-checkout/src/CheckoutModule.php:417
 msgid "Payment has been aborted"
 msgstr ""
 
-#: modules.local/checkout/src/CheckoutModule.php:443
-#: modules/inpsyde/payoneer-payment-gateway-checkout/src/CheckoutModule.php:443
+#: modules.local/checkout/src/CheckoutModule.php:436
+#: modules/inpsyde/payoneer-payment-gateway-checkout/src/CheckoutModule.php:436
 msgid "Payment failed. Please try again"
 msgstr ""
 
 #. translators: Notice when redirecting to cancelUrl (after failed 3DS challenge or customer abort)
-#: modules.local/checkout/src/CheckoutModule.php:446
-#: modules/inpsyde/payoneer-payment-gateway-checkout/src/CheckoutModule.php:446
+#: modules.local/checkout/src/CheckoutModule.php:439
+#: modules/inpsyde/payoneer-payment-gateway-checkout/src/CheckoutModule.php:439
 msgid "Payment canceled. Please try again or choose another payment method."
 msgstr ""
 
@@ -285,9 +285,9 @@ msgstr ""
 
 #. translators: Title of the settings tab
 #: modules.local/payment-methods/inc/fields.php:28
-#: modules.local/settings/inc/services.php:565
+#: modules.local/settings/inc/services.php:564
 #: modules/inpsyde/payoneer-payment-methods/inc/fields.php:28
-#: modules/inpsyde/payoneer-settings/inc/services.php:565
+#: modules/inpsyde/payoneer-settings/inc/services.php:564
 msgid "Afterpay"
 msgstr ""
 
@@ -435,31 +435,31 @@ msgstr ""
 msgid "Payoneer payment methods are de/activated globally on the gateway settings page"
 msgstr ""
 
-#: modules.local/settings/inc/services.php:510
-#: modules/inpsyde/payoneer-settings/inc/services.php:510
+#: modules.local/settings/inc/services.php:509
+#: modules/inpsyde/payoneer-settings/inc/services.php:509
 msgid "Are you sure you want to reset this field to its default value?"
 msgstr ""
 
 #. translators: Title of the settings tab
-#: modules.local/settings/inc/services.php:561
-#: modules/inpsyde/payoneer-settings/inc/services.php:561
+#: modules.local/settings/inc/services.php:560
+#: modules/inpsyde/payoneer-settings/inc/services.php:560
 msgid "Credit / Debit cards"
 msgstr ""
 
 #. translators: Title of the settings tab
-#: modules.local/settings/inc/services.php:563
-#: modules/inpsyde/payoneer-settings/inc/services.php:563
+#: modules.local/settings/inc/services.php:562
+#: modules/inpsyde/payoneer-settings/inc/services.php:562
 msgid "Hosted payment page"
 msgstr ""
 
 #. translators: %1$s, %2$s and %3$s are replaced with the opening and closing 'a' tags
-#: modules.local/settings/src/SettingsModule.php:185
-#: modules/inpsyde/payoneer-settings/src/SettingsModule.php:185
+#: modules.local/settings/src/SettingsModule.php:181
+#: modules/inpsyde/payoneer-settings/src/SettingsModule.php:181
 msgid "%1$sEnable live mode%2$s when you are ready to accept Live transactions."
 msgstr ""
 
-#: modules.local/settings/src/SettingsModule.php:196
-#: modules/inpsyde/payoneer-settings/src/SettingsModule.php:196
+#: modules.local/settings/src/SettingsModule.php:192
+#: modules/inpsyde/payoneer-settings/src/SettingsModule.php:192
 msgid "Payoneer Checkout Live mode is disabled"
 msgstr ""
 
@@ -580,18 +580,4 @@ msgstr ""
 #: modules.local/websdk/src/Config/StylesColor.php:74
 #: modules/inpsyde/payoneer-websdk/src/Config/StylesColor.php:74
 msgid "Specifies the border color around input fields when they are not focused and not displaying an error"
-msgstr ""
-
-#. translators: %1$s is replaced with the actual order ID.
-#: modules/inpsyde/payment-gateway/src/PaymentGateway.php:227
-msgid "Failed to process the refund: the order with ID %1$s not found"
-msgstr ""
-
-#: modules/inpsyde/payment-gateway/src/PaymentGateway.php:246
-msgid "Failed to refund the order payment"
-msgstr ""
-
-#. translators: Placeholder text if payment fields failed to render
-#: modules/inpsyde/payment-gateway/src/PaymentGateway.php:275
-msgid "Payment method not available. Please select another payment method."
 msgstr ""

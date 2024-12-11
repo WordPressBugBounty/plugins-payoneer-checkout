@@ -2,6 +2,7 @@
 
 //phpcs:disable Inpsyde.CodeQuality.NestingLevel.High
 //phpcs:disable Inpsyde.CodeQuality.LineLength.TooLong
+//phpcs:disable Inpsyde.CodeQuality.FunctionLength.TooLong
 declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\PaymentGateway;
 
@@ -38,7 +39,11 @@ class PaymentGatewayModule implements ServiceModule, ExecutableModule
             $requiredServices = $container->get('payment_gateways.required_services');
             assert(is_array($requiredServices));
             return new PaymentGatewayValidator($container, $requiredServices);
-        }];
+        }, 'payment_gateways.i18n' => static fn(ContainerInterface $container): I18n => new I18n($container), 'payment_gateways.i18n.messages' => static fn(): array => ['refund_order_not_found' => static fn(array $params): string => sprintf(
+            /* translators: %1$s is replaced with the actual order ID. */
+            __('Failed to process the refund: the order with ID %1$s not found', 'syde-payment-gateway'),
+            (string) $params['orderId']
+        ), 'refund_failed' => __('Failed to refund the order payment', 'syde-payment-gateway'), 'payment_method_not_available' => __('Payment method not available. Please select another payment method.', 'syde-payment-gateway')]];
     }
     /**
      * Get the full URL to a file within a plugin, given its absolute file path.

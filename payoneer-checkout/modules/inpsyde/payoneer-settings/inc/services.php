@@ -202,7 +202,7 @@ return static function (): array {
          * Scripts & Styles for Inpsyde Assets
          */
         'payoneer_settings.path.assets' => new StringService('{0}/{1}/assets/', ['core.local_modules_directory_name', 'payoneer_settings.module_name']),
-        'payoneer_settings.assets.js.admin_settings.data' => new Value(['i18n' => ['confirmReset' => \__('Are you sure you want to reset this field to its default value?', 'payoneer-checkout')]]),
+        'payoneer_settings.assets.js.admin_settings.data' => static fn() => ['i18n' => ['confirmReset' => \__('Are you sure you want to reset this field to its default value?', 'payoneer-checkout')]],
         'payoneer_settings.assets.js.admin_settings.handle' => new Value('payoneer-admin-settings-behaviour'),
         'payoneer_settings.token_placeholder' => new Value('*****'),
         'payoneer_settings.options' => new Factory(
@@ -223,7 +223,7 @@ return static function (): array {
                 return $product;
             }
         ),
-        'payoneer-settings.settings-tabs' => new Value([
+        'payoneer-settings.settings-tabs' => static fn() => [
             /* translators: Title of the settings tab */
             'payoneer-checkout' => \__('Credit / Debit cards', 'payoneer-checkout'),
             /* translators: Title of the settings tab */
@@ -235,7 +235,7 @@ return static function (): array {
             //As a result, the tab called for users 'Payoneer Checkout' must have another id.
             /* translators: Title of the settings tab */
             'payoneer-general' => \__('Payoneer Checkout', 'payoneer-checkout'),
-        ]),
+        ],
         'payoneer-settings.merchant-credentials.is-entered' => new Factory(['payoneer_settings.merchant'], static function (MerchantInterface $merchant): bool {
             return $merchant->getCode() && $merchant->getToken() && $merchant->getDivision();
         }),
