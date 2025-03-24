@@ -32,9 +32,7 @@ return static function (): array {
     }, 'payoneer_settings.settings_fields' => static function (array $previous, ContainerInterface $container): array {
         /** @var array<string, array-key> $generalSettingsFields */
         $generalSettingsFields = $container->get('checkout.settings.general_settings_fields');
-        /** @var array<string, array-key> $appearanceSettingsFields */
-        $appearanceSettingsFields = $container->get('checkout.settings.appearance_settings_fields');
-        return array_merge($previous, $generalSettingsFields, $appearanceSettingsFields);
+        return array_merge($previous, $generalSettingsFields);
     }, 'payment_gateway.payoneer-hosted.payment_processor' => static function (PaymentProcessorInterface $previous, ContainerInterface $container): PaymentProcessorInterface {
         /**
          * @var callable(ContainerInterface):PaymentProcessorInterface $factory

@@ -18,12 +18,6 @@ interface CommandInterface
      */
     public function execute(): ListInterface;
     /**
-     * @param string $transactionId
-     *
-     * @return static
-     */
-    public function withTransactionId(string $transactionId): self;
-    /**
      * Set API client to be used for requests.
      *
      * @param ApiClientInterface $apiClient

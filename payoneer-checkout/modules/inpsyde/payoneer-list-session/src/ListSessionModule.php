@@ -38,7 +38,7 @@ class ListSessionModule implements ExecutableModule, ServiceModule, ExtendingMod
     }
     public function run(ContainerInterface $container): bool
     {
-        (new ListSessionInitializer())($container);
+        //todo: check if we still need this after Fetch command is implemented
         $this->registerKeepingRedirectAfterUpdate();
         return \true;
     }

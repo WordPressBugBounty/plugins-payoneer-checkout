@@ -11,6 +11,12 @@ use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Product\ProductInterface;
 interface PaymentCommandInterface extends CommandInterface
 {
     /**
+     * @param string $transactionId
+     *
+     * @return static
+     */
+    public function withTransactionId(string $transactionId): self;
+    /**
      * Return new instance with provided payment.
      *
      * @param PaymentInterface $payment A payment to add to a new instance.

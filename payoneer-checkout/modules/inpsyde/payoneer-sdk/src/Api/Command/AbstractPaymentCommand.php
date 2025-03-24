@@ -38,6 +38,15 @@ abstract class AbstractPaymentCommand extends AbstractCommand implements Payment
         parent::__construct($apiClient, $listDeserializer, $pathTemplate, $responseValidator, $errors);
     }
     /**
+     * @inheritDoc
+     */
+    public function withTransactionId(string $transactionId): PaymentCommandInterface
+    {
+        $newThis = clone $this;
+        $newThis->transactionId = $transactionId;
+        return $newThis;
+    }
+    /**
      * Return a new instance with provided products.
      *
      * @param ProductInterface[] $products
@@ -64,7 +73,9 @@ abstract class AbstractPaymentCommand extends AbstractCommand implements Payment
         return $newThis;
     }
     /**
-     * @return array
+     * @return array[]
+     *
+     * @psalm-return list<array>
      */
     protected function prepareProducts(): array
     {

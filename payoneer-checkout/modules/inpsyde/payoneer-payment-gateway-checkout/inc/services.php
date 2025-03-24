@@ -66,66 +66,43 @@ return static function (): array {
     }), 'checkout.list_url_container_attribute_name' => static function (): string {
         return 'data-payoneer-list-url';
     }, 'checkout.session_hash_key' => new Value('_payoneer_checkout_hash'), 'checkout.list_hash_container_id' => new Value('data-payoneer-list-hash'), 'checkout.module_name' => new Value('checkout'), 'checkout.templates_dir_virtual_path' => new StringService('{module_name}/static/templates', ['module_name' => 'checkout.module_name']), 'checkout.module_path' => new Value(dirname(__FILE__, 2)), 'checkout.templates_dir_local_path' => new StringService('{module_path}/static/templates', ['module_path' => 'checkout.module_path']), 'checkout.security_token_generator' => new Constructor(TokenGenerator::class), 'checkout.transaction_id_generator' => new Constructor(TransactionIdGenerator::class), 'checkout.checkout_hash_provider' => new Constructor(CheckoutHashProvider::class, ['wc']), 'checkout.misconfiguration_detector' => new Constructor(MisconfigurationDetector::class), 'checkout.gateway_icon_elements_css' => new Value(<<<CSS
-input:is(#payment_method_payoneer-checkout):checked + label > #gateway-icons-payoneer {
+input:is(#payment_method_payoneer-checkout):checked + label > .syde-gateway-icons {
 \tdisplay: none;
 }
+#payment .payment_methods #payment_method_payoneer-checkout + label > .syde-gateway-icons img {
+    padding: 2px;
+}
 CSS
-), 'checkout.gateway_icon_elements_filenames' => new Factory(['checkout.amex_icon_enabled', 'checkout.jcb_icon_enabled', 'checkout.diners_icon_enabled', 'checkout.discover_icon_enabled', 'checkout.afterpay_icon_enabled', 'checkout.selected_payment_flow', 'checkout.gateway_icon_elements_filenames_all'], static function (bool $amexEnabled, bool $jcbEnabled, bool $dinersEnabled, bool $discoverEnabled, bool $afterpayEnabled, string $selectedPaymentFlow, array $icons): array {
-        if (!$amexEnabled) {
-            $icons = array_diff($icons, ['amex.svg']);
-        }
-        if (!$jcbEnabled) {
-            $icons = array_diff($icons, ['jcb.svg']);
-        }
-        if (!$dinersEnabled) {
-            $icons = array_diff($icons, ['diners.svg']);
-        }
-        if (!$discoverEnabled) {
-            $icons = array_diff($icons, ['discover.svg']);
-        }
-        if ($selectedPaymentFlow === 'embedded' || !$afterpayEnabled) {
-            $icons = array_diff($icons, ['afterpay.svg']);
-        }
-        return $icons;
-    }), 'checkout.gateway_icon_elements.base_path' => new Factory(['checkout.module_root_path'], static function (string $moduleRootPath): string {
-        return "{$moduleRootPath}/assets/img";
-    }), 'checkout.gateway_icon_elements' => new Factory(['checkout.gateway_icon_elements.base_path', 'checkout.gateway_icon_elements_filenames'], static function (string $basePath, array $imgFiles): array {
-        return array_map(static function (string $file) use ($basePath): string {
-            return plugins_url('img/' . $file, $basePath);
-        }, $imgFiles);
-    }), 'checkout.gateway_icon_elements_filenames_cards' => new Value(['visa.svg', 'mastercard.svg', 'amex.svg', 'discover.svg', 'diners.svg', 'jcb.svg']), 'checkout.gateway_icon_elements_filenames_cards.enabled' => new Factory(['checkout.gateway_icon_elements_filenames', 'checkout.gateway_icon_elements_filenames_cards'], static function (array $enabledIconsFilenames, array $cardsIconsFilenames): array {
-        return array_intersect($enabledIconsFilenames, $cardsIconsFilenames);
-    }), 'checkout.gateway_icon_elements_filenames_afterpay' => new Value(['afterpay.svg']), 'checkout.gateway_icon_elements_filenames_all' => new Factory(['checkout.gateway_icon_elements_filenames_cards', 'checkout.gateway_icon_elements_filenames_afterpay'], static function (array $iconsCards, array $iconsAfterpay): array {
-        return array_merge($iconsCards, $iconsAfterpay);
-    }), 'checkout.gateway_icon_elements_cards' => new Factory(['checkout.gateway_icon_elements.base_path', 'checkout.gateway_icon_elements_filenames_cards'], static function (string $basePath, array $imgFiles): array {
-        return array_map(static function (string $file) use ($basePath): string {
-            return plugins_url('img/' . $file, $basePath);
-        }, $imgFiles);
-    }), 'checkout.gateway_icon_elements_cards.enabled' => new Factory(['checkout.gateway_icon_elements.base_path', 'checkout.gateway_icon_elements_filenames_cards.enabled'], static function (string $basePath, array $imgFiles): array {
-        return array_map(static function (string $file) use ($basePath): string {
-            return plugins_url('img/' . $file, $basePath);
-        }, $imgFiles);
-    }), 'checkout.gateway_icon_elements_afterpay' => new Factory(['checkout.gateway_icon_elements.base_path', 'checkout.gateway_icon_elements_filenames_afterpay'], static function (string $basePath, array $imgFiles): array {
-        return array_map(static function (string $file) use ($basePath): string {
-            return plugins_url('img/' . $file, $basePath);
-        }, $imgFiles);
-    }), 'checkout.settings.general_settings_fields' => Service::fromFile(__DIR__ . "/general_settings_fields.php"), 'checkout.settings.appearance_settings_fields' => Service::fromFile(__DIR__ . "/appearance_settings_fields.php"), 'checkout.on_error_refresh_fragment_flag' => new Value('payoneer_refresh_fragment_onError'), 'checkout.is_on_error_refresh_fragment_flag' => new Factory(['checkout.on_error_refresh_fragment_flag'], static function (string $onErrorFlag): bool {
-        /**
-         * We can force refresh if a special flag is added
-         */
-        $postData = [];
-        $data = filter_input(\INPUT_POST, 'post_data') ?? '';
-        // phpcs:ignore WordPress.Security.NonceVerification.Missing
-        assert(is_string($data));
-        parse_str($data, $postData);
-        if (isset($postData[$onErrorFlag]) && $postData[$onErrorFlag] === 'true') {
-            return \true;
-        }
-        return \false;
-    }), 'checkout.flow_options' => new Value([]), 'checkout.flow_options_description' => static function (): string {
+), 'checkout.settings.general_settings_fields' => Service::fromFile(__DIR__ . "/general_settings_fields.php"), 'checkout.flow_options' => new Value([]), 'checkout.flow_options_description' => static function (): string {
         return __('Select the payment flow for every transaction.', 'payoneer-checkout');
     }, 'checkout.payment_flow_override_flag' => new Value('payoneer_force_hosted_flow'), 'checkout.payment_flow_override_flag.is_set' => new Factory(['checkout.payment_flow_override_flag'], static function (string $forceHostedFlowFlag): bool {
-        return filter_input(\INPUT_GET, $forceHostedFlowFlag, (int) \FILTER_VALIDATE_BOOL) || filter_input(\INPUT_POST, $forceHostedFlowFlag, (int) \FILTER_VALIDATE_BOOL);
+        /**
+         * Frontend JS decorates fetch() to pass a custom header to all outgoing HTTP calls
+         */
+        $headerUtil = new RequestHeaderUtil();
+        $headerName = 'x-payoneer-checkout-force-hosted-flow';
+        if ($headerUtil->hasHeader($headerName)) {
+            return $headerUtil->getHeader($headerName) === 'true';
+        }
+        /**
+         * In addition to this, we check the request body as well, to allow for
+         * cases where our JS wasn't executed (e.g. classic checkout or pay-for-order page).
+         */
+        $rawData = (string) file_get_contents("php://input");
+        $json = json_decode($rawData, \true);
+        if (!is_array($json)) {
+            //This may be classic checkout or pay-for-order page
+            return filter_input(\INPUT_GET, $forceHostedFlowFlag, (int) \FILTER_VALIDATE_BOOL) || filter_input(\INPUT_POST, $forceHostedFlowFlag, (int) \FILTER_VALIDATE_BOOL);
+        }
+        //Block checkout
+        $hppFlagField = array_filter(is_array($json['payment_data']) ? $json['payment_data'] : [], fn($item) => is_array($item) && $item['key'] === $forceHostedFlowFlag);
+        /**
+         * Missing HPP flag means our JS wasn't executed and HPP fallback flag is set.
+         *
+         * @todo: consider adding our own hidden block to checkout for our custom fields,
+         *      this will let us always have our custom fields set.
+         */
+        return !$hppFlagField || $hppFlagField[0]['value'] === \true ?? \false;
     }), 'checkout.selected_payment_flow' => new Factory(['inpsyde_payment_gateway.options', 'checkout.payment_flow_override_flag.is_set'], static function (ContainerInterface $options, bool $forceHostedFlowFlagIsSet): string {
         if ($forceHostedFlowFlagIsSet) {
             return 'hosted';

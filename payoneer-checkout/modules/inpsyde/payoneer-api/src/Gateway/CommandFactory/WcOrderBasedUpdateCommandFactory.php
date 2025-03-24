@@ -37,6 +37,7 @@ class WcOrderBasedUpdateCommandFactory implements WcOrderBasedUpdateCommandFacto
      * @var WcOrderBasedPaymentFactoryInterface
      */
     protected $paymentFactory;
+    protected string $fallbackCountry;
     /**
      * @param UpdateListCommandInterface $updateListCommand
      * @param WcOrderBasedPaymentFactoryInterface $paymentFactory
@@ -44,8 +45,9 @@ class WcOrderBasedUpdateCommandFactory implements WcOrderBasedUpdateCommandFacto
      * @param WcOrderBasedCustomerFactoryInterface $wcOrderBasedCustomerFactory
      * @param WcOrderBasedProductsFactoryInterface $productsFactory
      * @param SystemInterface $system
+     * @param string $fallbackCountry
      */
-    public function __construct(UpdateListCommandInterface $updateListCommand, WcOrderBasedPaymentFactoryInterface $paymentFactory, WcOrderBasedCallbackFactoryInterface $wcOrderBasedCallbackFactory, WcOrderBasedCustomerFactoryInterface $wcOrderBasedCustomerFactory, WcOrderBasedProductsFactoryInterface $productsFactory, SystemInterface $system)
+    public function __construct(UpdateListCommandInterface $updateListCommand, WcOrderBasedPaymentFactoryInterface $paymentFactory, WcOrderBasedCallbackFactoryInterface $wcOrderBasedCallbackFactory, WcOrderBasedCustomerFactoryInterface $wcOrderBasedCustomerFactory, WcOrderBasedProductsFactoryInterface $productsFactory, SystemInterface $system, string $fallbackCountry)
     {
         $this->updateListCommand = $updateListCommand;
         $this->callbackFactory = $wcOrderBasedCallbackFactory;
@@ -53,6 +55,7 @@ class WcOrderBasedUpdateCommandFactory implements WcOrderBasedUpdateCommandFacto
         $this->paymentFactory = $paymentFactory;
         $this->productsFactory = $productsFactory;
         $this->system = $system;
+        $this->fallbackCountry = $fallbackCountry;
     }
     /**
      * @inheritDoc
@@ -79,6 +82,6 @@ class WcOrderBasedUpdateCommandFactory implements WcOrderBasedUpdateCommandFacto
      */
     protected function getOrderCountry(WC_Order $order): string
     {
-        return $order->get_shipping_country() ?: $order->get_billing_country();
+        return ($order->get_billing_country() ?: $order->get_shipping_country()) ?: $this->fallbackCountry;
     }
 }

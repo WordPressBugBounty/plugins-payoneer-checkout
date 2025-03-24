@@ -5,7 +5,7 @@ namespace Syde\Vendor;
 
 use Syde\Vendor\Inpsyde\PaymentGateway\PaymentRequestValidatorInterface;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\AjaxOrderPay\OrderPayload;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\ListUrlPaymentRequestValidator;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\ListLongIdPaymentRequestValidator;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\PaymentFieldsRendererFactory;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionManager;
 use Syde\Vendor\Psr\Container\ContainerInterface;
@@ -31,11 +31,9 @@ return static function (): array {
             if (!$isEnabled || $isCheckoutPay) {
                 return $previous;
             }
-            /** @var string $listUrlInputName */
-            $listUrlInputName = $container->get('payment_methods.payoneer-checkout.list_url_container_id');
             /** @var ListSessionManager $listSessionManager */
             $listSessionManager = $container->get('list_session.manager');
-            return new ListUrlPaymentRequestValidator($listUrlInputName, $listSessionManager, $previous);
+            return new ListLongIdPaymentRequestValidator($listSessionManager, $previous);
         },
         'payment_gateway.payoneer-checkout.payment_fields_renderers' => static function (array $renderers, ContainerInterface $container): array {
             return \array_merge($renderers, PaymentFieldsRendererFactory::forComponent((string) $container->get('payment_methods.payoneer-checkout.payment_fields_component'), $container));

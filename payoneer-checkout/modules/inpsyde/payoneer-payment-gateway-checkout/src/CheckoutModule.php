@@ -61,11 +61,6 @@ class CheckoutModule implements ServiceModule, ExecutableModule, ExtendingModule
         $notificationReceivedOptionName = (string) $container->get('checkout.notification_received.option_name');
         $this->addIncomingWebhookListener($notificationReceivedOptionName);
         $this->addCreateListSessionFailedListener($container);
-        /**
-         * Inject some extra markup on the payment method title.
-         * This fixes alignment of title and icons.
-         */
-        $this->registerAddingGatewayTitleExtraMarkup($container);
         return \true;
     }
     protected function registerCheckoutSetup(ContainerInterface $container): void
@@ -90,28 +85,6 @@ class CheckoutModule implements ServiceModule, ExecutableModule, ExtendingModule
                 delete_option($saltOptionName);
             });
         }
-    }
-    protected function registerAddingGatewayTitleExtraMarkup(ContainerInterface $container): void
-    {
-        add_filter('woocommerce_gateway_title', static function (string $title, string $id) use ($container) {
-            $payoneerGatewayIds = $container->get('payment_gateways');
-            assert(is_array($payoneerGatewayIds));
-            if (!in_array($id, $payoneerGatewayIds, \true)) {
-                return $title;
-            }
-            $isCheckout = $container->get('wc.is_checkout');
-            $isCheckoutPay = $container->get('wc.is_checkout_pay_page');
-            /**
-             * The checks above are also true when processing the order.
-             * So we also check if we are a GET request
-             */
-            //phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotValidated
-            $isGetRequest = isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'GET';
-            if (!($isCheckout || $isCheckoutPay) || !$isGetRequest) {
-                return $title;
-            }
-            return '<span class="payoneer-payment-method-title">' . $title . '</span>';
-        }, 10, 2);
     }
     /**
      * If forcing hosted payment page flow flag is set, this means we are in the embedded payment
@@ -493,8 +466,7 @@ class CheckoutModule implements ServiceModule, ExecutableModule, ExtendingModule
          * merchant configuration.
          */
         add_action('payoneer-checkout.create_list_session_failed', static function ($arg) use ($container): void {
-            $isFrontendRequest = $container->get('checkout.is_frontend_request');
-            if (!$isFrontendRequest) {
+            if (!$container->get('wp.is_rest_api_request') && !$container->get('checkout.is_frontend_request')) {
                 return;
             }
             if (!is_array($arg)) {

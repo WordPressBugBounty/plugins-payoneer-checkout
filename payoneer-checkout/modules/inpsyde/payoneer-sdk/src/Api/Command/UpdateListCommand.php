@@ -6,6 +6,7 @@ namespace Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\ApiExceptionInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\Error\InteractionErrorInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\Exception\CommandException;
+use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\Exception\CommandExecutionException;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Callback\CallbackInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Callback\CallbackSerializerInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Customer\CustomerInterface;
@@ -17,11 +18,10 @@ use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Payment\PaymentSerializerInterf
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Product\ProductSerializerInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\System\SystemInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\System\SystemSerializerInterface;
+use Syde\Vendor\Inpsyde\PayoneerSdk\Client\ApiCallExceptionInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Client\ApiClientInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Client\JsonCodecTrait;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\ResponseValidator\ResponseValidatorInterface;
-use Syde\Vendor\Inpsyde\PayoneerSdk\PayoneerSdkExceptionInterface;
-use RuntimeException;
 class UpdateListCommand extends AbstractPaymentCommand implements UpdateListCommandInterface
 {
     use JsonCodecTrait;
@@ -88,8 +88,22 @@ class UpdateListCommand extends AbstractPaymentCommand implements UpdateListComm
             $this->onResponse($response);
             $parsedBody = $this->decodeJsonResponseBody($response);
             return $this->listDeserializer->deserializeList($parsedBody);
-        } catch (PayoneerSdkExceptionInterface|RuntimeException $exception) {
-            throw new CommandException($this, sprintf('Failed to update list session, ApiClientException caught: %1$s.', (string) $exception), 0, $exception);
+        } catch (ApiCallExceptionInterface $exception) {
+            /**
+             * If the client was able to receive a response (but with an error status),
+             * we still want to inspect the interaction codes in order to throw a dedicated
+             * exception.
+             */
+            $response = $exception->getResponse();
+            if ($response !== null) {
+                $this->onResponse($response);
+            }
+            /**
+             * If we cannot find anything wrong in the response body, throw a generic exception
+             */
+            throw new CommandExecutionException($this, sprintf('Failed to update list session %1$s: %2$s.', $this->longId ?? '', $exception->getMessage()), 0, $exception);
+        } catch (\Throwable $exception) {
+            throw new CommandException($this, sprintf('Failed to update list session %1$s: %2$s', $this->longId ?? '', $exception->getMessage()), 0, $exception);
         }
     }
     /**

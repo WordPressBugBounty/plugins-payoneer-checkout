@@ -42,6 +42,8 @@ class GenericError extends AbstractError implements ErrorInterface, ExceptionCla
      * @return static The new instance.
      *
      * @throws RuntimeException If problem configuring.
+     *
+     * @psalm-return static<E>
      */
     public function withExceptionClass(string $fqcn): ExceptionClassErrorInterface
     {

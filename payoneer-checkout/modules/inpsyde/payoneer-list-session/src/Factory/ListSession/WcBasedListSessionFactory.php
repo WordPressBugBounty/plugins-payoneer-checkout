@@ -71,7 +71,8 @@ class WcBasedListSessionFactory implements WcBasedListSessionFactoryInterface, W
      * @var TransactionIdGeneratorInterface
      */
     protected $transactionIdGenerator;
-    public function __construct(PayoneerInterface $payoneer, CallbackFactoryInterface $callbackFactory, PaymentFactoryInterface $paymentFactory, StyleFactoryInterface $styleFactory, WcBasedCustomerFactoryInterface $customerFactory, WcCartBasedProductListFactoryInterface $productListFactory, UriInterface $notificationUrl, string $checkoutLanguage, string $currency, SystemInterface $system, TransactionIdGeneratorInterface $transactionIdGenerator, string $division)
+    protected string $fallbackCountry;
+    public function __construct(PayoneerInterface $payoneer, CallbackFactoryInterface $callbackFactory, PaymentFactoryInterface $paymentFactory, StyleFactoryInterface $styleFactory, WcBasedCustomerFactoryInterface $customerFactory, WcCartBasedProductListFactoryInterface $productListFactory, UriInterface $notificationUrl, string $checkoutLanguage, string $currency, SystemInterface $system, TransactionIdGeneratorInterface $transactionIdGenerator, string $division, string $fallbackCountry)
     {
         $this->payoneer = $payoneer;
         $this->callbackFactory = $callbackFactory;
@@ -85,11 +86,12 @@ class WcBasedListSessionFactory implements WcBasedListSessionFactoryInterface, W
         $this->system = $system;
         $this->division = $division;
         $this->transactionIdGenerator = $transactionIdGenerator;
+        $this->fallbackCountry = $fallbackCountry;
     }
     public function createList(WC_Customer $customer, WC_Cart $cart, string $integrationType, string $hostedVersion = null): ListInterface
     {
         $transactionId = $this->transactionIdGenerator->generateTransactionId();
-        $country = $customer->get_shipping_country() ?: $customer->get_billing_country();
+        $country = ($customer->get_billing_country() ?: $customer->get_shipping_country()) ?: $this->fallbackCountry;
         $callback = $this->createCallback((string) $this->notificationUrl);
         $customer = $this->customerFactory->createCustomerFromWcCustomer($customer);
         $style = $this->styleFactory->createStyle($this->checkoutLanguage);
@@ -120,7 +122,7 @@ class WcBasedListSessionFactory implements WcBasedListSessionFactoryInterface, W
             $callback = $this->createCallback((string) $this->notificationUrl);
             $products = $this->productListFactory->createProductListFromWcCart($cart);
             $updateCommand = $this->payoneer->getUpdateCommand()->withCustomer($customer)->withPayment($payment)->withCallback($callback)->withLongId($listSessionIdentification->getLongId())->withSystem($this->system)->withProducts($products)->withTransactionId($listSessionIdentification->getTransactionId());
-            $country = $wcCustomer->get_shipping_country() ?: $wcCustomer->get_billing_country();
+            $country = ($wcCustomer->get_billing_country() ?: $wcCustomer->get_shipping_country()) ?: $this->fallbackCountry;
             if ($country) {
                 $updateCommand = $updateCommand->withCountry($country);
             }

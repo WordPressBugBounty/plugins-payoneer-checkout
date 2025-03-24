@@ -54,7 +54,11 @@ class OrderBasedListCommandFactory implements OrderBasedListCommandFactoryInterf
      * @var SystemInterface
      */
     protected $system;
-    public function __construct(PayoneerInterface $payoneer, TransactionIdGeneratorInterface $transactionIdGenerator, WcOrderBasedCallbackFactoryInterface $callbackFactory, WcOrderBasedCustomerFactoryInterface $customerFactory, WcOrderBasedPaymentFactoryInterface $paymentFactory, StyleFactoryInterface $styleFactory, WcOrderBasedProductsFactoryInterface $wcOrderBasedProductsFactory, SystemInterface $system, string $locale, ?string $division)
+    /**
+     * @var string
+     */
+    protected string $fallbackCountry;
+    public function __construct(PayoneerInterface $payoneer, TransactionIdGeneratorInterface $transactionIdGenerator, WcOrderBasedCallbackFactoryInterface $callbackFactory, WcOrderBasedCustomerFactoryInterface $customerFactory, WcOrderBasedPaymentFactoryInterface $paymentFactory, StyleFactoryInterface $styleFactory, WcOrderBasedProductsFactoryInterface $wcOrderBasedProductsFactory, SystemInterface $system, string $locale, string $fallbackCountry, ?string $division)
     {
         $this->payoneer = $payoneer;
         $this->transactionIdGenerator = $transactionIdGenerator;
@@ -66,6 +70,7 @@ class OrderBasedListCommandFactory implements OrderBasedListCommandFactoryInterf
         $this->locale = $locale;
         $this->division = $division;
         $this->system = $system;
+        $this->fallbackCountry = $fallbackCountry;
     }
     public function createListCommand(\WC_Order $order, string $integrationType, string $hostedVersion = null): CreateListCommandInterface
     {
@@ -75,7 +80,7 @@ class OrderBasedListCommandFactory implements OrderBasedListCommandFactoryInterf
         if ($hostedVersion) {
             $style = $style->withHostedVersion($hostedVersion);
         }
-        $command = $command->withTransactionId($transactionId)->withCountry($order->get_shipping_country() ?: $order->get_billing_country())->withCallback($this->callbackFactory->createCallback($order))->withCustomer($this->customerFactory->createCustomer($order))->withPayment($this->paymentFactory->createPayment($order))->withStyle($style)->withSystem($this->system)->withIntegrationType($integrationType)->withProducts($this->wcOrderBasedProductsFactory->createProductsFromWcOrder($order));
+        $command = $command->withTransactionId($transactionId)->withCountry(($order->get_billing_country() ?: $order->get_shipping_country()) ?: $this->fallbackCountry)->withCallback($this->callbackFactory->createCallback($order))->withCustomer($this->customerFactory->createCustomer($order))->withPayment($this->paymentFactory->createPayment($order))->withStyle($style)->withSystem($this->system)->withIntegrationType($integrationType)->withProducts($this->wcOrderBasedProductsFactory->createProductsFromWcOrder($order));
         if (is_string($this->division)) {
             $command = $command->withDivision($this->division);
         }

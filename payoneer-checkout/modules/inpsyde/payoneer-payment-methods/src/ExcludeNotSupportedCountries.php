@@ -23,7 +23,7 @@ class ExcludeNotSupportedCountries
     public function __invoke(): void
     {
         add_filter('payoneer-checkout.payment_gateway_is_available', function (bool $previous): bool {
-            if (!is_checkout()) {
+            if (!is_checkout() && !wp_is_serving_rest_request()) {
                 return $previous;
             }
             /** @var WC_Customer|null $customer */

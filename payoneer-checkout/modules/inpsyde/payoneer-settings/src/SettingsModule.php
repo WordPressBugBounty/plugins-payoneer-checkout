@@ -44,6 +44,7 @@ class SettingsModule implements ServiceModule, ExecutableModule
     /**
      * @throws NotFoundExceptionInterface
      * @throws ContainerExceptionInterface
+     * @phpcs:disable Inpsyde.CodeQuality.FunctionLength.TooLong
      */
     public function run(ContainerInterface $container): bool
     {
@@ -65,6 +66,25 @@ class SettingsModule implements ServiceModule, ExecutableModule
             $delegate = new FuncService(['payoneer_settings.is_settings_page'], \Closure::fromCallable([$this, 'transferGatewayErrorsAfterReload']));
             /** @psalm-suppress MixedFunctionCall */
             $delegate($container)();
+        });
+        /**
+         * Append gateway Icons to method title on Payment admin screen
+         */
+        add_action('woocommerce_settings_start', static function () use ($container) {
+            $isPaymentsPage = $container->get('payoneer_settings.is_payments_settings_page');
+            if (!$isPaymentsPage) {
+                return;
+            }
+            add_filter('woocommerce_gateway_title', static function (string $title, string $gatewayId) use ($container): string {
+                $payoneerMethods = $container->get('payment_methods.all');
+                assert(is_array($payoneerMethods));
+                if (!in_array($gatewayId, $payoneerMethods, \true)) {
+                    return $title;
+                }
+                $gateway = $container->get('payment_methods.' . $gatewayId . '.instance');
+                assert($gateway instanceof \WC_Payment_Gateway);
+                return $title . ' ' . $gateway->get_icon();
+            }, 10, 2);
         });
         $this->setUpPaymentPageAjaxCallback($container);
         $this->setUpProcessingMerchants($container);
@@ -541,26 +561,44 @@ STYLE
             echo wp_kses($style, ['style' => ['type' => [], 'id' => []]]);
         });
     }
+    /**
+     * Prevent merchants from visiting individual payment gateway settings pages until the merchant credentials
+     * have been entered.
+     * This is arguably a little crude and we should find a better solution.
+     * TODO Remove/Refactor this when WC 9.7+ releases the revamped Payment Settings UX
+     *
+     * @param ContainerInterface $container
+     *
+     * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     public function setUpLinkToGeneralTabIfNotConnected(ContainerInterface $container): void
     {
-        add_filter('admin_url', static function ($url, $path) use ($container) {
-            if (!is_string($url)) {
-                return $url;
-            }
-            if (!$container->get('payoneer_settings.is_payments_settings_page')) {
-                return $url;
-            }
-            if ($container->get('payoneer-settings.merchant-credentials.is-entered')) {
-                return $url;
-            }
-            $gatewayIds = $container->get('payment_gateways');
-            foreach ($gatewayIds as $gatewayId) {
-                assert(is_string($gatewayId));
-                if ($path === 'admin.php?page=wc-settings&tab=checkout&section=' . $gatewayId) {
-                    return (string) $container->get('core.http.settings_url');
+        /**
+         * Defer to admin_init since we anticipate a call to get_rest_url() which cannot run early
+         * This has previously led to issues if admin_url() is called very early in the request)
+         */
+        add_action('admin_init', static function () use ($container) {
+            add_filter('admin_url', static function ($url, $path) use ($container) {
+                if (!is_string($url)) {
+                    return $url;
                 }
-            }
-            return $url;
-        }, 10, 2);
+                if (!$container->get('payoneer_settings.is_payments_settings_page')) {
+                    return $url;
+                }
+                if ($container->get('payoneer-settings.merchant-credentials.is-entered')) {
+                    return $url;
+                }
+                $gatewayIds = $container->get('payment_gateways');
+                foreach ($gatewayIds as $gatewayId) {
+                    assert(is_string($gatewayId));
+                    if ($path === 'admin.php?page=wc-settings&tab=checkout&section=' . $gatewayId) {
+                        return (string) $container->get('core.http.settings_url');
+                    }
+                }
+                return $url;
+            }, 10, 2);
+        });
     }
 }

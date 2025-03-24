@@ -11,12 +11,13 @@ use Syde\Vendor\Inpsyde\Assets\Script;
 use Syde\Vendor\Inpsyde\PaymentGateway\PaymentFieldsRendererInterface;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\AjaxOrderPay\AjaxPayAction;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\AjaxOrderPay\OrderPayload;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\EnvironmentProvider;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\ListUrlEnvironmentExtractor;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\PaymentFieldsRenderer\HiddenInputRenderer;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\PaymentFieldsRenderer\ListDebugFieldRenderer;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\PaymentFieldsRenderer\ListUrlFieldRenderer;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\PaymentFieldsRenderer\RenderOnceFieldRenderer;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\PaymentFieldsRenderer\WidgetPlaceholderFieldRenderer;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionManager;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionProvider;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\WebSdk\Config\StylesColor;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\ListSession\ListSerializerInterface;
@@ -50,23 +51,20 @@ return static function (): array {
             }
             return $styles;
         }),
-        'embedded_payment.widget.list_url_container_id' => new Value('payoneer-list-url'),
-        'embedded_payment.widget.list_url_attribute_list_id' => new Value('data-long-id'),
-        'embedded_payment.widget.list_url_attribute_list_env' => new Value('data-env'),
         'embedded_payment.widget.payment_fields_container_id' => new Value('payoneer-payment-fields-container'),
         'embedded_payment.widget.payment_fields_attribute_component' => new Value('data-component'),
         'embedded_payment.widget.payment_fields_attribute_list_id' => new Value('data-long-id'),
         'embedded_payment.widget.payment_fields_attribute_list_env' => new Value('data-env'),
-        'embedded_payment.widget_script_data' => new Factory(['embedded_payment.widget.payment_fields_container_id', 'embedded_payment.widget.list_url_container_id', 'embedded_payment.widget.list_url_attribute_list_id', 'embedded_payment.widget.list_url_attribute_list_env', 'embedded_payment.widget.payment_fields_attribute_component', 'checkout.on_error_refresh_fragment_flag', 'checkout.payment_flow_override_flag', 'embedded_payment.pay_order_error_flag', 'embedded_payment.assets.websdk.umd.url.template', 'embedded_payment.widget.websdk_styles'], static function (string $paymentFieldsContainerId, string $listUrlContainerId, string $listIdAttribute, string $listEnvAttribute, string $paymentFieldsComponentAttribute, string $onErrorRefreshFragmentFlag, string $hostedFlowOverrideFlag, string $payOrderErrorFlag, string $webSdkUmdUrlTemplate, array $websdkStyles): array {
-            return ['listUrlContainerId' => $listUrlContainerId, 'listIdAttribute' => $listIdAttribute, 'listEnvAttribute' => $listEnvAttribute, 'paymentFieldsContainerId' => $paymentFieldsContainerId, 'paymentFieldsComponentAttribute' => $paymentFieldsComponentAttribute, 'isPayForOrder' => is_wc_endpoint_url('order-pay'), 'onErrorRefreshFragmentFlag' => $onErrorRefreshFragmentFlag, 'hostedFlowOverrideFlag' => $hostedFlowOverrideFlag, 'payOrderErrorFlag' => $payOrderErrorFlag, 'webSdkUmdUrlTemplate' => $webSdkUmdUrlTemplate, 'websdkStyles' => (object) $websdkStyles];
+        'embedded_payment.widget_script_data' => new Factory(['embedded_payment.widget.payment_fields_container_id', 'embedded_payment.widget.payment_fields_attribute_component', 'checkout.payment_flow_override_flag', 'embedded_payment.pay_order_error_flag', 'embedded_payment.assets.websdk.umd.url.template', 'embedded_payment.widget.websdk_styles', 'wc.is_block_checkout'], static function (string $paymentFieldsContainerId, string $paymentFieldsComponentAttribute, string $hostedFlowOverrideFlag, string $payOrderErrorFlag, string $webSdkUmdUrlTemplate, array $websdkStyles, bool $isBlockCheckout): array {
+            return ['paymentFieldsContainerId' => $paymentFieldsContainerId, 'paymentFieldsComponentAttribute' => $paymentFieldsComponentAttribute, 'isPayForOrder' => is_wc_endpoint_url('order-pay'), 'hostedFlowOverrideFlag' => $hostedFlowOverrideFlag, 'payOrderErrorFlag' => $payOrderErrorFlag, 'webSdkUmdUrlTemplate' => $webSdkUmdUrlTemplate, 'websdkStyles' => (object) $websdkStyles, 'isBlockCheckout' => $isBlockCheckout];
         }),
         'embedded_payment.pay_order_error_flag' => new Value('payoneer-checkout-on-before-server-error'),
         'embedded_payment.path.assets' => new Factory(['core.local_modules_directory_name'], static function (string $modulesDirectoryRelativePath): string {
             $moduleRelativePath = \sprintf('%1$s/%2$s', $modulesDirectoryRelativePath, 'payoneer-embedded-payment');
             return \sprintf('%1$s/assets/', $moduleRelativePath);
         }),
-        'embedded_payment.assets.can_enqueue' => new FuncService(['wc.is_checkout', 'payment_methods.payoneer-checkout.is_enabled'], static function (bool $isCheckout, bool $isGatewayEnabled): bool {
-            return $isCheckout && $isGatewayEnabled;
+        'embedded_payment.assets.can_enqueue' => new FuncService(['wc.is_checkout', 'payment_methods.payoneer-checkout.is_enabled', 'wc.is_order_received_page'], static function (bool $isCheckout, bool $isGatewayEnabled, bool $isOrderReceivedPage): bool {
+            return $isCheckout && !$isOrderReceivedPage && $isGatewayEnabled;
         }),
         'embedded_payment.assets.js.websdk' => new Factory(['embedded_payment.assets.js.websdk.url', 'embedded_payment.assets.can_enqueue'], static function (string $webSdkJsUrl, callable $canEnqueue): Script {
             $script = new Script('payoneer-websdk-loader', $webSdkJsUrl);
@@ -78,6 +76,7 @@ return static function (): array {
             $url = \plugins_url($assetsPath . 'payoneer-checkout.js', $mainPluginFile);
             $script = new Script('payoneer-checkout', $url);
             $script->withLocalize('PayoneerData', $widgetScriptData);
+            $script->withDependencies('inpsyde-blocks');
             /** @psalm-var callable():bool $canEnqueue */
             $script->canEnqueue($canEnqueue);
             return $script;
@@ -94,12 +93,6 @@ return static function (): array {
          */
         'embedded_payment.payment_fields_renderer.placeholder.cards' => new Constructor(WidgetPlaceholderFieldRenderer::class, ['embedded_payment.widget.payment_fields_container_id', 'embedded_payment.widget.payment_fields_attribute_component', 'payment_methods.payoneer-checkout.payment_fields_component']),
         'embedded_payment.payment_fields_renderer.placeholder.afterpay' => new Constructor(WidgetPlaceholderFieldRenderer::class, ['embedded_payment.widget.payment_fields_container_id', 'embedded_payment.widget.payment_fields_attribute_component', 'payment_methods.payoneer-afterpay.payment_fields_component']),
-        'embedded_payment.payment_fields_renderer.list_url' => new Factory(['list_session.manager', 'embedded_payment.list_url_environment_extractor', 'payment_methods.payoneer-checkout.list_url_container_id', 'embedded_payment.widget.list_url_attribute_list_id', 'embedded_payment.widget.list_url_attribute_list_env'], static function (ListSessionProvider $listSessionProvider, ListUrlEnvironmentExtractor $environmentExtractor, string $containerId, string $idAttributeName, string $envAttributeName): PaymentFieldsRendererInterface {
-            return new RenderOnceFieldRenderer(new ListUrlFieldRenderer($listSessionProvider, $environmentExtractor, $containerId, $idAttributeName, $envAttributeName));
-        }),
-        'embedded_payment.payment_fields_renderer.on_error_flag' => new Factory(['checkout.on_error_refresh_fragment_flag'], static function (string $onErrorRefreshFlag): PaymentFieldsRendererInterface {
-            return new RenderOnceFieldRenderer(new HiddenInputRenderer($onErrorRefreshFlag, "false"));
-        }),
         'embedded_payment.payment_fields_renderer.hosted_override_flag' => new Factory(['checkout.payment_flow_override_flag'], static function (string $flowOverrideFlag): PaymentFieldsRendererInterface {
             return new RenderOnceFieldRenderer(new HiddenInputRenderer($flowOverrideFlag, "true"));
         }),
@@ -126,5 +119,6 @@ return static function (): array {
             }
         ),
         'embedded_payment.list_url_environment_extractor' => new Constructor(ListUrlEnvironmentExtractor::class),
+        'embedded_payment.environment_provider' => new Factory(['embedded_payment.list_url_environment_extractor', 'list_session.manager'], static fn(ListUrlEnvironmentExtractor $environmentExtractor, ListSessionManager $listSessionProvider) => new EnvironmentProvider($environmentExtractor, $listSessionProvider)),
     ];
 };

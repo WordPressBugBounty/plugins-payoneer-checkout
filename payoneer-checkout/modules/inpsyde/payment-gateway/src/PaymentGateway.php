@@ -41,16 +41,19 @@ class PaymentGateway extends WC_Payment_Gateway
     protected const TRANSACTION_URL_TEMPLATE_FIELD_NAME = '_transaction_url_template';
     protected ContainerInterface $serviceLocator;
     protected I18n $i18n;
+    private ServiceKeyGenerator $serviceKeyGenerator;
     public function __construct(string $id, ContainerInterface $serviceLocator)
     {
         $this->id = $id;
         $this->serviceLocator = $serviceLocator;
-        $this->supports = $this->locateWithFallback('supports', ['products']);
+        $this->serviceKeyGenerator = new ServiceKeyGenerator($id);
+        $this->supports = $this->locate('supports');
         $this->i18n = $serviceLocator->get('payment_gateways.i18n');
         $this->init_settings();
         unset($this->order_button_text);
         unset($this->method_title);
         unset($this->method_description);
+        unset($this->icon);
         add_action('woocommerce_update_options_payment_gateways_' . $this->id, [$this, 'process_admin_options']);
         add_action('woocommerce_settings_checkout', [$this, 'display_errors']);
         add_filter('woocommerce_settings_api_sanitized_fields_' . $this->id, [$this, 'filterVirtualFields'], -1000);
@@ -63,14 +66,14 @@ class PaymentGateway extends WC_Payment_Gateway
     public function get_title(): string
     {
         if (!$this->title) {
-            $this->title = $this->locateWithFallback('title', $this->id);
+            $this->title = $this->locate('title');
         }
         return parent::get_title();
     }
     public function get_description(): string
     {
         if (!$this->description) {
-            $this->description = $this->locateWithFallback('description', $this->id);
+            $this->description = $this->locate('description');
         }
         return parent::get_description();
     }
@@ -85,9 +88,7 @@ class PaymentGateway extends WC_Payment_Gateway
         if (!$isAvailable) {
             return \false;
         }
-        $canBeUsed = $this->locateWithFallback('availability_callback', static function () {
-            return \true;
-        });
+        $canBeUsed = $this->locate('availability_callback');
         assert(is_callable($canBeUsed));
         return $canBeUsed($this);
     }
@@ -117,13 +118,14 @@ class PaymentGateway extends WC_Payment_Gateway
     }
     public function get_icon()
     {
+        $output = '';
         try {
             $iconService = $this->locate('gateway_icons_renderer');
             assert($iconService instanceof GatewayIconsRendererInterface);
+            $output = $iconService->renderIcons();
         } catch (ContainerExceptionInterface $exception) {
-            return apply_filters('woocommerce_gateway_icon', '', $this->id);
+            // Silence
         }
-        $output = $iconService->renderIcons();
         return apply_filters('woocommerce_gateway_icon', $output, $this->id);
     }
     /**
@@ -278,7 +280,6 @@ class PaymentGateway extends WC_Payment_Gateway
     {
         $type = $this->get_field_type($field);
         $fieldKey = $this->get_field_key($key);
-        // phpcs:ignore WordPress.Security
         $postData = empty($postData) ? $_POST : $postData;
         $value = $postData[$fieldKey] ?? null;
         try {
@@ -381,7 +382,7 @@ class PaymentGateway extends WC_Payment_Gateway
     public function get_form_fields()
     {
         if (!$this->form_fields) {
-            $this->form_fields = $this->locateWithFallback('form_fields', ['enabled' => ['title' => 'Enable/Disable', 'type' => 'checkbox', 'label' => 'Enable payment method', 'default' => 'no']]);
+            $this->form_fields = $this->locate('form_fields');
         }
         return parent::get_form_fields();
     }
@@ -428,6 +429,7 @@ class PaymentGateway extends WC_Payment_Gateway
     }
     /**
      * @param string $key
+     *
      * @return mixed
      * @throws NotFoundExceptionInterface  No entry was found for this key.
      * @throws ContainerExceptionInterface Error while retrieving the entry.
@@ -435,9 +437,9 @@ class PaymentGateway extends WC_Payment_Gateway
     private function locate(string $key)
     {
         try {
-            return $this->serviceLocator->get($this->createServiceKey($key));
+            return $this->serviceLocator->get($this->serviceKeyGenerator->createKey($key));
         } catch (ContainerExceptionInterface $exception) {
-            $globalKey = 'payment_gateways.' . $key;
+            $globalKey = $this->serviceKeyGenerator->createFallbackKey($key);
             if ($this->serviceLocator->has($globalKey)) {
                 return $this->serviceLocator->get($globalKey);
             }
@@ -452,10 +454,6 @@ class PaymentGateway extends WC_Payment_Gateway
             return $fallback;
         }
     }
-    private function createServiceKey(string $key): string
-    {
-        return 'payment_gateway.' . $this->id . '.' . $key;
-    }
     public function has_fields()
     {
         try {
@@ -467,13 +465,16 @@ class PaymentGateway extends WC_Payment_Gateway
     public function __get($name)
     {
         if ($name === 'order_button_text') {
-            return $this->locateWithFallback($name, null);
+            return $this->locate($name);
         }
         if ($name === 'method_title') {
-            return $this->locateWithFallback($name, $this->id);
+            return $this->locate($name);
         }
         if ($name === 'method_description') {
-            return $this->locateWithFallback($name, $this->id);
+            return $this->locate($name);
+        }
+        if ($name === 'icon') {
+            return $this->locateWithFallback($name, null);
         }
         return $this->{$name};
     }

@@ -9,9 +9,12 @@ use Syde\Vendor\Psr\Container\ContainerInterface;
 return static function (): array {
     return ['payoneer_sdk.list_factory' => static function (ListFactoryInterface $previous): ListFactoryInterface {
         return new RedirectInjectingListFactory($previous);
-    }, 'list_session.middlewares' => static function (array $middlewares, ContainerInterface $container) {
-        $isFrontend = $container->get('wp.is_frontend_request');
-        if (!$isFrontend) {
+    }, 'list_session.middlewares' => static function (array $middlewares, ContainerInterface $container): array {
+        /**
+         * If it is safe to boot a LIST,
+         * we can add additional middleware relevant to the frontend UX
+         */
+        if (!$container->get('list_session.can_try_create_list')) {
             return $middlewares;
         }
         /**
@@ -19,6 +22,11 @@ return static function (): array {
          */
         \array_unshift($middlewares, $container->get('list_session.middlewares.wc-session'));
         \array_unshift($middlewares, $container->get('list_session.middlewares.wc-session-update'));
+        /**
+         * Prepend the validating middleware as the last step.
+         * We do not want anything to execute before it.
+         */
+        \array_unshift($middlewares, $container->get('list_session.middlewares.validating'));
         return $middlewares;
     }];
 };

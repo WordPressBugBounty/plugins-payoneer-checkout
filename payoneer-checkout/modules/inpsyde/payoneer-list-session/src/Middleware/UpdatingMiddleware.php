@@ -16,6 +16,7 @@ use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\UpdateListCommandInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\ListSession\ListInterface;
 class UpdatingMiddleware implements ListSessionProviderMiddleware
 {
+    protected bool $isRestRequest;
     /**
      * @var ListSessionPersistor
      */
@@ -33,13 +34,14 @@ class UpdatingMiddleware implements ListSessionProviderMiddleware
      */
     private $sessionHashKey;
     protected WcOrderBasedUpdateCommandFactoryInterface $orderBasedUpdateCommandFactory;
-    public function __construct(ListSessionPersistor $persistor, WcBasedUpdateCommandFactoryInterface $wcBasedListSessionFactory, HashProviderInterface $hashProvider, string $sessionHashKey, WcOrderBasedUpdateCommandFactoryInterface $orderBasedUpdateCommandFactory)
+    public function __construct(ListSessionPersistor $persistor, WcBasedUpdateCommandFactoryInterface $wcBasedListSessionFactory, HashProviderInterface $hashProvider, string $sessionHashKey, WcOrderBasedUpdateCommandFactoryInterface $orderBasedUpdateCommandFactory, bool $isRestRequest)
     {
         $this->persistor = $persistor;
         $this->wcBasedListSessionFactory = $wcBasedListSessionFactory;
         $this->hashProvider = $hashProvider;
         $this->sessionHashKey = $sessionHashKey;
         $this->orderBasedUpdateCommandFactory = $orderBasedUpdateCommandFactory;
+        $this->isRestRequest = $isRestRequest;
     }
     public function provide(ContextInterface $context, ListSessionProvider $next): ListInterface
     {
@@ -106,7 +108,7 @@ class UpdatingMiddleware implements ListSessionProviderMiddleware
          * calculated. Before this moment, cart returns 0 for totals and List update will obviously
          * get 'ABORT' because no payment networks support 0 amount.
          */
-        if (!did_action('woocommerce_after_calculate_totals')) {
+        if (!$this->isRestRequest && !did_action('woocommerce_after_calculate_totals')) {
             return $list;
         }
         /**

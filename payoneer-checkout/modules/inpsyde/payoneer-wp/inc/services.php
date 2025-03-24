@@ -43,6 +43,8 @@ return static function (): array {
         return \defined('DOING_AJAX') && \DOING_AJAX;
     }), 'wp.is_frontend_request' => new Factory(['wc'], static function (\WooCommerce $wooCommerce): bool {
         return (!\is_admin() || \defined('DOING_AJAX')) && !\defined('DOING_CRON') && !\defined('REST_REQUEST') && !$wooCommerce->is_rest_api_request();
+    }), 'wp.is_rest_api_request' => new Factory(['wc'], static function (\WooCommerce $wooCommerce): bool {
+        return $wooCommerce->is_rest_api_request();
     }), 'wp.site_url' => new Factory([], static function (): string {
         return \get_site_url(\get_current_blog_id());
     }), 'wp.is_debug' => new Value(\defined('WP_DEBUG') && \WP_DEBUG), 'wp.is_script_debug' => new Value(\defined('SCRIPT_DEBUG') && \SCRIPT_DEBUG), 'wp.user_id' => new Factory([], static function (): string {
@@ -54,8 +56,13 @@ return static function (): array {
         return \WC();
     }), 'wc.version' => new Factory(['core.wp_environment'], static function (WpEnvironmentInterface $wpEnvironment): string {
         return $wpEnvironment->getWcVersion();
-    }), 'wc.session' => new Factory(['wc', 'wp.is_admin', 'wp.is_ajax'], static function (\WooCommerce $wooCommerce, bool $isAdmin, bool $isAjax): \WC_Session {
-        if ($isAdmin && !$isAjax || !$wooCommerce->session instanceof \WC_Session) {
+    }), 'wc.session.is-available' => new Factory(['wc', 'wp.is_admin', 'wp.is_ajax'], static function (\WooCommerce $wooCommerce, bool $isAdmin, bool $isAjax): bool {
+        if ($isAdmin && !$isAjax) {
+            return \false;
+        }
+        return $wooCommerce->session instanceof \WC_Session;
+    }), 'wc.session' => new Factory(['wc', 'wc.session.is-available'], static function (\WooCommerce $wooCommerce, bool $isAvailable): \WC_Session {
+        if (!$isAvailable) {
             throw new PayoneerException('WooCommerce session is not available.');
         }
         return $wooCommerce->session;
@@ -72,6 +79,36 @@ return static function (): array {
     }), 'wc.is_fragment_update' => new Factory([], static function (): bool {
         $wcAjaxAction = \filter_input(\INPUT_GET, 'wc-ajax', \FILTER_CALLBACK, ['options' => 'sanitize_text_field']);
         return $wcAjaxAction === 'update_order_review' || $wcAjaxAction === 'update_checkout';
+    }), 'wc.is_store_api_request' => new Factory(['wc'], static function (\WooCommerce $wooCommerce): bool {
+        /**
+         * We really really wish to access raw data here.
+         * Wea re also doing only string comparisons and will not use the data
+         * for processing. Hence:
+         * phpcs:disable WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+         * phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+         */
+        global $wp_rewrite;
+        \assert($wp_rewrite instanceof \WP_Rewrite);
+        if ($wp_rewrite->using_permalinks()) {
+            /**
+             * is_store_api_request is not available <=8.9.1.
+             * However, block checkout as a whole has been around far longer.
+             * So for older WC versions, we execute a copy of the method we have today
+             */
+            if (!\method_exists($wooCommerce, 'is_store_api_request')) {
+                if (empty($_SERVER['REQUEST_URI'])) {
+                    return \false;
+                }
+                // phpcs:disable WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+                return \false !== \strpos($_SERVER['REQUEST_URI'], \trailingslashit(\rest_get_url_prefix()) . 'wc/store/');
+            }
+            return $wooCommerce->is_store_api_request();
+        }
+        return \preg_match('/\/index\.php\?rest_route=\/wc\/store\//', isset($_SERVER['REQUEST_URI']) ? \urldecode($_SERVER['REQUEST_URI']) : '') === 1;
+        /**
+         * phpcs:enable WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+         * phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+         */
     }), 'wc.is_checkout_pay_page' => new Factory(['wc'], static function (): bool {
         return is_checkout_pay_page();
     }), 'wc.is_order_received_page' => new Factory(['wc'], static function (): bool {
@@ -105,5 +142,5 @@ return static function (): array {
         $enabled = OrderUtil::custom_orders_table_usage_is_enabled();
         //WooCommerce return types sometimes incorrect, better to make sure.
         return \is_bool($enabled) ? $enabled : \wc_string_to_bool((string) $enabled);
-    }];
+    }, 'wc.is_block_checkout' => fn() => \function_exists('has_block') && \has_block('woocommerce/checkout')];
 };

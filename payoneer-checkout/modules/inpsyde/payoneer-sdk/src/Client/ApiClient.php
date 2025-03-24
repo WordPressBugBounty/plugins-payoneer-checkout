@@ -131,7 +131,7 @@ class ApiClient implements ApiClientInterface
                 $requestUrl = $requestUrl->withQuery($query);
             }
         } catch (InvalidArgumentException $exception) {
-            throw new ApiClientException($this, sprintf('Failed to prepare request. Exception caught when trying to build request URL: %1$s', $exception->getMessage()), 0, $exception);
+            throw new ApiClientException($this, 'Failed to prepare request. Exception caught when trying to build request URL.', 0, $exception);
         }
         return $requestUrl;
     }
@@ -156,7 +156,7 @@ class ApiClient implements ApiClientInterface
      *
      * @return ResponseInterface The HTTP response on success.
      *
-     * @throws ApiClientException If HTTP client throwing exception or response code >=300.
+     * @throws ApiClientExceptionInterface If HTTP client throwing exception or response code >=300.
      */
     protected function sendRequest(RequestInterface $request): ResponseInterface
     {
@@ -167,14 +167,7 @@ class ApiClient implements ApiClientInterface
         }
         $statusCode = $response->getStatusCode();
         if ($statusCode >= 300) {
-            $responseBody = $response->getBody();
-            try {
-                $responseBody->rewind();
-                $responseBodyContents = $responseBody->getContents();
-            } catch (RuntimeException $exception) {
-                $responseBodyContents = '';
-            }
-            throw new ApiClientException($this, sprintf('Api request failed. Received response code %1$d. Response body is %2$s', $statusCode, $responseBodyContents), $statusCode);
+            throw new ApiCallException($this, $request, $response);
         }
         return $response;
     }

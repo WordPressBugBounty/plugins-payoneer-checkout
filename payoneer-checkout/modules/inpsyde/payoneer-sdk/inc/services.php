@@ -7,11 +7,13 @@ use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\ChargeCommand;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\ChargeCommandInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\CommandInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\CreateListCommand;
+use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\Fetch;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\CreateListCommandInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\Error\InteractionErrorFactory;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\Error\InteractionErrorFactoryInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\Error\InteractionErrorInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\Exception\InteractionException;
+use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\FetchListCommand;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\PayoutCommand;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\PayoutCommandInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\UpdateListCommand;
@@ -421,6 +423,18 @@ return static function (): array {
         $errors = $container->get('payoneer_sdk.command_response_validator.errors');
         $country = $container->get('payoneer_sdk.default_country');
         return new CreateListCommand($errors, $apiClient, $requestPathTemplate, $listDeserializer, $customerSerializer, $paymentSerializer, $callbackSerializer, $productSerializer, $styleSerializer, $responseValidator, $systemSerializer, $country);
+    }, 'payoneer_sdk.commands.fetch' => static function (ContainerInterface $container): CommandInterface {
+        /** @var ApiClientInterface $apiClient */
+        $apiClient = $container->get('payoneer_sdk.api_client');
+        /** @var string $requestPathTemplate */
+        $requestPathTemplate = $container->get('payoneer_sdk.commands.update_request_path_template');
+        /** @var ListDeserializerInterface $listDeserializer */
+        $listDeserializer = $container->get('payoneer_sdk.list_deserializer');
+        $responseValidator = $container->get('payoneer_sdk.command_response_validator');
+        \assert($responseValidator instanceof ResponseValidatorInterface);
+        /** @var array<string, InteractionErrorInterface> */
+        $errors = $container->get('payoneer_sdk.command_response_validator.errors');
+        return new FetchListCommand($apiClient, $listDeserializer, $requestPathTemplate, $responseValidator, $errors);
     }, 'payoneer_sdk.commands.update' => static function (ContainerInterface $container): UpdateListCommandInterface {
         /** @var ApiClientInterface $apiClient */
         $apiClient = $container->get('payoneer_sdk.api_client');

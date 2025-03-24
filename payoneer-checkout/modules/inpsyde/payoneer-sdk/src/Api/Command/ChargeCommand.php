@@ -6,17 +6,17 @@ namespace Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\Error\InteractionErrorInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\Exception\CommandException;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\Exception\CommandExceptionInterface;
+use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\Exception\CommandExecutionException;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\ListSession\ListDeserializerInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\ListSession\ListInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Payment\PaymentInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Payment\PaymentSerializerInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Product\ProductSerializerInterface;
+use Syde\Vendor\Inpsyde\PayoneerSdk\Client\ApiCallExceptionInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Client\ApiClientInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Client\DecodeJsonResponseBodyTrait;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Client\JsonCodecTrait;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\ResponseValidator\ResponseValidatorInterface;
-use Syde\Vendor\Inpsyde\PayoneerSdk\PayoneerSdkExceptionInterface;
-use RuntimeException;
 /**
  * Command making CHARGE request for defined session.
  *
@@ -55,9 +55,23 @@ class ChargeCommand extends AbstractPaymentCommand implements ChargeCommandInter
             $this->onResponse($response);
             $parsedBody = $this->decodeJsonResponseBody($response);
             return $this->listDeserializer->deserializeList($parsedBody);
-        } catch (PayoneerSdkExceptionInterface|RuntimeException $exception) {
+        } catch (ApiCallExceptionInterface $exception) {
+            /**
+             * If the client was able to receive a response (but with an error status),
+             * we still want to inspect the interaction codes in order to throw a dedicated
+             * exception.
+             */
+            $response = $exception->getResponse();
+            if ($response !== null) {
+                $this->onResponse($response);
+            }
+            /**
+             * If we cannot find anything wrong in the response body, throw a generic exception
+             */
+            throw new CommandExecutionException($this, sprintf('Failed to make charge for the list session %1$s, exception caught: %2$s.', $this->longId ?? '', $exception->getMessage()), 0, $exception);
+        } catch (\Throwable $exception) {
             if (!$exception instanceof CommandExceptionInterface) {
-                $exception = new CommandException($this, sprintf('Failed to make charge for the list session, exception caught: %1$s.', (string) $exception), 0, $exception);
+                $exception = new CommandException($this, sprintf('Failed to make charge for the list session %1$s, exception caught: %2$s.', $this->longId ?? '', $exception->getMessage()), 0, $exception);
             }
             throw $exception;
         }

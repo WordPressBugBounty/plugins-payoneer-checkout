@@ -25,10 +25,12 @@ class EmbeddedPaymentProcessor extends AbstractPaymentProcessor
      * @var string
      */
     protected $hostedModeOverrideFlag;
-    public function __construct(WcOrderBasedUpdateCommandFactoryInterface $updateCommandFactory, ListSessionProvider $sessionProvider, ListSessionPersistor $sessionPersistor, TokenGeneratorInterface $tokenGenerator, string $tokenKey, string $transactionIdFieldName, string $hostedModeOverrideFlag, MisconfigurationDetectorInterface $misconfigurationDetector, string $checkoutSessionHashKey)
+    protected bool $isRestRequest;
+    public function __construct(WcOrderBasedUpdateCommandFactoryInterface $updateCommandFactory, ListSessionProvider $sessionProvider, ListSessionPersistor $sessionPersistor, TokenGeneratorInterface $tokenGenerator, string $tokenKey, string $transactionIdFieldName, string $hostedModeOverrideFlag, MisconfigurationDetectorInterface $misconfigurationDetector, string $checkoutSessionHashKey, bool $isRestRequest)
     {
         parent::__construct($misconfigurationDetector, $sessionProvider, $sessionPersistor, $updateCommandFactory, $tokenGenerator, $tokenKey, $transactionIdFieldName, $checkoutSessionHashKey);
         $this->hostedModeOverrideFlag = $hostedModeOverrideFlag;
+        $this->isRestRequest = $isRestRequest;
     }
     public function processPayment(WC_Order $order, PaymentGateway $gateway): array
     {
@@ -51,7 +53,19 @@ class EmbeddedPaymentProcessor extends AbstractPaymentProcessor
             );
             return $this->handleFailedPaymentProcessing($order, $exceptionWrapper);
         }
-        $result['redirect'] = add_query_arg([$this->hostedModeOverrideFlag => \true], $order->get_checkout_payment_url());
+        /**
+         * We always signal success: The actual payment is supposed to be handled by the JS WebSDK
+         * or by the hosted payment page.
+         * in the customer's browser session. Our 'redirect' URL is only a fallback in case our JS
+         * is somehow broken. For this reason, we also add the flag to force hosted mode.
+         * The WebSDK is taking care of redirecting to 'thank-you' after finishing the transaction.
+         * If this somehow does not happen, we still instruct WC to move to the payment page
+         *
+         * But this doesn't work properly for block checkout.
+         */
+        if (!$this->isRestRequest) {
+            $result['redirect'] = add_query_arg([$this->hostedModeOverrideFlag => \true], $order->get_checkout_payment_url());
+        }
         return $result;
     }
 }

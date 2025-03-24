@@ -7,24 +7,15 @@ use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\ChargeCommandInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\CreateListCommandInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\PayoutCommandInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\UpdateListCommandInterface;
-use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Callback\CallbackInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Callback\CallbackSerializerInterface;
-use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Customer\CustomerInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Customer\CustomerSerializerInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\ListSession\ListDeserializerInterface;
-use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\ListSession\ListInterface;
-use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Payment\PaymentInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Payment\PaymentSerializerInterface;
-use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Style\StyleInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Style\StyleSerializerInterface;
-use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Product\ProductInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Product\ProductSerializerInterface;
-use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\System\SystemInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\System\SystemSerializerInterface;
-use Syde\Vendor\Inpsyde\PayoneerSdk\Client\ApiClientExceptionInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Client\ApiClientInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Client\DecodeJsonResponseBodyTrait;
-use RuntimeException;
 class Payoneer implements PayoneerInterface
 {
     use DecodeJsonResponseBodyTrait;
@@ -118,23 +109,6 @@ class Payoneer implements PayoneerInterface
         $this->systemSerializer = $systemSerializer;
     }
     /**
-     * @inheritDoc
-     */
-    public function createList(string $transactionId, string $country, CallbackInterface $callback, CustomerInterface $customer, PaymentInterface $payment, StyleInterface $style, array $views, string $operationType, array $products, SystemInterface $system, string $division = null, bool $allowDelete = \false): ListInterface
-    {
-        $requestBody = $this->prepareRequestBody($transactionId, $country, $callback, $customer, $payment, $style, $operationType, $products, $system, $division, $allowDelete);
-        $queryParams = $views ? ['view' => $views] : [];
-        try {
-            $response = $this->apiClient->post('lists', $this->headers, $queryParams, $requestBody);
-            $responseBodyParsed = $this->decodeJsonResponseBody($response);
-        } catch (ApiClientExceptionInterface|RuntimeException $exception) {
-            $messageBase = 'Failed to initiate a new list session from payload';
-            throw new OperationFailedException($messageBase, ['resultInfo' => $exception->getMessage()], $requestBody);
-        }
-        $this->validateSessionStatus($responseBodyParsed, $requestBody);
-        return $this->listDeserializer->deserializeList($responseBodyParsed);
-    }
-    /**
      * Quick&dirty solution to leaking sensitive data into logs via exceptions
      * Works for now, might have to be re-assessed later.
      * @psalm-suppress MixedArrayAccess
@@ -158,34 +132,6 @@ class Payoneer implements PayoneerInterface
         isset($payload['customer']['name']['firstName']) && $payload['customer']['name']['firstName'] = $redacted;
         isset($payload['customer']['name']['lastName']) && $payload['customer']['name']['lastName'] = $redacted;
         return $payload;
-    }
-    /**
-     * @param string $transactionId
-     * @param string $country
-     * @param CallbackInterface $callback
-     * @param CustomerInterface $customer
-     * @param PaymentInterface $payment
-     * @param StyleInterface $style
-     * @param string $operationType
-     * @param ProductInterface[] $products
-     * @param SystemInterface $system
-     * @param string|null $division
-     * @param bool $allowDelete
-     *
-     * @return array
-     */
-    protected function prepareRequestBody(string $transactionId, string $country, CallbackInterface $callback, CustomerInterface $customer, PaymentInterface $payment, StyleInterface $style, string $operationType, array $products, SystemInterface $system, string $division = null, bool $allowDelete = \false): array
-    {
-        $productsData = array_map([$this->productSerializer, 'serializeProduct'], $products);
-        $body = ['integration' => $this->integration, 'transactionId' => $transactionId, 'country' => $country, 'customer' => $this->customerSerializer->serializeCustomer($customer), 'payment' => $this->paymentSerializer->serializePayment($payment), 'callback' => $this->callbackSerializer->serializeCallback($callback), 'operationType' => $operationType, 'products' => $productsData, 'system' => $this->systemSerializer->serializeSystem($system), 'allowDelete' => $allowDelete];
-        if ($division !== null) {
-            $body['division'] = $division;
-        }
-        $serializedStyle = $this->styleSerializer->serializeStyle($style);
-        if ($serializedStyle) {
-            $body['style'] = $serializedStyle;
-        }
-        return $body;
     }
     /**
      * @inheritDoc
@@ -214,21 +160,5 @@ class Payoneer implements PayoneerInterface
     public function getPayoutCommand(): PayoutCommandInterface
     {
         return $this->payoutCommand;
-    }
-    /**
-     * Throws if response data indicates session creating was failed.
-     *
-     * @param array $responseBodyParsed
-     * @param array $requestBody
-     *
-     * @throws ApiException
-     */
-    protected function validateSessionStatus(array $responseBodyParsed, array $requestBody): void
-    {
-        $statusCode = $responseBodyParsed['status']['code'] ?? '';
-        if ($statusCode !== 'listed') {
-            $messageBase = 'Failed to initiate a new LIST session.';
-            throw new OperationFailedException($messageBase, $responseBodyParsed, $this->redactSensitiveData($requestBody));
-        }
     }
 }

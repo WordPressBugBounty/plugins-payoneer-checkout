@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Checkout\PaymentProcessor;
 
-use Exception;
 use Syde\Vendor\Inpsyde\PaymentGateway\PaymentGateway;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Checkout\Authentication\TokenGeneratorInterface;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Checkout\CheckoutExceptionInterface;
@@ -13,10 +12,13 @@ use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessi
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\PaymentContext;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Api\Gateway\CommandFactory\WcOrderBasedUpdateCommandFactoryInterface;
 use Syde\Vendor\Inpsyde\PaymentGateway\PaymentProcessorInterface;
+use Syde\Vendor\Inpsyde\PayoneerSdk\Api\ApiExceptionInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\Exception\CommandExceptionInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\Exception\InteractionExceptionInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\ResponseValidator\InteractionCodeFailureInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\UpdateListCommandInterface;
+use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Address\AddressInterface;
+use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Customer\CustomerInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\ListSession\ListInterface;
 use WC_Order;
 /**
@@ -100,6 +102,9 @@ abstract class AbstractPaymentProcessor implements PaymentProcessorInterface
         $this->updateOrderWithSessionData($order, $list);
         $updateCommand = $this->updateCommandFactory->createUpdateCommand($order, $list);
         do_action('payoneer-checkout.before_update_list', ['longId' => $list->getIdentification()->getLongId(), 'list' => $list]);
+        // We have a requirement to log when the List country is not set or different from
+        // a billing country.
+        $this->validateUpdateCommandCountry($updateCommand);
         $list = $this->updateListSession($updateCommand);
         do_action('payoneer-checkout.list_session_updated', ['longId' => $list->getIdentification()->getLongId(), 'list' => $list]);
         /**
@@ -117,14 +122,6 @@ abstract class AbstractPaymentProcessor implements PaymentProcessorInterface
          * another payment method.
          */
         wc()->session->set('order_awaiting_payment', \false);
-        /**
-         * We always signal success: The actual payment is supposed to be handled by the JS WebSDK
-         * or by the hosted payment page.
-         * in the customer's browser session. Our 'redirect' URL is only a fallback in case our JS
-         * is somehow broken. For this reason, we also add the flag to force hosted mode.
-         * The WebSDK is taking care of redirecting to 'thank-you' after finishing the transaction.
-         * If this somehow does not happen, we still instruct WC to move to the payment page
-         */
         return ['result' => 'success', 'redirect' => '', 'messages' => '<div></div>'];
     }
     /**
@@ -234,5 +231,23 @@ abstract class AbstractPaymentProcessor implements PaymentProcessorInterface
     {
         do_action('payoneer-checkout.update_list_session_failed', ['exception' => $exception, 'order' => $order]);
         return $this->handleFailedPaymentProcessing($order, $exception);
+    }
+    protected function validateUpdateCommandCountry(UpdateListCommandInterface $updateListCommand): void
+    {
+        $listCountry = $updateListCommand->getCountry();
+        $customer = $updateListCommand->getCustomer();
+        try {
+            if ($listCountry && $customer instanceof CustomerInterface) {
+                $billingAddress = $customer->getAddresses()['billing'] ?? null;
+                if ($billingAddress instanceof AddressInterface) {
+                    $countryValid = $listCountry === $billingAddress->getCountry();
+                }
+            }
+        } catch (ApiExceptionInterface $exception) {
+            //do nothing here.
+        }
+        if (!isset($countryValid) || !$countryValid) {
+            do_action('payoneer_checkout.invalid_country_after_final_update', ['country' => $listCountry, 'longId' => $updateListCommand->getLongId(), 'customer' => $customer]);
+        }
     }
 }

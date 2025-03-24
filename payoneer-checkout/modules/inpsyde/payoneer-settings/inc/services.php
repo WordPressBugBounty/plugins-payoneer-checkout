@@ -28,7 +28,6 @@ use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Settings\Merchant\MerchantSeriali
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Settings\Fields\CssField;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Settings\Fields\PlainTextField;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Settings\Fields\VirtualField;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Settings\PaymentSettingsPageIconsRenderer;
 use Syde\Vendor\Psr\Container\ContainerExceptionInterface;
 use Syde\Vendor\Psr\Http\Message\UriInterface;
 return static function (): array {
@@ -239,8 +238,5 @@ return static function (): array {
         'payoneer-settings.merchant-credentials.is-entered' => new Factory(['payoneer_settings.merchant'], static function (MerchantInterface $merchant): bool {
             return $merchant->getCode() && $merchant->getToken() && $merchant->getDivision();
         }),
-        'payment_methods.payoneer-checkout.gateway_icons_renderer' => new Constructor(PaymentSettingsPageIconsRenderer::class, ['checkout.gateway_icon_elements_cards']),
-        'payment_methods.payoneer-hosted.gateway_icons_renderer' => new Alias('payment_methods.payoneer-checkout.gateway_icons_renderer'),
-        'payment_methods.payoneer-afterpay.gateway_icons_renderer' => new Constructor(PaymentSettingsPageIconsRenderer::class, ['checkout.gateway_icon_elements_afterpay']),
     ];
 };

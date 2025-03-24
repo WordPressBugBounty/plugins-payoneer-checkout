@@ -2,9 +2,9 @@
 Contributors: payoneercheckout, inpsyde
 Tags: payment, woocommerce, checkout
 Requires at least: 5.3
-Tested up to: 6.7.1
+Tested up to: 6.7.2
 Requires PHP: 7.4
-Stable tag: 3.2.4
+Stable tag: 3.3.0
 License: MPL-2.0
 License URI: https://www.mozilla.org/en-US/MPL/2.0/
 
@@ -59,14 +59,23 @@ Our global banking and payment networks stretch around the world so we can suppo
 
 == Changelog ==
 
+= [3.3.0] - 2025-03-24 =
+* Added
+  * Added support for blocks checkout, compatible with both hosted and embedded payment flows
+  * Payment method logos are now displayed dynamically, based on available payment networks
+
+* Fixes & Removals
+  * Removed static appearance configuration in plugin settings for payment method logos (now replaced by added support of dynamic payment methods logos)
+  * Fixed an issue where card fields became unresponsive and the checkout design broke after a refused payment on checkout
+  * Resolved a conflict with the Zettle plugin, improving overall compatibility
+
 = [3.2.4] - 2024-12-11 =
 * Fixed:
   * Fix incorrect webSDK integration
   * Reduce call UPDATE on less important fields
   * Remove modules.local directory in the public version of the plugin
   * Fix order status change in pre-dispute flow
-
-Added missing translations
+  * Added missing translations
 
 = [3.2.3] - 2024-10-01 =
 * Fixed

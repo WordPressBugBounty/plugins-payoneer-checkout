@@ -17,10 +17,6 @@ class PaymentFieldsRendererFactory
     public static function forComponent(string $component, ContainerInterface $container): array
     {
         $renderers = [];
-        $isEnabled = (bool) $container->get('embedded_payment.is_enabled');
-        if (!$isEnabled) {
-            return $renderers;
-        }
         $isCheckout = (bool) $container->get('wc.is_checkout');
         $isFragmentUpdate = (bool) $container->get('wc.is_fragment_update');
         $isOrderPay = (bool) $container->get('wc.is_checkout_pay_page');
@@ -28,16 +24,10 @@ class PaymentFieldsRendererFactory
         if (!($isCheckout || $shouldRenderList)) {
             return $renderers;
         }
-        $listUrlRenderer = $container->get('embedded_payment.payment_fields_renderer.list_url');
-        assert($listUrlRenderer instanceof PaymentFieldsRendererInterface);
-        $onErrorFlagRenderer = $container->get('embedded_payment.payment_fields_renderer.on_error_flag');
-        assert($onErrorFlagRenderer instanceof PaymentFieldsRendererInterface);
         $hostedFlowOverrideFlag = $container->get('embedded_payment.payment_fields_renderer.hosted_override_flag');
         assert($hostedFlowOverrideFlag instanceof PaymentFieldsRendererInterface);
         $placeholderRenderer = $container->get("embedded_payment.payment_fields_renderer.placeholder.{$component}");
         assert($placeholderRenderer instanceof WidgetPlaceholderFieldRenderer);
-        $renderers[] = $listUrlRenderer;
-        $renderers[] = $onErrorFlagRenderer;
         $renderers[] = $hostedFlowOverrideFlag;
         $renderers[] = $placeholderRenderer;
         $isDebug = (bool) $container->get('checkout.is_debug');

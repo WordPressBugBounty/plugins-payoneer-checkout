@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment;
 
+use Automattic\WooCommerce\StoreApi\Schemas\V1\CartSchema;
 use Syde\Vendor\Dhii\Services\Factories\FuncService;
 use Syde\Vendor\Inpsyde\Assets\Asset;
 use Syde\Vendor\Inpsyde\Assets\AssetManager;
@@ -14,7 +15,7 @@ use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\AjaxOrderPay\Ajax
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\AjaxOrderPay\OrderPayload;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\CheckoutContext;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionManager;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionPersistor;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionProvider;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\PaymentContext;
 use Syde\Vendor\Psr\Container\ContainerInterface;
 use WC_Data_Exception;
@@ -39,6 +40,11 @@ class EmbeddedPaymentModule implements ExecutableModule, ServiceModule, Extendin
             }
             $this->setupModuleActions($container);
         });
+        /**
+         * Our 'payoneer-checkout.init_checkout' hook fires too late for this, so this must stay
+         * out of $this->setupModuleActions() method call.
+         */
+        $this->registerSendingListDataToFrontend($container);
         return \true;
     }
     /**
@@ -66,6 +72,17 @@ class EmbeddedPaymentModule implements ExecutableModule, ServiceModule, Extendin
     public function registerAssets(ContainerInterface $container): void
     {
         add_action(AssetManager::ACTION_SETUP, static function (AssetManager $assetManager) use ($container) {
+            /**
+             * Although the same will be checked by Asset Manager later,
+             * by checking it here we can prevent pulling lots of other services
+             * we don't need at the moment. Some of them, like List provider, cannot be used
+             * properly in many cases.
+             */
+            $canEnqueue = $container->get('embedded_payment.assets.can_enqueue');
+            assert(is_callable($canEnqueue));
+            if (!$canEnqueue()) {
+                return;
+            }
             /** @var Asset[] $assets */
             $assets = $container->get('embedded_payment.assets');
             $assetManager->register(...$assets);
@@ -116,25 +133,6 @@ class EmbeddedPaymentModule implements ExecutableModule, ServiceModule, Extendin
         wp_safe_redirect($order->get_checkout_payment_url());
         exit;
     }
-    public function onBeforeServerError(ContainerInterface $container): void
-    {
-        //if there is the refresh flag, we need to create a new LIST session
-        $onErrorFlag = $container->get('checkout.is_on_error_refresh_fragment_flag');
-        $orderId = $container->get('wc.order_under_payment');
-        if ($onErrorFlag) {
-            $listSessionPersistor = $container->get('list_session.manager');
-            assert($listSessionPersistor instanceof ListSessionPersistor);
-            $listSessionPersistor->persist(null, new CheckoutContext());
-            $wcOrder = wc_get_order($orderId);
-            if ($wcOrder instanceof WC_Order) {
-                /**
-                 * The LIST has already been transferred to order meta, so for this case,
-                 * we explicitly want to clear the persisted LIST as well
-                 */
-                $listSessionPersistor->persist(null, new PaymentContext($wcOrder));
-            }
-        }
-    }
     /**
      * For embedded flow, we need to create a LIST session ahead of time.
      * Based on customer and Cart data, a LIST object will be serialized into the
@@ -146,12 +144,6 @@ class EmbeddedPaymentModule implements ExecutableModule, ServiceModule, Extendin
      */
     public function registerSessionHandling(ContainerInterface $container): void
     {
-        /**
-         * onBeforeServerError: Back-end-side handling
-         */
-        add_action('woocommerce_checkout_update_order_review', function () use ($container) {
-            $this->onBeforeServerError($container);
-        }, 10);
         add_action('wp', function () use ($container) {
             if (!$container->get('wc.is_checkout_pay_page')) {
                 return;
@@ -167,12 +159,54 @@ class EmbeddedPaymentModule implements ExecutableModule, ServiceModule, Extendin
             $this->beforeOrderPay($wcOrder, $listSessionManager, $onBeforeServerErrorFlag);
         }, 0);
     }
+    protected function registerSendingListDataToFrontend(ContainerInterface $container): void
+    {
+        add_action('woocommerce_init', function () use ($container) {
+            /**
+             * We support WooCommerce 5.0.0 - 6.9.0, so versions predating block checkout / store API
+             * TODO: Remove this check when support for these versions is dropped
+             */
+            if (!function_exists('woocommerce_store_api_register_endpoint_data')) {
+                return;
+            }
+            woocommerce_store_api_register_endpoint_data(['endpoint' => CartSchema::IDENTIFIER, 'namespace' => 'payoneer-checkout', 'data_callback' => function () use ($container): array {
+                return $this->provideCartExtensionData($container);
+            }, 'schema_callback' => fn() => ['longId' => ['description' => 'LongId of the LIST session', 'type' => 'string', 'readonly' => \true], 'environment' => ['description' => 'The current environment', 'type' => 'string', 'readonly' => \true]], 'schema_type' => \ARRAY_A]);
+        });
+    }
+    private function provideCartExtensionData(ContainerInterface $container): array
+    {
+        /**
+         * During the initial page load,
+         * WooCommerce will pre-warm some API call for usage in blocks.
+         * This data is injected into wp.apiFetch via a preloadingMiddleware so it is
+         * returned as the result of actual API/HTTP calls.
+         * In other words, the first JS call to '/wc/store/v1/cart' (and others)
+         * is always pre-warmed in PHP.
+         *
+         * Since we explicitly want to make this data available lazily and prevent
+         * LIST creation when it is not needed - or impossible,
+         * we check if we are currently doing an API call
+         *
+         * @see \Automattic\WooCommerce\Blocks\Assets\AssetDataRegistry::hydrate_api_request
+         */
+        $isStoreApi = $container->get('wc.is_store_api_request');
+        if (!$isStoreApi) {
+            return ['longId' => null, 'environment' => null];
+        }
+        $listProvider = $container->get('list_session.manager');
+        assert($listProvider instanceof ListSessionProvider);
+        $envExtractor = $container->get('embedded_payment.list_url_environment_extractor');
+        assert($envExtractor instanceof ListUrlEnvironmentExtractor);
+        $list = $listProvider->provide(ListSessionManager::determineContextFromGlobals());
+        return ['longId' => $list->getIdentification()->getLongId(), 'environment' => $envExtractor->extract($list->getLinks()['self'] ?? '')];
+    }
     /**
      * Client-side CHARGE requires us to validate & create the order *before* attempting payment.
-     * The payment page is a classic form submission, followed by hard redirect & exit handling by WooCommerce.
-     * This unfortunately means we cannot just AJAXify that POST request.
-     * \WC_Form_Handler does not provide us with any decoupled subset of functionality that we could use.
-     * So here, we practically re-implement order-pay as an AJAX call.
+     * The payment page is a classic form submission, followed by hard redirect & exit handling by
+     * WooCommerce. This unfortunately means we cannot just AJAXify that POST request.
+     * \WC_Form_Handler does not provide us with any decoupled subset of functionality that we
+     * could use. So here, we practically re-implement order-pay as an AJAX call.
      *
      * @see \WC_Form_Handler::pay_action()
      * @param ContainerInterface $container

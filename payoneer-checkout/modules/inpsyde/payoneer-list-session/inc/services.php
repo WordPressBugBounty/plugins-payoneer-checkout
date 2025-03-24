@@ -23,6 +23,7 @@ use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessi
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionManagerProxy;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\NoopListSessionPersistor;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\Middleware\UpdatingMiddleware;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\Middleware\ValidatingMiddleware;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\Middleware\WcOrderMiddleware;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\Middleware\WcSessionMiddleware;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Api\Gateway\WcProductSerializer\WcProductSerializerInterface;
@@ -38,10 +39,10 @@ use Syde\Vendor\Psr\Http\Message\UriInterface;
 return static function (): array {
     return [
         'list_session.wc_based_customer_factory' => new Constructor(WcBasedCustomerFactory::class, ['core.customer_factory', 'core.phone_factory', 'core.address_factory', 'core.name_factory', 'core.registration_factory', 'checkout.customer_registration_id_field_name', 'checkout.state_provider', 'list_session.fallback_country']),
-        'list_session.order_based_list_command_factory' => new Constructor(OrderBasedListCommandFactory::class, ['checkout.payoneer', 'checkout.transaction_id_generator', 'checkout.wc_order_based_callback_factory', 'checkout.wc_order_based_customer_factory', 'checkout.wc_order_based_payment_factory', 'checkout.style_factory', 'checkout.wc_order_based_products_factory', 'list_session.list_session_system', 'wp.current_locale.normalized', 'checkout.merchant_division']),
+        'list_session.order_based_list_command_factory' => new Constructor(OrderBasedListCommandFactory::class, ['checkout.payoneer', 'checkout.transaction_id_generator', 'checkout.wc_order_based_callback_factory', 'checkout.wc_order_based_customer_factory', 'checkout.wc_order_based_payment_factory', 'checkout.style_factory', 'checkout.wc_order_based_products_factory', 'list_session.list_session_system', 'wp.current_locale.normalized', 'list_session.fallback_country', 'checkout.merchant_division']),
         'list_session.order_based_list_session_factory' => new Constructor(OrderBasedListSessionFactory::class, ['list_session.order_based_list_command_factory']),
-        'list_session.list_session_factory' => new Factory(['core.payoneer', 'core.callback_factory', 'core.style_factory', 'core.payment_factory', 'list_session.wc_based_customer_factory', 'list_session.wc_cart_based_product_list_factory', 'checkout.notification_url', 'wp.current_locale.normalized', 'wc.currency', 'list_session.list_session_system', 'checkout.transaction_id_generator', 'payoneer_settings.merchant_division'], static function (PayoneerInterface $payoneer, CallbackFactoryInterface $callbackFactory, StyleFactoryInterface $styleFactory, PaymentFactoryInterface $paymentFactory, WcBasedCustomerFactoryInterface $wcBasedCustomerFactory, WcCartBasedProductListFactory $wcCartBasedProductListFactory, UriInterface $notificationUrl, string $checkoutLocale, string $currency, SystemInterface $system, TransactionIdGeneratorInterface $transactionIdGenerator, string $division): WcBasedListSessionFactory {
-            return new WcBasedListSessionFactory($payoneer, $callbackFactory, $paymentFactory, $styleFactory, $wcBasedCustomerFactory, $wcCartBasedProductListFactory, $notificationUrl, $checkoutLocale, $currency, $system, $transactionIdGenerator, $division);
+        'list_session.list_session_factory' => new Factory(['core.payoneer', 'core.callback_factory', 'core.style_factory', 'core.payment_factory', 'list_session.wc_based_customer_factory', 'list_session.wc_cart_based_product_list_factory', 'checkout.notification_url', 'wp.current_locale.normalized', 'wc.currency', 'list_session.list_session_system', 'checkout.transaction_id_generator', 'payoneer_settings.merchant_division', 'list_session.fallback_country'], static function (PayoneerInterface $payoneer, CallbackFactoryInterface $callbackFactory, StyleFactoryInterface $styleFactory, PaymentFactoryInterface $paymentFactory, WcBasedCustomerFactoryInterface $wcBasedCustomerFactory, WcCartBasedProductListFactory $wcCartBasedProductListFactory, UriInterface $notificationUrl, string $checkoutLocale, string $currency, SystemInterface $system, TransactionIdGeneratorInterface $transactionIdGenerator, string $division, string $fallbackCountry): WcBasedListSessionFactory {
+            return new WcBasedListSessionFactory($payoneer, $callbackFactory, $paymentFactory, $styleFactory, $wcBasedCustomerFactory, $wcCartBasedProductListFactory, $notificationUrl, $checkoutLocale, $currency, $system, $transactionIdGenerator, $division, $fallbackCountry);
         }),
         'list_session.quantity_normalizer' => new Constructor(QuantityNormalizer::class),
         'list_session.wc_based_product_factory' => static function (ContainerInterface $container): WcBasedProductFactoryInterface {
@@ -62,13 +63,14 @@ return static function (): array {
             return $selectedPaymentFlow === 'hosted' ? PayoneerIntegrationTypes::HOSTED : PayoneerIntegrationTypes::EMBEDDED;
         }),
         'list_session.hosted_version' => static function (): string {
-            return 'v4';
+            return 'v5';
         },
         'list_session.default_persistor' => new Constructor(NoopListSessionPersistor::class, []),
         'list_session.creator' => new Constructor(ApiListSessionProvider::class, ['list_session.list_session_factory', 'list_session.order_based_list_session_factory', 'list_session.integration_type', 'list_session.hosted_version']),
+        'list_session.middlewares.validating' => new Constructor(ValidatingMiddleware::class, ['payoneer_sdk.commands.fetch', 'list_session.manager.proxy']),
         'list_session.middlewares.wc-order' => new Constructor(WcOrderMiddleware::class, ['checkout.order_list_session_field_name', 'core.list_serializer', 'core.list_deserializer']),
         'list_session.middlewares.wc-session' => new Constructor(WcSessionMiddleware::class, ['wc.session', 'checkout.list_session_manager.cache_key', 'core.list_serializer', 'core.list_deserializer']),
-        'list_session.middlewares.wc-session-update' => new Constructor(UpdatingMiddleware::class, ['list_session.manager.proxy', 'list_session.list_session_factory', 'checkout.checkout_hash_provider', 'checkout.session_hash_key', 'core.order_based_update_command_factory']),
+        'list_session.middlewares.wc-session-update' => new Constructor(UpdatingMiddleware::class, ['list_session.manager.proxy', 'list_session.list_session_factory', 'checkout.checkout_hash_provider', 'checkout.session_hash_key', 'core.order_based_update_command_factory', 'wp.is_rest_api_request']),
         'list_session.middlewares' => new ServiceList(['list_session.middlewares.wc-order', 'list_session.creator', 'list_session.default_persistor']),
         'list_session.manager' => new Constructor(ListSessionManager::class, ['list_session.middlewares']),
         /**
@@ -89,5 +91,31 @@ return static function (): array {
             };
             return new ListSessionManagerProxy($factory);
         },
+        /**
+         * Maintaining the state of a transaction (with constantly updating cart/billing data)
+         * requires a "storage backend" to keep track of transaction data across multiple requests.
+         * Therefore, we use this service to determine whether
+         * we have a WC_Session or WC_Order to write to
+         */
+        'list_session.can_persist' => static function (ContainerInterface $container): bool {
+            $isPaymentPage = (bool) $container->get('wc.is_checkout_pay_page');
+            if ($isPaymentPage) {
+                return \true;
+            }
+            return (bool) $container->get('wc.session.is-available');
+        },
+        'list_session.can_create' => static function (ContainerInterface $container): bool {
+            $orderUnderPayment = $container->get('wc.order_under_payment');
+            if ($orderUnderPayment) {
+                return \true;
+            }
+            if (!\did_action('woocommerce_init')) {
+                return \false;
+            }
+            $cart = $container->get('wc.cart');
+            \assert($cart instanceof \WC_Cart);
+            return (float) $cart->get_total('') > 0;
+        },
+        'list_session.can_try_create_list' => static fn(ContainerInterface $container) => $container->get('list_session.can_persist') && $container->get('list_session.can_create'),
     ];
 };

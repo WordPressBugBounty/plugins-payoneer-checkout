@@ -9,7 +9,7 @@ return array(
     'Syde\\Vendor\\WpOop\\Containers\\' => array($vendorDir . '/wp-oop/containers/src'),
     'Syde\\Vendor\\Symfony\\Polyfill\\Php80\\' => array($vendorDir . '/symfony/polyfill-php80'),
     'Syde\\Vendor\\Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
-    'Syde\\Vendor\\Psr\\Http\\Server\\' => array($vendorDir . '/psr/http-server-handler/src', $vendorDir . '/psr/http-server-middleware/src'),
+    'Syde\\Vendor\\Psr\\Http\\Server\\' => array($vendorDir . '/psr/http-server-middleware/src', $vendorDir . '/psr/http-server-handler/src'),
     'Syde\\Vendor\\Psr\\Http\\Message\\' => array($vendorDir . '/psr/http-factory/src', $vendorDir . '/psr/http-message/src'),
     'Syde\\Vendor\\Psr\\Http\\Client\\' => array($vendorDir . '/psr/http-client/src'),
     'Syde\\Vendor\\Psr\\Container\\' => array($vendorDir . '/psr/container/src'),

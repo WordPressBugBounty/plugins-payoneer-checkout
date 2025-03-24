@@ -54,15 +54,6 @@ abstract class AbstractCommand implements CommandInterface
     /**
      * @inheritDoc
      */
-    public function withTransactionId(string $transactionId): CommandInterface
-    {
-        $newThis = clone $this;
-        $newThis->transactionId = $transactionId;
-        return $newThis;
-    }
-    /**
-     * @inheritDoc
-     */
     public function withApiClient(ApiClientInterface $apiClient): CommandInterface
     {
         $newThis = clone $this;
