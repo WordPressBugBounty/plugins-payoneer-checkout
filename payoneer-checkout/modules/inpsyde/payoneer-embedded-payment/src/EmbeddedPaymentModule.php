@@ -17,6 +17,7 @@ use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\CheckoutC
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionManager;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionProvider;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\PaymentContext;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\WebSdk\Security\SdkIntegrityService;
 use Syde\Vendor\Psr\Container\ContainerInterface;
 use WC_Data_Exception;
 use WC_Order;
@@ -171,7 +172,7 @@ class EmbeddedPaymentModule implements ExecutableModule, ServiceModule, Extendin
             }
             woocommerce_store_api_register_endpoint_data(['endpoint' => CartSchema::IDENTIFIER, 'namespace' => 'payoneer-checkout', 'data_callback' => function () use ($container): array {
                 return $this->provideCartExtensionData($container);
-            }, 'schema_callback' => fn() => ['longId' => ['description' => 'LongId of the LIST session', 'type' => 'string', 'readonly' => \true], 'environment' => ['description' => 'The current environment', 'type' => 'string', 'readonly' => \true]], 'schema_type' => \ARRAY_A]);
+            }, 'schema_callback' => fn() => ['longId' => ['description' => 'LongId of the LIST session', 'type' => 'string', 'readonly' => \true], 'environment' => ['description' => 'The current environment', 'type' => 'string', 'readonly' => \true], 'sdkVersion' => ['description' => 'Pinned WebSDK script version', 'type' => 'string', 'readonly' => \true], 'sdkIntegrity' => ['description' => 'WebSDK integrity hash', 'type' => 'string', 'readonly' => \true]], 'schema_type' => \ARRAY_A]);
         });
     }
     private function provideCartExtensionData(ContainerInterface $container): array
@@ -192,14 +193,27 @@ class EmbeddedPaymentModule implements ExecutableModule, ServiceModule, Extendin
          */
         $isStoreApi = $container->get('wc.is_store_api_request');
         if (!$isStoreApi) {
-            return ['longId' => null, 'environment' => null];
+            return ['longId' => null, 'environment' => null, 'sdkVersion' => null, 'sdkIntegrity' => null];
         }
         $listProvider = $container->get('list_session.manager');
         assert($listProvider instanceof ListSessionProvider);
         $envExtractor = $container->get('embedded_payment.list_url_environment_extractor');
         assert($envExtractor instanceof ListUrlEnvironmentExtractor);
         $list = $listProvider->provide(ListSessionManager::determineContextFromGlobals());
-        return ['longId' => $list->getIdentification()->getLongId(), 'environment' => $envExtractor->extract($list->getLinks()['self'] ?? '')];
+        // TODO: Refactor the environment detection to use the current WP options.
+        // Extract the environment name from the LIST response.
+        $environment = $envExtractor->extract($list->getLinks()['self'] ?? '');
+        // TODO: Determine whether we can get SRI details (URL + hash) from the LIST response, and drop this service.
+        $sdkIntegrity = $container->get('websdk.security.integrity');
+        assert($sdkIntegrity instanceof SdkIntegrityService);
+        $sdkIntegrity->setVersion($environment);
+        return [
+            'longId' => $list->getIdentification()->getLongId(),
+            // TODO: Consider returning the full SDK URL instead of only the environment. We could return the final `websdk.assets.umd.url.template` here.
+            'environment' => $environment,
+            'sdkVersion' => $sdkIntegrity->getVersion(),
+            'sdkIntegrity' => $sdkIntegrity->getHash(),
+        ];
     }
     /**
      * Client-side CHARGE requires us to validate & create the order *before* attempting payment.

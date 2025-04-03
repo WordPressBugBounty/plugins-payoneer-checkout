@@ -673,6 +673,7 @@ class ComposerStaticInit110142e4fa6f6a2d282d7cc0c0e60c1d
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\ThirdPartyCompat\\ThirdPartyCompatModule' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-third-party-compat/src/ThirdPartyCompatModule.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\WebSdk\\Config\\StylesColor' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-websdk/src/Config/StylesColor.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\WebSdk\\Config\\StylesConfig' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-websdk/src/Config/StylesConfig.php',
+        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\WebSdk\\Security\\SdkIntegrityService' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-websdk/src/Security/SdkIntegrityService.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\WebSdk\\WebSdkModule' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-websdk/src/WebSdkModule.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Webhooks\\Controller\\OrderPaymentWebhookStrategyHandler' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-webhooks/src/Controller/OrderPaymentWebhookStrategyHandler.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Webhooks\\Controller\\PaymentWebhookController' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-webhooks/src/Controller/PaymentWebhookController.php',

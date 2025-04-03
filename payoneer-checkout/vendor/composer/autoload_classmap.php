@@ -439,6 +439,7 @@ return array(
     'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\ThirdPartyCompat\\ThirdPartyCompatModule' => $baseDir . '/modules/inpsyde/payoneer-third-party-compat/src/ThirdPartyCompatModule.php',
     'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\WebSdk\\Config\\StylesColor' => $baseDir . '/modules/inpsyde/payoneer-websdk/src/Config/StylesColor.php',
     'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\WebSdk\\Config\\StylesConfig' => $baseDir . '/modules/inpsyde/payoneer-websdk/src/Config/StylesConfig.php',
+    'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\WebSdk\\Security\\SdkIntegrityService' => $baseDir . '/modules/inpsyde/payoneer-websdk/src/Security/SdkIntegrityService.php',
     'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\WebSdk\\WebSdkModule' => $baseDir . '/modules/inpsyde/payoneer-websdk/src/WebSdkModule.php',
     'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Webhooks\\Controller\\OrderPaymentWebhookStrategyHandler' => $baseDir . '/modules/inpsyde/payoneer-webhooks/src/Controller/OrderPaymentWebhookStrategyHandler.php',
     'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Webhooks\\Controller\\PaymentWebhookController' => $baseDir . '/modules/inpsyde/payoneer-webhooks/src/Controller/PaymentWebhookController.php',

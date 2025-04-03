@@ -4,7 +4,7 @@ Tags: payment, woocommerce, checkout
 Requires at least: 5.3
 Tested up to: 6.7.2
 Requires PHP: 7.4
-Stable tag: 3.3.0
+Stable tag: 3.3.1
 License: MPL-2.0
 License URI: https://www.mozilla.org/en-US/MPL/2.0/
 
@@ -58,6 +58,10 @@ Our global banking and payment networks stretch around the world so we can suppo
 == Screenshots ==
 
 == Changelog ==
+
+= [3.3.1] - 2025-04-02 =
+* Added
+    * SRI integrity hash (security enhancement for PSI/DSS 4.0 compatibility)
 
 = [3.3.0] - 2025-03-24 =
 * Added

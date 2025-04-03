@@ -36,5 +36,4 @@ return static fn() => ['wc.is_checkout' => new Factory(['wc'], static function (
      * phpcs:enable WordPress.Security.ValidatedSanitizedInput.MissingUnslash
      * phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
      */
-    return $wooCommerce->is_rest_api_request();
 })];
