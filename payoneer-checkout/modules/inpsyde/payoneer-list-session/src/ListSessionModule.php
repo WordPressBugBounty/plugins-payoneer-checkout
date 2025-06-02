@@ -5,6 +5,7 @@ namespace Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession;
 
 use Syde\Vendor\Inpsyde\Modularity\Module\ExecutableModule;
 use Syde\Vendor\Inpsyde\Modularity\Module\ExtendingModule;
+use Syde\Vendor\Inpsyde\Modularity\Module\FactoryModule;
 use Syde\Vendor\Inpsyde\Modularity\Module\ModuleClassNameIdTrait;
 use Syde\Vendor\Inpsyde\Modularity\Module\ServiceModule;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\ApiExceptionInterface;
@@ -12,7 +13,7 @@ use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Identification\IdentificationIn
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\ListSession\ListInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Redirect\RedirectInterface;
 use Syde\Vendor\Psr\Container\ContainerInterface;
-class ListSessionModule implements ExecutableModule, ServiceModule, ExtendingModule
+class ListSessionModule implements ExecutableModule, ServiceModule, ExtendingModule, FactoryModule
 {
     use ModuleClassNameIdTrait;
     public function services(): array
@@ -23,6 +24,15 @@ class ListSessionModule implements ExecutableModule, ServiceModule, ExtendingMod
         }
         /** @var callable(): array<string, callable(\Psr\Container\ContainerInterface $container):mixed> $services */
         return $services();
+    }
+    public function factories(): array
+    {
+        static $factories;
+        if ($factories === null) {
+            $factories = require_once dirname(__DIR__) . '/inc/factories.php';
+        }
+        /** @var callable(): array<string, callable(\Psr\Container\ContainerInterface $container):mixed> $factories */
+        return $factories();
     }
     /**
      * @inheritDoc

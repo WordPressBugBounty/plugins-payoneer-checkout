@@ -38,7 +38,7 @@ class ChargedPaymentHandler implements OrderPaymentWebhookHandlerInterface
          *
          * This check was removed because when taxes are enabled and prices include tax, in the
          * request amount is set to netAmount, although from our side amount were different.
-         * Most probably, this happens due to the not impemented tax calculation on the Payoneer
+         * Most probably, this happens due to the not implemented tax calculation on the Payoneer
          * side. Until it works properly, we cannot return the amount and currency check.
          */
         $chargeId = (string) $request->get_param('longId');

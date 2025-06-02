@@ -16,31 +16,41 @@ class ApiListSessionProvider implements ListSessionProvider
     /**
      * @var OrderBasedListSessionFactory
      */
-    private $paymentFactory;
+    private $listFactory;
     /**
      * @var PayoneerIntegrationTypes::* $integrationType
      */
     private $integrationType;
+    /**
+     * @var bool
+     */
+    private bool $canCreateList;
     /**
      * @var string|null
      */
     private $hostedVersion;
     /**
      * @param WcBasedListSessionFactoryInterface $checkoutFactory
-     * @param OrderBasedListSessionFactory $paymentFactory
+     * @param OrderBasedListSessionFactory $listFactory
      * @param string $integrationType $integrationType
+     * @param bool $canCreateList
      * @param string|null $hostedVersion
+     *
      * @psalm-param PayoneerIntegrationTypes::* $integrationType
      */
-    public function __construct(WcBasedListSessionFactoryInterface $checkoutFactory, OrderBasedListSessionFactory $paymentFactory, string $integrationType, string $hostedVersion = null)
+    public function __construct(WcBasedListSessionFactoryInterface $checkoutFactory, OrderBasedListSessionFactory $listFactory, string $integrationType, bool $canCreateList, string $hostedVersion = null)
     {
         $this->checkoutFactory = $checkoutFactory;
-        $this->paymentFactory = $paymentFactory;
+        $this->listFactory = $listFactory;
         $this->integrationType = $integrationType;
         $this->hostedVersion = $hostedVersion;
+        $this->canCreateList = $canCreateList;
     }
     public function provide(ContextInterface $context): ListInterface
     {
+        if (!$this->canCreateList) {
+            throw new \RuntimeException('Cannot create List session.');
+        }
         if ($context instanceof CheckoutContext) {
             $totals = $context->getCart()->get_total('edit');
             if (!$totals) {
@@ -51,7 +61,7 @@ class ApiListSessionProvider implements ListSessionProvider
             return $list;
         }
         if ($context instanceof PaymentContext) {
-            $list = $this->paymentFactory->createList($context->getOrder(), $this->integrationType, $this->hostedVersion);
+            $list = $this->listFactory->createList($context->getOrder(), $this->integrationType, $this->hostedVersion);
             $context->offsetSet('list_just_created', \true);
             return $list;
         }

@@ -86,7 +86,7 @@ class HostedPaymentProcessor extends AbstractPaymentProcessor
         $redirectUrl = $this->createRedirectUrl($list);
         /* translators: Order note added when processing an order in hosted flow */
         $note = __('The customer is being redirected to the hosted payment page.', 'payoneer-checkout');
-        $order->update_status('on-hold', $note);
+        $this->putOrderOnHold($order, $note);
         return ['result' => 'success', 'redirect' => $redirectUrl];
     }
     /**

@@ -29,9 +29,9 @@ if (!function_exists('humbug_phpscoper_expose_class')) {
         }
     }
 }
+humbug_phpscoper_expose_class('UnhandledMatchError', 'Syde\Vendor\UnhandledMatchError');
 humbug_phpscoper_expose_class('Attribute', 'Syde\Vendor\Attribute');
 humbug_phpscoper_expose_class('Stringable', 'Syde\Vendor\Stringable');
-humbug_phpscoper_expose_class('UnhandledMatchError', 'Syde\Vendor\UnhandledMatchError');
 humbug_phpscoper_expose_class('PhpToken', 'Syde\Vendor\PhpToken');
 humbug_phpscoper_expose_class('ValueError', 'Syde\Vendor\ValueError');
 

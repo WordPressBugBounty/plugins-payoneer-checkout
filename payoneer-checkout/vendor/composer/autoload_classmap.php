@@ -408,6 +408,7 @@ return array(
     'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\PaymentMethods\\AvailabilityCallback\\LiveModeAvailabilityCallback' => $baseDir . '/modules/inpsyde/payoneer-payment-methods/src/AvailabilityCallback/LiveModeAvailabilityCallback.php',
     'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\PaymentMethods\\ExcludeNotSupportedCountries' => $baseDir . '/modules/inpsyde/payoneer-payment-methods/src/ExcludeNotSupportedCountries.php',
     'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\PaymentMethods\\GatewayIconsRenderer\\DynamicIconProvider' => $baseDir . '/modules/inpsyde/payoneer-payment-methods/src/GatewayIconsRenderer/DynamicIconProvider.php',
+    'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\PaymentMethods\\GatewayIconsRenderer\\IconProviderFactory' => $baseDir . '/modules/inpsyde/payoneer-payment-methods/src/GatewayIconsRenderer/IconProviderFactory.php',
     'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\PaymentMethods\\ListCondition\\ListConditionInterface' => $baseDir . '/modules/inpsyde/payoneer-payment-methods/src/ListCondition/ListConditionInterface.php',
     'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\PaymentMethods\\ListCondition\\MatchNetworkCodeCondition' => $baseDir . '/modules/inpsyde/payoneer-payment-methods/src/ListCondition/MatchNetworkCodeCondition.php',
     'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\PaymentMethods\\ListCondition\\MatchNetworkGroupingCondition' => $baseDir . '/modules/inpsyde/payoneer-payment-methods/src/ListCondition/MatchNetworkGroupingCondition.php',

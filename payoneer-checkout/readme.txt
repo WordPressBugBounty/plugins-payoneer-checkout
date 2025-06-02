@@ -2,9 +2,9 @@
 Contributors: payoneercheckout, inpsyde
 Tags: payment, woocommerce, checkout
 Requires at least: 5.3
-Tested up to: 6.7.2
+Tested up to: 6.8.1
 Requires PHP: 7.4
-Stable tag: 3.3.1
+Stable tag: 3.3.2
 License: MPL-2.0
 License URI: https://www.mozilla.org/en-US/MPL/2.0/
 
@@ -58,6 +58,15 @@ Our global banking and payment networks stretch around the world so we can suppo
 == Screenshots ==
 
 == Changelog ==
+
+= [3.3.2] - 2025-06-02 =
+* Fixed:
+  * Issue allowing checkout form to be submitted with invalid cards fields
+  * Issue with additional payment method icons being displayed on Payoneer Checkout at checkout and block cart page
+  * PHP 8+ errors caused during API calls after 3.3.0 release
+  * PHP 7.4 errors caused during API calls after 3.3.0 release
+* Changed:
+  * Repeated payment attempts no longer generate new orders. The original order is now reused, with its status set to On hold after checkout and updated to Failed if the payment is declined.
 
 = [3.3.1] - 2025-04-02 =
 * Added

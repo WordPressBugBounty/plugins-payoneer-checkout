@@ -66,12 +66,23 @@ return static function (): array {
             return 'v5';
         },
         'list_session.default_persistor' => new Constructor(NoopListSessionPersistor::class, []),
-        'list_session.creator' => new Constructor(ApiListSessionProvider::class, ['list_session.list_session_factory', 'list_session.order_based_list_session_factory', 'list_session.integration_type', 'list_session.hosted_version']),
+        'list_session.creator' => new Constructor(ApiListSessionProvider::class, ['list_session.list_session_factory', 'list_session.order_based_list_session_factory', 'list_session.integration_type', 'list_session.can_try_create_list', 'list_session.hosted_version']),
         'list_session.middlewares.validating' => new Constructor(ValidatingMiddleware::class, ['payoneer_sdk.commands.fetch', 'list_session.manager.proxy']),
         'list_session.middlewares.wc-order' => new Constructor(WcOrderMiddleware::class, ['checkout.order_list_session_field_name', 'core.list_serializer', 'core.list_deserializer']),
         'list_session.middlewares.wc-session' => new Constructor(WcSessionMiddleware::class, ['wc.session', 'checkout.list_session_manager.cache_key', 'core.list_serializer', 'core.list_deserializer']),
         'list_session.middlewares.wc-session-update' => new Constructor(UpdatingMiddleware::class, ['list_session.manager.proxy', 'list_session.list_session_factory', 'checkout.checkout_hash_provider', 'checkout.session_hash_key', 'core.order_based_update_command_factory', 'wp.is_rest_api_request']),
-        'list_session.middlewares' => new ServiceList(['list_session.middlewares.wc-order', 'list_session.creator', 'list_session.default_persistor']),
+        'list_session.middlewares' => new ServiceList([
+            /**
+             * WcOrderMiddleware only operates on PaymentContext, otherwise just calls next
+             * middleware. PaymentContext always contains order, so it is safe to always have
+             * WcOrderMiddleware.
+             *
+             * @todo: consider doing the same with the WC_Session List provider
+             */
+            'list_session.middlewares.wc-order',
+            'list_session.creator',
+            'list_session.default_persistor',
+        ]),
         'list_session.manager' => new Constructor(ListSessionManager::class, ['list_session.middlewares']),
         /**
          * An unpleasant helper to break a recursive dependency chain.
@@ -91,31 +102,5 @@ return static function (): array {
             };
             return new ListSessionManagerProxy($factory);
         },
-        /**
-         * Maintaining the state of a transaction (with constantly updating cart/billing data)
-         * requires a "storage backend" to keep track of transaction data across multiple requests.
-         * Therefore, we use this service to determine whether
-         * we have a WC_Session or WC_Order to write to
-         */
-        'list_session.can_persist' => static function (ContainerInterface $container): bool {
-            $isPaymentPage = (bool) $container->get('wc.is_checkout_pay_page');
-            if ($isPaymentPage) {
-                return \true;
-            }
-            return (bool) $container->get('wc.session.is-available');
-        },
-        'list_session.can_create' => static function (ContainerInterface $container): bool {
-            $orderUnderPayment = $container->get('wc.order_under_payment');
-            if ($orderUnderPayment) {
-                return \true;
-            }
-            if (!\did_action('woocommerce_init')) {
-                return \false;
-            }
-            $cart = $container->get('wc.cart');
-            \assert($cart instanceof \WC_Cart);
-            return (float) $cart->get_total('') > 0;
-        },
-        'list_session.can_try_create_list' => static fn(ContainerInterface $container) => $container->get('list_session.can_persist') && $container->get('list_session.can_create'),
     ];
 };

@@ -117,11 +117,6 @@ abstract class AbstractPaymentProcessor implements PaymentProcessorInterface
          * nothing happens.
          */
         wc()->session->set($this->sessionHashKey, null);
-        /**
-         * Also unlink the order from WC Session so it couldn't be reused with
-         * another payment method.
-         */
-        wc()->session->set('order_awaiting_payment', \false);
         return ['result' => 'success', 'redirect' => '', 'messages' => '<div></div>'];
     }
     /**
@@ -249,5 +244,22 @@ abstract class AbstractPaymentProcessor implements PaymentProcessorInterface
         if (!isset($countryValid) || !$countryValid) {
             do_action('payoneer_checkout.invalid_country_after_final_update', ['country' => $listCountry, 'longId' => $updateListCommand->getLongId(), 'customer' => $customer]);
         }
+    }
+    /**
+     * This method's body is not a part of the `process_payment()` method mostly because we want
+     * to provide different notes from Embedded and Hosted payment processors.
+     *
+     * The idea of changing order status to `On Hold` was here for a long time. We tried other
+     * approaches, but end up with this because we need to prevent the order from being paid with
+     * other payment methods while our payment processing was started. This mostly applies
+     * to the Afterpay payment method and all payment methods in Hosted mode. In all these cases
+     * customer has hosted payment page opened in another tab and nothing prevents them from
+     * returning to the checkout and doing payment with another method while our payment processing
+     * was started already.
+     */
+    protected function putOrderOnHold(WC_Order $order, string $note): void
+    {
+        $order->update_status('on-hold', $note);
+        $order->save();
     }
 }

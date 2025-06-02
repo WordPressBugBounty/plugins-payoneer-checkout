@@ -227,6 +227,9 @@ class AnalyticsModule implements ServiceModule, ExtendingModule, ExecutableModul
     }
     protected function getCartTotal(ContainerInterface $container): float
     {
+        if (!$container->get('wc.cart.is-available')) {
+            return 0.0;
+        }
         $cart = $container->get('analytics.wc.cart');
         if (!$cart instanceof WC_Cart) {
             return 0.0;

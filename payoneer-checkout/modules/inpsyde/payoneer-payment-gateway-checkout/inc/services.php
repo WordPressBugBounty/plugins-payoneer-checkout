@@ -95,7 +95,8 @@ CSS
             return filter_input(\INPUT_GET, $forceHostedFlowFlag, (int) \FILTER_VALIDATE_BOOL) || filter_input(\INPUT_POST, $forceHostedFlowFlag, (int) \FILTER_VALIDATE_BOOL);
         }
         //Block checkout
-        $hppFlagField = array_filter(is_array($json['payment_data']) ? $json['payment_data'] : [], fn($item) => is_array($item) && $item['key'] === $forceHostedFlowFlag);
+        $paymentData = array_key_exists('payment_data', $json) && is_array($json['payment_data']) ? $json['payment_data'] : [];
+        $hppFlagField = array_filter($paymentData, fn($item) => is_array($item) && $item['key'] === $forceHostedFlowFlag);
         /**
          * Missing HPP flag means our JS wasn't executed and HPP fallback flag is set.
          *

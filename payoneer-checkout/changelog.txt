@@ -2,6 +2,15 @@
 
 = [next-version] - yyyy-mm-dd =
 
+= [3.3.2] - 2025-06-02 =
+* Fixed:
+  * Issue allowing checkout form to be submitted with invalid cards fields
+  * Issue with additional payment method icons being displayed on Payoneer Checkout at checkout and block cart page
+  * PHP 8+ errors caused during API calls after 3.3.0 release
+  * PHP 7.4 errors caused during API calls after 3.3.0 release
+* Changed:
+  * Repeated payment attempts no longer generate new orders. The original order is now reused, with its status set to On hold after checkout and updated to Failed if the payment is declined.
+
 = [3.3.1] - 2025-04-02 =
 * Added
     * SRI integrity hash (security enhancement for PSI/DSS 4.0 compatibility)
@@ -197,7 +206,7 @@
 
 = [0.2.1] - 2022-05-25 =
 ### Fixed
-* Fix: Unpaid orders also show a working transation ID on the orders page
+* Fix: Unpaid orders also show a working transaction ID on the orders page
 * Fix: Removed giant error message during checkout that coiuld appear in rare cases
 * Fix: LIST session is only stored on the order if it was paid for with our gateway
 * Fix: Checkout widget handles removal of payment gateway during checkout more gracefully

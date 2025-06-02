@@ -36,4 +36,9 @@ return static fn() => ['wc.is_checkout' => new Factory(['wc'], static function (
      * phpcs:enable WordPress.Security.ValidatedSanitizedInput.MissingUnslash
      * phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
      */
-})];
+}), 'wc.session.is-available' => new Factory(['wc', 'wp.is_admin', 'wp.is_ajax'], static function (\WooCommerce $wooCommerce, bool $isAdmin, bool $isAjax): bool {
+    if ($isAdmin && !$isAjax) {
+        return \false;
+    }
+    return $wooCommerce->session instanceof \WC_Session;
+}), 'wc.cart.is-available' => new Factory(['wc'], static fn(\WooCommerce $wooCommerce) => $wooCommerce->cart instanceof \WC_Cart)];

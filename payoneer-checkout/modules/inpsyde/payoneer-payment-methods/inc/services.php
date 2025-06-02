@@ -10,11 +10,9 @@ use Syde\Vendor\Dhii\Services\Factories\Value;
 use Syde\Vendor\Dhii\Services\Factory;
 use Syde\Vendor\Inpsyde\PaymentGateway\DefaultIconsRenderer;
 use Syde\Vendor\Inpsyde\PaymentGateway\GatewayIconsRendererInterface;
-use Syde\Vendor\Inpsyde\PaymentGateway\Icon;
 use Syde\Vendor\Inpsyde\PaymentGateway\IconProviderInterface;
 use Syde\Vendor\Inpsyde\PaymentGateway\PaymentFieldsRendererInterface;
 use Syde\Vendor\Inpsyde\PaymentGateway\PaymentProcessorInterface;
-use Syde\Vendor\Inpsyde\PaymentGateway\StaticIconProvider;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Api\Gateway\CommandFactory\WcOrderBasedUpdateCommandFactoryInterface;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Checkout\Authentication\TokenGeneratorInterface;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Checkout\MisconfigurationDetector\MisconfigurationDetectorInterface;
@@ -22,7 +20,6 @@ use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Checkout\PaymentFieldsRenderer\Co
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\PaymentProcessor\EmbeddedPaymentProcessor;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\HostedPayment\PaymentProcessor\HostedPaymentProcessor;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionManager;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionProvider;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\AvailabilityCallback\AvailabilityCallbackInterface;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\AvailabilityCallback\CompoundAvailabilityCallback;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\AvailabilityCallback\ConditionalCallbackDecorator;
@@ -30,7 +27,7 @@ use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\AvailabilityCallba
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\AvailabilityCallback\ListConditionAvailabilityCallback;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\AvailabilityCallback\LiveModeAvailabilityCallback;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\ExcludeNotSupportedCountries;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\GatewayIconsRenderer\DynamicIconProvider;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\GatewayIconsRenderer\IconProviderFactory;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\ListCondition\MatchNetworkCodeCondition;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\ListCondition\MatchNetworkGroupingCondition;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\ListCondition\NoopListCondition;
@@ -206,39 +203,21 @@ return static function (): array {
         'payment_methods.payoneer-checkout.default_icons' => new Value(['visa', 'mastercard', 'amex', 'discover', 'diners', 'jcb']),
         'payment_methods.payoneer-hosted.default_icons' => new Value(['visa', 'mastercard', 'amex', 'discover', 'diners', 'jcb', 'afterpay']),
         'payment_methods.payoneer-afterpay.default_icons' => new Value(['afterpay']),
-        'payment_gateway.payoneer-checkout.method_icon_provider' => new Factory(['core.main_plugin_file', 'payment_methods.path.assets', 'payment_methods.payoneer-checkout.default_icons', 'list_session.can_try_create_list', 'list_session.manager', 'payment_methods.network_icon_map'], static function (string $pluginMainFile, string $assetPath, array $icons, bool $canTryCreateList, ListSessionProvider $listSessionProvider, array $networkMap): IconProviderInterface {
-            $src = static fn(string $handle) => \plugins_url("{$assetPath}/img/{$handle}.svg", $pluginMainFile);
-            $alt = static fn(string $handle) => "{$handle} icon";
-            $icon = static fn(string $handle) => new Icon($handle, $src($handle), $alt($handle));
-            $defaultIconProvider = new StaticIconProvider(...\array_map($icon, $icons));
-            /**
-             * If it is safe to boot a LIST, we can inspect real data
-             */
-            if (!$canTryCreateList) {
-                return $defaultIconProvider;
-            }
-            /**
-             * @var array<string, string> $networkMap
-             */
-            return new DynamicIconProvider($listSessionProvider, $networkMap, $defaultIconProvider);
+        'payment_gateway.payoneer-checkout.method_icon_provider' => new Factory(['payment_methods.icon_provider_factory', 'payment_methods.payoneer-checkout.default_icons'], static function (IconProviderFactory $iconProviderFactory, array $defaultIcons): IconProviderInterface {
+            return $iconProviderFactory->create($defaultIcons);
         }),
         'payment_gateway.payoneer-checkout.gateway_icons_renderer' => new Factory(['payment_gateway.payoneer-checkout.method_icon_provider'], static function (IconProviderInterface $iconProvider): GatewayIconsRendererInterface {
             return new DefaultIconsRenderer($iconProvider);
         }),
-        'payment_gateway.payoneer-hosted.method_icon_provider' => new Factory(['core.main_plugin_file', 'payment_methods.path.assets', 'payment_methods.payoneer-hosted.default_icons'], static function (string $pluginMainFile, string $assetPath, array $icons): StaticIconProvider {
-            $src = static fn(string $handle) => \plugins_url("{$assetPath}/img/{$handle}.svg", $pluginMainFile);
-            $alt = static fn(string $handle) => "{$handle} icon";
-            $icon = static fn(string $handle) => new Icon($handle, $src($handle), $alt($handle));
-            return new StaticIconProvider(...\array_map($icon, $icons));
+        'payment_methods.icon_provider_factory' => new Constructor(IconProviderFactory::class, ['core.main_plugin_file', 'payment_methods.path.assets', 'list_session.can_try_create_list', 'list_session.manager', 'payment_methods.network_icon_map']),
+        'payment_gateway.payoneer-hosted.method_icon_provider' => new Factory(['payment_methods.icon_provider_factory', 'payment_methods.payoneer-hosted.default_icons'], static function (IconProviderFactory $iconProviderFactory, array $defaultIcons): IconProviderInterface {
+            return $iconProviderFactory->create($defaultIcons);
         }),
         'payment_gateway.payoneer-hosted.gateway_icons_renderer' => new Factory(['payment_gateway.payoneer-hosted.method_icon_provider'], static function (IconProviderInterface $iconProvider): GatewayIconsRendererInterface {
             return new DefaultIconsRenderer($iconProvider);
         }),
-        'payment_gateway.payoneer-afterpay.method_icon_provider' => new Factory(['core.main_plugin_file', 'payment_methods.path.assets', 'payment_methods.payoneer-afterpay.default_icons'], static function (string $pluginMainFile, string $assetPath, array $icons): IconProviderInterface {
-            $src = static fn(string $handle) => \plugins_url("{$assetPath}/img/{$handle}.svg", $pluginMainFile);
-            $alt = static fn(string $handle) => "{$handle} icon";
-            $icon = static fn(string $handle) => new Icon($handle, $src($handle), $alt($handle));
-            return new StaticIconProvider(...\array_map($icon, $icons));
+        'payment_gateway.payoneer-afterpay.method_icon_provider' => new Factory(['payment_methods.icon_provider_factory', 'payment_methods.payoneer-afterpay.default_icons'], static function (IconProviderFactory $iconProviderFactory, array $defaultIcons): IconProviderInterface {
+            return $iconProviderFactory->create($defaultIcons);
         }),
         'payment_gateway.payoneer-afterpay.gateway_icons_renderer' => new Factory(['payment_gateway.payoneer-afterpay.method_icon_provider'], static function (IconProviderInterface $iconProvider): GatewayIconsRendererInterface {
             return new DefaultIconsRenderer($iconProvider);

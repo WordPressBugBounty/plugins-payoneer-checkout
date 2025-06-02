@@ -56,11 +56,6 @@ return static function (): array {
         return \WC();
     }), 'wc.version' => new Factory(['core.wp_environment'], static function (WpEnvironmentInterface $wpEnvironment): string {
         return $wpEnvironment->getWcVersion();
-    }), 'wc.session.is-available' => new Factory(['wc', 'wp.is_admin', 'wp.is_ajax'], static function (\WooCommerce $wooCommerce, bool $isAdmin, bool $isAjax): bool {
-        if ($isAdmin && !$isAjax) {
-            return \false;
-        }
-        return $wooCommerce->session instanceof \WC_Session;
     }), 'wc.session' => new Factory(['wc', 'wc.session.is-available'], static function (\WooCommerce $wooCommerce, bool $isAvailable): \WC_Session {
         if (!$isAvailable) {
             throw new PayoneerException('WooCommerce session is not available.');

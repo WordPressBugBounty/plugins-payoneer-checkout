@@ -18,7 +18,9 @@ use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessi
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionProvider;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\PaymentContext;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\WebSdk\Security\SdkIntegrityService;
+use Syde\Vendor\Psr\Container\ContainerExceptionInterface;
 use Syde\Vendor\Psr\Container\ContainerInterface;
+use Syde\Vendor\Psr\Container\NotFoundExceptionInterface;
 use WC_Data_Exception;
 use WC_Order;
 /**
@@ -46,6 +48,7 @@ class EmbeddedPaymentModule implements ExecutableModule, ServiceModule, Extendin
          * out of $this->setupModuleActions() method call.
          */
         $this->registerSendingListDataToFrontend($container);
+        $this->registerPaymentDeclinedListener($container);
         return \true;
     }
     /**
@@ -254,6 +257,60 @@ class EmbeddedPaymentModule implements ExecutableModule, ServiceModule, Extendin
             wp_send_json_success(['result' => 'success'], 200);
         }
         wp_send_json_error(['result' => 'failure'], 500);
+    }
+    protected function registerPaymentDeclinedListener(ContainerInterface $container): void
+    {
+        add_action('wc_ajax_payoneer-checkout-payment-declined', function () use ($container) {
+            $nonceAction = (string) $container->get('embedded_payment.nonce.action.on_payment_declined');
+            check_ajax_referer($nonceAction);
+            try {
+                $orderId = $this->getOrderIdForPaymentDeclinedRequest($container);
+            } catch (\Throwable $exception) {
+                wp_send_json_error('Failed to change order status in payment declined request.');
+            }
+            $order = wc_get_order($orderId);
+            if (!$order instanceof WC_Order) {
+                //Typecast $orderId to make psalm happy.
+                wp_send_json_error(sprintf('Cannot get order by ID %s', $orderId));
+            }
+            if (!$this->isSupportedPaymentMethod($order, $container)) {
+                wp_send_json_error('Unexpected payment method');
+            }
+            $order->update_status('failed', 'Setting order failed after payment declined.' . \PHP_EOL);
+            $order->save();
+            wp_send_json_success(['message' => 'Order status was set to failed.', 'nonce' => wp_create_nonce($nonceAction)]);
+        });
+    }
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    protected function getOrderIdForPaymentDeclinedRequest(ContainerInterface $container): int
+    {
+        $orderKey = (string) filter_input(\INPUT_POST, 'orderKey', \FILTER_CALLBACK, ['options' => fn($rawInput) => sanitize_text_field((string) wp_unslash($rawInput))]);
+        /**
+         * We need a way of getting order ID directly from post for the block checkout.
+         *
+         * Block checkout doesn't keep the order ID under the `order_awaiting_payment` key
+         * in WC Session. We still could get the order ID from the `store_api_draft_order` session
+         * key, but is not so reliable. Also, this creates problems in potential corner cases when
+         * both block and classic checkouts are configured in the store and both session keys have
+         * some order IDs.
+         *
+         * Sending order ID directly from frontend is less secure than getting it from a WC Session
+         * on backend, but we are compensating it by comparing longId and verifying nonce.
+         */
+        $orderId = filter_input(\INPUT_POST, 'payoneerOrderId', \FILTER_SANITIZE_NUMBER_INT);
+        if (!$orderId) {
+            $orderId = $orderKey ? wc_get_order_id_by_order_key($orderKey) : $container->get('wc.order_under_payment');
+        }
+        return (int) $orderId;
+    }
+    protected function isSupportedPaymentMethod(WC_Order $order, ContainerInterface $container): bool
+    {
+        $payoneerMethods = $container->get('payment_methods.all');
+        assert(is_array($payoneerMethods));
+        return in_array($order->get_payment_method(), $payoneerMethods, \true);
     }
     /**
      * @inheritDoc

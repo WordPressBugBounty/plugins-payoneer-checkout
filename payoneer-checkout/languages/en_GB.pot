@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.11.0\n"
+"X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: payoneer-checkout\n"
 
 #. Plugin Name of the plugin
@@ -136,28 +136,31 @@ msgstr ""
 #. translators: %1$s, %2$s and %3$s are replaced with the opening and closing 'a' tags
 #: modules.local/checkout/src/CheckoutModule.php:554
 #: modules/inpsyde/payoneer-payment-gateway-checkout/src/CheckoutModule.php:554
+#, php-format
 msgid "Enter valid Test credentials and Save settings to receive a payment notification and unlock Live mode checkbox. You can %1$srefresh%2$s the page to check if a payment notification has been already received and Live mode checkbox is unlocked."
 msgstr ""
 
 #. translators: Transaction ID supplied by WooCommerce plugin
-#: modules.local/checkout/src/PaymentProcessor/AbstractPaymentProcessor.php:180
-#: modules/inpsyde/payoneer-payment-gateway-checkout/src/PaymentProcessor/AbstractPaymentProcessor.php:180
+#: modules.local/checkout/src/PaymentProcessor/AbstractPaymentProcessor.php:174
+#: modules/inpsyde/payoneer-payment-gateway-checkout/src/PaymentProcessor/AbstractPaymentProcessor.php:174
+#, php-format
 msgid "Initiating payment with transaction ID \"%1$s\""
 msgstr ""
 
-#: modules.local/checkout/src/PaymentProcessor/AbstractPaymentProcessor.php:221
-#: modules/inpsyde/payoneer-payment-gateway-checkout/src/PaymentProcessor/AbstractPaymentProcessor.php:221
+#: modules.local/checkout/src/PaymentProcessor/AbstractPaymentProcessor.php:215
+#: modules/inpsyde/payoneer-payment-gateway-checkout/src/PaymentProcessor/AbstractPaymentProcessor.php:215
 msgid "The payment was not processed. Please try again."
 msgstr ""
 
 #. translators: Used after checking for misconfigured merchant credentials, e.g. when we encounter 401/INVALID_CONFIGURATION
-#: modules.local/checkout/src/PaymentProcessor/AbstractPaymentProcessor.php:267
-#: modules/inpsyde/payoneer-payment-gateway-checkout/src/PaymentProcessor/AbstractPaymentProcessor.php:267
+#: modules.local/checkout/src/PaymentProcessor/AbstractPaymentProcessor.php:261
+#: modules/inpsyde/payoneer-payment-gateway-checkout/src/PaymentProcessor/AbstractPaymentProcessor.php:261
 msgid "Failed to initialize payment session. Payoneer Checkout is not configured properly."
 msgstr ""
 
 #: modules.local/embedded-payment/inc/custom_style_fields.php:21
 #: modules/inpsyde/payoneer-embedded-payment/inc/custom_style_fields.php:21
+#, php-format
 msgid "%s (Empty: use default color)"
 msgstr ""
 
@@ -195,6 +198,12 @@ msgstr ""
 #: modules/inpsyde/payoneer-embedded-payment/src/PaymentProcessor/EmbeddedPaymentProcessor.php:79
 #: modules/inpsyde/payoneer-hosted-payment/src/PaymentProcessor/HostedPaymentProcessor.php:90
 msgid "Payment failed. Please attempt the payment again or contact the shop admin. This issue has been logged."
+msgstr ""
+
+#. translators: Order note added when processing an order in embedded flow
+#: modules.local/embedded-payment/src/PaymentProcessor/EmbeddedPaymentProcessor.php:109
+#: modules/inpsyde/payoneer-embedded-payment/src/PaymentProcessor/EmbeddedPaymentProcessor.php:109
+msgid "Backend processing finished, frontend processing is about to start."
 msgstr ""
 
 #: modules.local/hosted-payment/inc/extensions.php:21
@@ -262,60 +271,63 @@ msgstr ""
 msgid "The description that customers see at checkout"
 msgstr ""
 
-#: modules.local/payment-methods/inc/services.php:118
-#: modules/inpsyde/payoneer-payment-methods/inc/services.php:118
+#: modules.local/payment-methods/inc/services.php:115
+#: modules/inpsyde/payoneer-payment-methods/inc/services.php:115
 msgid "Payoneer Checkout - Credit / Debit cards"
 msgstr ""
 
-#: modules.local/payment-methods/inc/services.php:122
-#: modules/inpsyde/payoneer-payment-methods/inc/services.php:122
+#: modules.local/payment-methods/inc/services.php:119
+#: modules/inpsyde/payoneer-payment-methods/inc/services.php:119
 msgid "Pay with"
 msgstr ""
 
-#: modules.local/payment-methods/inc/services.php:146
-#: modules.local/payment-methods/inc/services.php:181
-#: modules.local/payment-methods/inc/services.php:217
-#: modules/inpsyde/payoneer-payment-methods/inc/services.php:146
-#: modules/inpsyde/payoneer-payment-methods/inc/services.php:181
-#: modules/inpsyde/payoneer-payment-methods/inc/services.php:217
+#: modules.local/payment-methods/inc/services.php:143
+#: modules.local/payment-methods/inc/services.php:178
+#: modules.local/payment-methods/inc/services.php:214
+#: modules/inpsyde/payoneer-payment-methods/inc/services.php:143
+#: modules/inpsyde/payoneer-payment-methods/inc/services.php:178
+#: modules/inpsyde/payoneer-payment-methods/inc/services.php:214
 msgid "Test:"
 msgstr ""
 
-#: modules.local/payment-methods/inc/services.php:156
-#: modules/inpsyde/payoneer-payment-methods/inc/services.php:156
+#: modules.local/payment-methods/inc/services.php:153
+#: modules/inpsyde/payoneer-payment-methods/inc/services.php:153
 msgid "Payoneer Checkout - Hosted payment page"
 msgstr ""
 
-#: modules.local/payment-methods/inc/services.php:191
-#: modules/inpsyde/payoneer-payment-methods/inc/services.php:191
+#: modules.local/payment-methods/inc/services.php:188
+#: modules/inpsyde/payoneer-payment-methods/inc/services.php:188
 msgid "Payoneer Checkout - Afterpay"
 msgstr ""
 
-#: modules.local/payment-methods/inc/services.php:227
-#: modules/inpsyde/payoneer-payment-methods/inc/services.php:227
+#: modules.local/payment-methods/inc/services.php:224
+#: modules/inpsyde/payoneer-payment-methods/inc/services.php:224
 msgid "Pay"
 msgstr ""
 
-#: modules.local/payment-methods/inc/services.php:253
-#: modules/inpsyde/payoneer-payment-methods/inc/services.php:253
+#: modules.local/payment-methods/inc/services.php:250
+#: modules/inpsyde/payoneer-payment-methods/inc/services.php:250
 msgid "Payoneer Checkout is the next generation of payment processing platforms."
 msgstr ""
 
 #. translators: %1$s, %2$s, %3$s and %4$s are replaced with opening and closing 'a' tags.
-#: modules.local/payment-methods/inc/services.php:259
-#: modules/inpsyde/payoneer-payment-methods/inc/services.php:259
+#: modules.local/payment-methods/inc/services.php:256
+#: modules/inpsyde/payoneer-payment-methods/inc/services.php:256
+#, php-format
 msgid "By using Payoneer Checkout, you agree to the %1$sTerms of Service%2$s and %3$sPrivacy policy%4$s."
 msgstr ""
 
 #. translators: %1$s, %2$s, %3$s, %4$s, %5$s and %6$s is replaced with the opening and closing 'a' tags.
-#: modules.local/payment-methods/inc/services.php:282
-#: modules/inpsyde/payoneer-payment-methods/inc/services.php:282
+#: modules.local/payment-methods/inc/services.php:279
+#: modules/inpsyde/payoneer-payment-methods/inc/services.php:279
+#, php-format
 msgid "Before you begin read How to %1$sConnect WooCommerce%2$s to Payoneer Checkout. Make sure you have a Payoneer Account. If you don't, see %3$sRegister for Checkout%4$s. You can get your %5$sauthentication data%6$s in the Payoneer Account."
 msgstr ""
 
 #. translators: %1$s is replaced with transaction Long ID
-#: modules.local/payment-methods/inc/services.php:592
-#: modules/inpsyde/payoneer-payment-methods/inc/services.php:592
+#: modules.local/payment-methods/inc/services.php:589
+#: modules/inpsyde/payoneer-payment-methods/inc/services.php:589
+#, php-format
 msgid "Refunded by Payoneer Checkout - long ID: %1$s"
 msgstr ""
 
@@ -416,6 +428,7 @@ msgstr ""
 #. translators: %1$s, %2$s and %3$s are replaced with the opening and closing 'a' tags
 #: modules.local/settings/src/SettingsModule.php:208
 #: modules/inpsyde/payoneer-settings/src/SettingsModule.php:208
+#, php-format
 msgid "%1$sEnable live mode%2$s when you are ready to accept Live transactions."
 msgstr ""
 
@@ -464,12 +477,14 @@ msgstr ""
 #. translators: %1$s is replaced with the actual notification ID.
 #: modules.local/webhooks/src/OrderPaymentWebhookHandler/RefundedPaymentHandler.php:74
 #: modules/inpsyde/payoneer-webhooks/src/OrderPaymentWebhookHandler/RefundedPaymentHandler.php:74
+#, php-format
 msgid "Refunded automatically on incoming webhook. Notification id is %1$s."
 msgstr ""
 
 #. translators: %1$s is replaced with the actual error message
 #: modules.local/webhooks/src/OrderPaymentWebhookHandler/RefundedPaymentHandler.php:95
 #: modules/inpsyde/payoneer-webhooks/src/OrderPaymentWebhookHandler/RefundedPaymentHandler.php:95
+#, php-format
 msgid "Failed to create an order refund on incoming webhook. Error message: %1$s"
 msgstr ""
 
