@@ -13,7 +13,7 @@ class Customer implements CustomerInterface
     /**
      * Customer identifier given by merchant.
      *
-     * @var string
+     * @var string|null
      */
     protected $number;
     /**
@@ -55,7 +55,7 @@ class Customer implements CustomerInterface
      * @param RegistrationInterface|null $registration Object with info about customer registration in the Payoneer API.
      * @param NameInterface|null $name Object containing customer name.
      */
-    public function __construct(string $number, array $phones = null, array $addresses = null, string $email = null, string $deliveryEmail = null, RegistrationInterface $registration = null, NameInterface $name = null)
+    public function __construct(string $number = null, array $phones = null, array $addresses = null, string $email = null, string $deliveryEmail = null, RegistrationInterface $registration = null, NameInterface $name = null)
     {
         $this->number = $number;
         $this->phones = $phones;
@@ -70,6 +70,9 @@ class Customer implements CustomerInterface
      */
     public function getNumber(): string
     {
+        if ($this->number === null) {
+            throw new ApiException('number field is not set');
+        }
         return $this->number;
     }
     /**

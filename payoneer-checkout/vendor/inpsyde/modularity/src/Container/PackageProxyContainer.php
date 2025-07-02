@@ -37,8 +37,8 @@ class PackageProxyContainer implements ContainerInterface
     /**
      * @return bool
      *
-     * @psalm-assert-if-true ContainerInterface $this->container
-     * @psalm-assert-if-false null $this->container
+     * @phpstan-assert-if-true ContainerInterface $this->container
+     * @phpstan-assert-if-false null $this->container
      */
     private function tryContainer(): bool
     {
@@ -54,7 +54,7 @@ class PackageProxyContainer implements ContainerInterface
      * @param string $id
      * @return void
      *
-     * @psalm-assert ContainerInterface $this->container
+     * @phpstan-assert ContainerInterface $this->container
      */
     private function assertPackageBooted(string $id): void
     {

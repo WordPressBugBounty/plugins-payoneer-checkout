@@ -11,7 +11,7 @@ interface CustomerDeserializerInterface
 {
     /**
      * @param array {
-     *     number: string,
+     *     number?: string,
      *     phones?: array {
      *          mobile: array {
      *              'unstructuredNumber': string

@@ -81,12 +81,6 @@ use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Phone\PhoneFactory;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Phone\PhoneFactoryInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Phone\PhoneSerializer;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Phone\PhoneSerializerInterface;
-use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\ProcessingModel\ProcessingModelDeserializer;
-use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\ProcessingModel\ProcessingModelDeserializerInterface;
-use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\ProcessingModel\ProcessingModelFactory;
-use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\ProcessingModel\ProcessingModelFactoryInterface;
-use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\ProcessingModel\ProcessingModelSerializer;
-use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\ProcessingModel\ProcessingModelSerializerInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Product\ProductDeserializer;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Product\ProductDeserializerInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Product\ProductFactory;
@@ -209,8 +203,6 @@ return static function (): array {
         return new RedirectFactory();
     }, 'payoneer_sdk.registration_factory' => static function (): RegistrationFactoryInterface {
         return new RegistrationFactory();
-    }, 'payoneer_sdk.processing_model_factory' => static function (): ProcessingModelFactoryInterface {
-        return new ProcessingModelFactory();
     }, 'payoneer_sdk.networks_factory' => static function (): NetworksFactoryInterface {
         return new NetworksFactory();
     }, 'payoneer_sdk.applicable_network_factory' => static function (): ApplicableNetworkFactoryInterface {
@@ -299,11 +291,9 @@ return static function (): array {
         $redirectDeserializer = $container->get('payoneer_sdk.redirect_deserializer');
         /** @var ProductDeserializerInterface $productDeserializer */
         $productDeserializer = $container->get('payoneer_sdk.product_deserializer');
-        /** @var ProcessingModelDeserializerInterface $processingModelDeserializer */
-        $processingModelDeserializer = $container->get('payoneer_sdk.processing_model_deserializer');
         /** @var NetworksDeserializer $networksDeserializer */
         $networksDeserializer = $container->get('payoneer_sdk.networks_deserializer');
-        return new ListDeserializer($listFactory, $callbackDeserializer, $customerDeserializer, $paymentDeserializer, $statusDeserializer, $redirectDeserializer, $identificationDeserializer, $styleDeserializer, $productDeserializer, $processingModelDeserializer, $networksDeserializer);
+        return new ListDeserializer($listFactory, $callbackDeserializer, $customerDeserializer, $paymentDeserializer, $statusDeserializer, $redirectDeserializer, $identificationDeserializer, $styleDeserializer, $productDeserializer, $networksDeserializer);
     }, 'payoneer_sdk.redirect_deserializer' => static function (ContainerInterface $container): RedirectDeserializerInterface {
         $redirectFactory = $container->get('payoneer_sdk.redirect_factory');
         return new RedirectDeserializer($redirectFactory);
@@ -322,10 +312,6 @@ return static function (): array {
         $nameSerializer = $container->get('payoneer_sdk.name_serializer');
         /** @var PhoneSerializerInterface */
         return new CustomerSerializer($phoneSerializer, $addressSerializer, $registrationSerializer, $nameSerializer);
-    }, 'payoneer_sdk.processing_model_deserializer' => static function (ContainerInterface $container): ProcessingModelDeserializerInterface {
-        /** @var ProcessingModelFactoryInterface $processingModelFactory */
-        $processingModelFactory = $container->get('payoneer_sdk.processing_model_factory');
-        return new ProcessingModelDeserializer($processingModelFactory);
     }, 'payoneer_sdk.identification_serializer' => static function (): IdentificationSerializerInterface {
         return new IdentificationSerializer();
     }, 'payoneer_sdk.phone_serializer' => static function (): PhoneSerializerInterface {
@@ -369,11 +355,9 @@ return static function (): array {
         $redirectSerializer = $container->get('payoneer_sdk.redirect_serializer');
         /** @var  ProductSerializerInterface $productSerializer */
         $productSerializer = $container->get('payoneer_sdk.product_serializer');
-        /** @var ProcessingModelSerializerInterface $processingModelSerializer */
-        $processingModelSerializer = $container->get('payoneer_sdk.processing_model_serializer');
         /** @var NetworksSerializer $networksSerializer */
         $networksSerializer = $container->get('payoneer_sdk.networks_serializer');
-        return new ListSerializer($identificationSerializer, $paymentSerializer, $statusSerializer, $customerSerializer, $styleSerializer, $redirectSerializer, $productSerializer, $processingModelSerializer, $networksSerializer);
+        return new ListSerializer($identificationSerializer, $paymentSerializer, $statusSerializer, $customerSerializer, $styleSerializer, $redirectSerializer, $productSerializer, $networksSerializer);
     }, 'payoneer_sdk.commands.update_request_path_template' => static function (): string {
         return 'lists/%1$s';
     }, 'payoneer_sdk.command.error_factory' => static function (): InteractionErrorFactoryInterface {
@@ -396,8 +380,6 @@ return static function (): array {
         $errorCodes = \array_keys($errors);
         $validator = new InteractionCodeValidator($errorCodes);
         return $validator;
-    }, 'payoneer_sdk.processing_model_serializer' => static function (): ProcessingModelSerializerInterface {
-        return new ProcessingModelSerializer();
     }, 'payoneer_sdk.default_country' => static function (): string {
         return 'US';
     }, 'payoneer_sdk.commands.create' => static function (ContainerInterface $container): CreateListCommandInterface {

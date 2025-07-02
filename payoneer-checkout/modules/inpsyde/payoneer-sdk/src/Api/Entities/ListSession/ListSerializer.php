@@ -8,7 +8,6 @@ use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Customer\CustomerSerializerInte
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Identification\IdentificationSerializerInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Network\NetworksSerializerInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Payment\PaymentSerializerInterface;
-use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\ProcessingModel\ProcessingModelSerializerInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Product\ProductInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Product\ProductSerializerInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Redirect\RedirectSerializerInterface;
@@ -41,10 +40,6 @@ class ListSerializer implements ListSerializerInterface
      */
     protected $redirectSerializer;
     /**
-     * @var ProcessingModelSerializerInterface
-     */
-    private $processingModelSerializer;
-    /**
      * @var ProductSerializerInterface
      */
     protected $productSerializer;
@@ -61,7 +56,7 @@ class ListSerializer implements ListSerializerInterface
      * @param StyleSerializerInterface $styleSerializer To serialize style instance.
      * @param RedirectSerializerInterface $redirectSerializer To serialize redirect instance.
      */
-    public function __construct(IdentificationSerializerInterface $identificationSerializer, PaymentSerializerInterface $paymentSerializer, StatusSerializerInterface $statusSerializer, CustomerSerializerInterface $customerSerializer, StyleSerializerInterface $styleSerializer, RedirectSerializerInterface $redirectSerializer, ProductSerializerInterface $productSerializer, ProcessingModelSerializerInterface $processingModelSerializer, NetworksSerializerInterface $networksSerializer)
+    public function __construct(IdentificationSerializerInterface $identificationSerializer, PaymentSerializerInterface $paymentSerializer, StatusSerializerInterface $statusSerializer, CustomerSerializerInterface $customerSerializer, StyleSerializerInterface $styleSerializer, RedirectSerializerInterface $redirectSerializer, ProductSerializerInterface $productSerializer, NetworksSerializerInterface $networksSerializer)
     {
         $this->identificationSerializer = $identificationSerializer;
         $this->paymentSerializer = $paymentSerializer;
@@ -69,7 +64,6 @@ class ListSerializer implements ListSerializerInterface
         $this->customerSerializer = $customerSerializer;
         $this->styleSerializer = $styleSerializer;
         $this->redirectSerializer = $redirectSerializer;
-        $this->processingModelSerializer = $processingModelSerializer;
         $this->productSerializer = $productSerializer;
         $this->networksSerializer = $networksSerializer;
     }
@@ -113,12 +107,6 @@ class ListSerializer implements ListSerializerInterface
             $listData['division'] = $division;
         } catch (ApiExceptionInterface $exception) {
             //Division is an optional parameter, so it's ok to have an exception here.
-        }
-        try {
-            $processingModel = $listSession->getProcessingModel();
-            $listData['processingModel'] = $this->processingModelSerializer->serializeProcessingModel($processingModel);
-        } catch (ApiExceptionInterface $exception) {
-            //Processing model is an optional parameter, so it's ok to have an exception here.
         }
         try {
             $networks = $listSession->getNetworks();

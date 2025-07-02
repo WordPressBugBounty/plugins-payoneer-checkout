@@ -50,10 +50,7 @@ class CustomerDeserializer implements CustomerDeserializerInterface
      */
     public function deserializeCustomer(array $customerData): CustomerInterface
     {
-        if (!isset($customerData['number'])) {
-            throw new ApiException('Data contains no expected number element.');
-        }
-        $number = $customerData['number'];
+        $number = $customerData['number'] ?? null;
         if (isset($customerData['phones'])) {
             $phonesData = $customerData['phones'];
             $mobilePhone = $this->phoneDeserializer->deserializePhone($phonesData['mobile']);

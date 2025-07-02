@@ -75,7 +75,14 @@ input:is(#payment_method_payoneer-checkout):checked + label > .syde-gateway-icon
 CSS
 ), 'checkout.settings.general_settings_fields' => Service::fromFile(__DIR__ . "/general_settings_fields.php"), 'checkout.flow_options' => new Value([]), 'checkout.flow_options_description' => static function (): string {
         return __('Select the payment flow for every transaction.', 'payoneer-checkout');
-    }, 'checkout.payment_flow_override_flag' => new Value('payoneer_force_hosted_flow'), 'checkout.payment_flow_override_flag.is_set' => new Factory(['checkout.payment_flow_override_flag'], static function (string $forceHostedFlowFlag): bool {
+    }, 'checkout.payment_flow_override_flag' => new Value('payoneer_force_hosted_flow'), 'checkout.payment_flow_override_flag.is_set' => new Factory(['checkout.payment_flow_override_flag', 'wp.is_rest_api_request', 'wc.is_store_api_request'], static function (string $forceHostedFlowFlag, bool $isRestApiRequest, bool $isStoreApiRequest): bool {
+        if ($isRestApiRequest && !$isStoreApiRequest) {
+            /**
+             * This is a REST API request, and it is not from block checkout. Therefore,
+             * there cannot be payment flow override flag.
+             */
+            return \false;
+        }
         /**
          * Frontend JS decorates fetch() to pass a custom header to all outgoing HTTP calls
          */

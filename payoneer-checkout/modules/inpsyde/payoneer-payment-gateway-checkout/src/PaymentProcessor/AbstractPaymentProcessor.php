@@ -7,7 +7,6 @@ use Syde\Vendor\Inpsyde\PaymentGateway\PaymentGateway;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Checkout\Authentication\TokenGeneratorInterface;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Checkout\CheckoutExceptionInterface;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Checkout\MisconfigurationDetector\MisconfigurationDetectorInterface;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionPersistor;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionProvider;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\PaymentContext;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Api\Gateway\CommandFactory\WcOrderBasedUpdateCommandFactoryInterface;
@@ -30,50 +29,26 @@ use WC_Order;
  */
 abstract class AbstractPaymentProcessor implements PaymentProcessorInterface
 {
-    /**
-     * @var MisconfigurationDetectorInterface
-     */
-    protected $misconfigurationDetector;
-    /**
-     * @var ListSessionProvider
-     */
-    protected $sessionProvider;
-    /**
-     * @var ListSessionPersistor
-     */
-    protected $sessionPersistor;
-    /**
-     * @var WcOrderBasedUpdateCommandFactoryInterface
-     */
-    protected $updateCommandFactory;
-    /**
-     * @var string
-     */
-    protected $transactionIdFieldName;
-    /**
-     * @var TokenGeneratorInterface
-     */
-    private $tokenGenerator;
-    /**
-     * @var string
-     */
-    private $tokenKey;
+    protected MisconfigurationDetectorInterface $misconfigurationDetector;
+    protected ListSessionProvider $sessionProvider;
+    protected WcOrderBasedUpdateCommandFactoryInterface $updateCommandFactory;
+    protected string $transactionIdFieldName;
+    private TokenGeneratorInterface $tokenGenerator;
+    private string $tokenKey;
     private string $sessionHashKey;
     /**
      * @param MisconfigurationDetectorInterface $misconfigurationDetector
      * @param ListSessionProvider $sessionProvider
-     * @param ListSessionPersistor $sessionPersistor
      * @param WcOrderBasedUpdateCommandFactoryInterface $updateCommandFactory
      * @param TokenGeneratorInterface $tokenGenerator
      * @param string $tokenKey
      * @param string $transactionIdFieldName
      * @param string $sessionHashKey
      */
-    public function __construct(MisconfigurationDetectorInterface $misconfigurationDetector, ListSessionProvider $sessionProvider, ListSessionPersistor $sessionPersistor, WcOrderBasedUpdateCommandFactoryInterface $updateCommandFactory, TokenGeneratorInterface $tokenGenerator, string $tokenKey, string $transactionIdFieldName, string $sessionHashKey)
+    public function __construct(MisconfigurationDetectorInterface $misconfigurationDetector, ListSessionProvider $sessionProvider, WcOrderBasedUpdateCommandFactoryInterface $updateCommandFactory, TokenGeneratorInterface $tokenGenerator, string $tokenKey, string $transactionIdFieldName, string $sessionHashKey)
     {
         $this->misconfigurationDetector = $misconfigurationDetector;
         $this->sessionProvider = $sessionProvider;
-        $this->sessionPersistor = $sessionPersistor;
         $this->updateCommandFactory = $updateCommandFactory;
         $this->tokenGenerator = $tokenGenerator;
         $this->tokenKey = $tokenKey;
@@ -125,7 +100,6 @@ abstract class AbstractPaymentProcessor implements PaymentProcessorInterface
      */
     protected function updateOrderWithSessionData(WC_Order $order, ListInterface $list): void
     {
-        $this->sessionPersistor->persist($list, new PaymentContext($order));
         $identification = $list->getIdentification();
         $transactionId = $identification->getTransactionId();
         $order->update_meta_data($this->transactionIdFieldName, $transactionId);

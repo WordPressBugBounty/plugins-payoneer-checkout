@@ -11,6 +11,8 @@ use Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry;
 use Syde\Vendor\Inpsyde\Modularity\Module\ExecutableModule;
 use Syde\Vendor\Inpsyde\Modularity\Module\ModuleClassNameIdTrait;
 use Syde\Vendor\Inpsyde\Modularity\Module\ServiceModule;
+use Syde\Vendor\Inpsyde\Modularity\Package;
+use Syde\Vendor\Inpsyde\Modularity\Properties\PluginProperties;
 use Syde\Vendor\Inpsyde\PaymentGateway\Fields\ContentField;
 use Syde\Vendor\Inpsyde\PaymentGateway\Method\PaymentMethodDefinition;
 use Syde\Vendor\Psr\Container\ContainerExceptionInterface;
@@ -30,49 +32,73 @@ class PaymentGatewayModule implements ServiceModule, ExecutableModule
     }
     public function services(): array
     {
-        return array_merge(['payment_gateways.assets_url' => function (): string {
-            return $this->getPluginFileUrlFromAbsolutePath(dirname(__DIR__) . '/assets');
-        }, 'payment_gateways.assets_path' => static function (): string {
-            return dirname(__DIR__) . '/assets';
-        }, 'payment_gateways.noop_payment_request_validator' => static function (): PaymentRequestValidatorInterface {
-            return new NoopPaymentRequestValidator();
-        }, 'payment_gateways.noop_payment_processor' => static function (): PaymentProcessorInterface {
-            return new NoopPaymentProcessor();
-        }, 'payment_gateways.noop_refund_processor' => static function (): RefundProcessorInterface {
-            return new NoopRefundProcessor();
-        }, 'payment_gateways.settings_field_renderer.content' => static function (): SettingsFieldRendererInterface {
-            return new ContentField();
-        }, 'payment_gateways' => function (): array {
-            $gateways = [];
-            foreach ($this->paymentMethods as $paymentMethod) {
-                $gateways[] = $paymentMethod->id();
-            }
-            return $gateways;
-        }, 'payment_gateways.methods_supporting_blocks' => static function (ContainerInterface $container): array {
-            $supported = [];
-            $allMethods = $container->get('payment_gateways');
-            foreach ($allMethods as $method) {
-                $registerBlocksKey = 'payment_gateway.' . $method . '.register_blocks';
-                $shouldRegister = \true;
-                if ($container->has($registerBlocksKey)) {
-                    $shouldRegister = (bool) $container->get($registerBlocksKey);
+        return array_merge([
+            /**
+             * WooCommerce (>= 9.6) derives the payment gateway plugin slug via reflection
+             * (see \Automattic\WooCommerce\Internal\Admin\Settings\PaymentProviders\PaymentGateway::get_plugin_slug)
+             * but first checks if the plugin_slug property is set. By setting it explicitly here, we
+             * prevent potential namespace conflicts when multiple plugins use this payment gateway library.
+             */
+            'payment_gateways.plugin_slug' => static function (ContainerInterface $container): string {
+                /** @var PluginProperties $properties */
+                $pluginProperties = $container->get(Package::PROPERTIES);
+                return $pluginProperties->baseName();
+            },
+            'payment_gateways.assets_url' => function (): string {
+                return $this->getPluginFileUrlFromAbsolutePath(dirname(__DIR__) . '/assets');
+            },
+            'payment_gateways.assets_path' => static function (): string {
+                return dirname(__DIR__) . '/assets';
+            },
+            'payment_gateways.noop_payment_request_validator' => static function (): PaymentRequestValidatorInterface {
+                return new NoopPaymentRequestValidator();
+            },
+            'payment_gateways.noop_payment_processor' => static function (): PaymentProcessorInterface {
+                return new NoopPaymentProcessor();
+            },
+            'payment_gateways.noop_refund_processor' => static function (): RefundProcessorInterface {
+                return new NoopRefundProcessor();
+            },
+            'payment_gateways.settings_field_renderer.content' => static function (): SettingsFieldRendererInterface {
+                return new ContentField();
+            },
+            'payment_gateways' => function (): array {
+                $gateways = [];
+                foreach ($this->paymentMethods as $paymentMethod) {
+                    $gateways[] = $paymentMethod->id();
                 }
-                if ($shouldRegister) {
-                    $supported[] = $method;
+                return $gateways;
+            },
+            'payment_gateways.methods_supporting_blocks' => static function (ContainerInterface $container): array {
+                $supported = [];
+                $allMethods = $container->get('payment_gateways');
+                foreach ($allMethods as $method) {
+                    $registerBlocksKey = 'payment_gateway.' . $method . '.register_blocks';
+                    $shouldRegister = \true;
+                    if ($container->has($registerBlocksKey)) {
+                        $shouldRegister = (bool) $container->get($registerBlocksKey);
+                    }
+                    if ($shouldRegister) {
+                        $supported[] = $method;
+                    }
                 }
-            }
-            return $supported;
-        }, 'payment_gateways.required_services' => static function (): array {
-            return ['payment_gateway.%s.payment_request_validator', 'payment_gateway.%s.payment_processor'];
-        }, 'payment_gateways.validator' => static function (ContainerInterface $container): PaymentGatewayValidator {
-            $requiredServices = $container->get('payment_gateways.required_services');
-            assert(is_array($requiredServices));
-            return new PaymentGatewayValidator($container, $requiredServices);
-        }, 'payment_gateways.i18n' => static fn(ContainerInterface $container): I18n => new I18n($container), 'payment_gateways.i18n.messages' => static fn(): array => ['refund_order_not_found' => static fn(array $params): string => sprintf(
-            /* translators: %1$s is replaced with the actual order ID. */
-            __('Failed to process the refund: the order with ID %1$s not found', 'syde-payment-gateway'),
-            (string) $params['orderId']
-        ), 'refund_failed' => __('Failed to refund the order payment', 'syde-payment-gateway'), 'payment_method_not_available' => __('Payment method not available. Please select another payment method.', 'syde-payment-gateway')]], $this->providePaymentMethodServices(...$this->paymentMethods));
+                return $supported;
+            },
+            'payment_gateways.required_services' => static function (): array {
+                return ['payment_gateway.%s.payment_request_validator', 'payment_gateway.%s.payment_processor'];
+            },
+            'payment_gateways.validator' => static function (ContainerInterface $container): PaymentGatewayValidator {
+                $requiredServices = $container->get('payment_gateways.required_services');
+                assert(is_array($requiredServices));
+                return new PaymentGatewayValidator($container, $requiredServices);
+            },
+            'payment_gateways.i18n' => static fn(ContainerInterface $container): I18n => new I18n($container),
+            'payment_gateways.i18n.messages' => static fn(): array => ['refund_order_not_found' => static fn(array $params): string => sprintf(
+                /* translators: %1$s is replaced with the actual order ID. */
+                __('Failed to process the refund: the order with ID %1$s not found', 'syde-payment-gateway'),
+                (string) $params['orderId']
+            ), 'refund_failed' => __('Failed to refund the order payment', 'syde-payment-gateway'), 'payment_method_not_available' => __('Payment method not available. Please select another payment method.', 'syde-payment-gateway')],
+        ], $this->providePaymentMethodServices(...$this->paymentMethods));
     }
     public function run(ContainerInterface $container): bool
     {
@@ -92,7 +118,7 @@ class PaymentGatewayModule implements ServiceModule, ExecutableModule
          * Registers WooCommerce Blocks integration.
          *
          */
-        add_action('woocommerce_blocks_loaded', function () use ($container): void {
+        add_action('woocommerce_init', function () use ($container): void {
             if (!class_exists(AbstractPaymentMethodType::class)) {
                 return;
             }

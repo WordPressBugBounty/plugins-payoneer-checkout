@@ -9,7 +9,6 @@ use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Customer\CustomerDeserializerIn
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Identification\IdentificationDeserializerInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Network\NetworksDeserializerInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Payment\PaymentDeserializerInterface;
-use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\ProcessingModel\ProcessingModelDeserializerInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Product\ProductDeserializerInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Redirect\RedirectDeserializerInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Status\StatusDeserializerInterface;
@@ -53,10 +52,6 @@ class ListDeserializer implements ListDeserializerInterface
      */
     protected $productDeserializer;
     /**
-     * @var ProcessingModelDeserializerInterface
-     */
-    protected $processingModelDeserializer;
-    /**
      * @var NetworksDeserializerInterface
      */
     protected $networksDeserializer;
@@ -70,10 +65,8 @@ class ListDeserializer implements ListDeserializerInterface
      * @param IdentificationDeserializerInterface $identificationDeserializer To create identification instance from data map.
      * @param StyleDeserializerInterface $styleDeserializer To create style instance from data map.
      * @param ProductDeserializerInterface $productDeserializer To create product instances.
-     * @param ProcessingModelDeserializerInterface $processingModelDeserializer To create processing model instance from
-     *  data map.
      */
-    public function __construct(ListFactoryInterface $listFactory, CallbackDeserializerInterface $callbackDeserializer, CustomerDeserializerInterface $customerDeserializer, PaymentDeserializerInterface $paymentDeserializer, StatusDeserializerInterface $statusDeserializer, RedirectDeserializerInterface $redirectDeserializer, IdentificationDeserializerInterface $identificationDeserializer, StyleDeserializerInterface $styleDeserializer, ProductDeserializerInterface $productDeserializer, ProcessingModelDeserializerInterface $processingModelDeserializer, NetworksDeserializerInterface $networksDeserializer)
+    public function __construct(ListFactoryInterface $listFactory, CallbackDeserializerInterface $callbackDeserializer, CustomerDeserializerInterface $customerDeserializer, PaymentDeserializerInterface $paymentDeserializer, StatusDeserializerInterface $statusDeserializer, RedirectDeserializerInterface $redirectDeserializer, IdentificationDeserializerInterface $identificationDeserializer, StyleDeserializerInterface $styleDeserializer, ProductDeserializerInterface $productDeserializer, NetworksDeserializerInterface $networksDeserializer)
     {
         $this->listFactory = $listFactory;
         $this->callbackDeserializer = $callbackDeserializer;
@@ -84,7 +77,6 @@ class ListDeserializer implements ListDeserializerInterface
         $this->statusDeserializer = $statusDeserializer;
         $this->redirectDeserializer = $redirectDeserializer;
         $this->productDeserializer = $productDeserializer;
-        $this->processingModelDeserializer = $processingModelDeserializer;
         $this->networksDeserializer = $networksDeserializer;
     }
     /**
@@ -110,11 +102,10 @@ class ListDeserializer implements ListDeserializerInterface
         $style = isset($listData['style']) ? $this->styleDeserializer->deserializeStyle($listData['style']) : null;
         $redirect = isset($listData['redirect']) ? $this->redirectDeserializer->deserializeRedirect($listData['redirect']) : null;
         $division = $listData['division'] ?? null;
-        $processingModel = isset($listData['processingModel']) ? $this->processingModelDeserializer->deserializeProcessingModel($listData['processingModel']) : null;
         $networks = isset($listData['networks']) ? $this->networksDeserializer->deserializeNetworks($listData['networks']) : null;
         $products = array_map(function (array $productData) {
             return $this->productDeserializer->deserializeProduct($productData);
         }, $listData['products'] ?? []);
-        return $this->listFactory->createList($links, $identification, $status, $payment, $customer, $style, $redirect, $division, $products, $processingModel, $networks);
+        return $this->listFactory->createList($links, $identification, $status, $payment, $customer, $style, $redirect, $division, $products, $networks);
     }
 }

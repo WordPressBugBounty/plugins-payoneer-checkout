@@ -41,4 +41,8 @@ return static fn() => ['wc.is_checkout' => new Factory(['wc'], static function (
         return \false;
     }
     return $wooCommerce->session instanceof \WC_Session;
-}), 'wc.cart.is-available' => new Factory(['wc'], static fn(\WooCommerce $wooCommerce) => $wooCommerce->cart instanceof \WC_Cart)];
+}), 'wc.cart.is-available' => new Factory(['wc'], static fn(\WooCommerce $wooCommerce) => $wooCommerce->cart instanceof \WC_Cart), 'wc.is_checkout_pay_page' => new Factory(['wc'], static function (): bool {
+    return is_checkout_pay_page();
+}), 'wc.is_order_received_page' => new Factory(['wc'], static function (): bool {
+    return is_order_received_page();
+})];

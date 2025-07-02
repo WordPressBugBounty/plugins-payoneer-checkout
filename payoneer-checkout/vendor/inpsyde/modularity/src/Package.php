@@ -5,16 +5,16 @@ namespace Syde\Vendor\Inpsyde\Modularity;
 
 use Syde\Vendor\Inpsyde\Modularity\Container\ContainerConfigurator;
 use Syde\Vendor\Inpsyde\Modularity\Container\PackageProxyContainer;
-use Syde\Vendor\Inpsyde\Modularity\Module\ExtendingModule;
 use Syde\Vendor\Inpsyde\Modularity\Module\ExecutableModule;
+use Syde\Vendor\Inpsyde\Modularity\Module\ExtendingModule;
 use Syde\Vendor\Inpsyde\Modularity\Module\FactoryModule;
 use Syde\Vendor\Inpsyde\Modularity\Module\Module;
 use Syde\Vendor\Inpsyde\Modularity\Module\ServiceModule;
 use Syde\Vendor\Inpsyde\Modularity\Properties\Properties;
 use Syde\Vendor\Psr\Container\ContainerInterface;
 /**
- * @psalm-import-type Service from \Inpsyde\Modularity\Module\ServiceModule
- * @psalm-import-type ExtendingService from \Inpsyde\Modularity\Module\ExtendingModule
+ * @phpstan-import-type Service from \Inpsyde\Modularity\Module\ServiceModule
+ * @phpstan-import-type ExtendingService from \Inpsyde\Modularity\Module\ExtendingModule
  */
 class Package
 {
@@ -167,11 +167,11 @@ class Package
      */
     public static function new(Properties $properties, ContainerInterface ...$containers): Package
     {
-        return new self($properties, ...array_values($containers));
+        return new self($properties, ...$containers);
     }
     /**
      * @param Properties $properties
-     * @param list<ContainerInterface> $containers
+     * @param ContainerInterface ...$containers
      */
     private function __construct(Properties $properties, ContainerInterface ...$containers)
     {
@@ -212,12 +212,9 @@ class Package
     /**
      * @param Package $package
      * @return bool
-     *
-     * phpcs:disable Inpsyde.CodeQuality.FunctionLength
      */
     public function connect(Package $package): bool
     {
-        // phpcs:enable Inpsyde.CodeQuality.FunctionLength
         try {
             if ($package === $this) {
                 return \false;
@@ -398,7 +395,7 @@ class Package
     {
         /** @var null|array<string, Service|ExtendingService> $services */
         $services = null;
-        /** @var null|callable(string, Service|ExtendingService) $addCallback */
+        /** @var null|callable(string, Service|ExtendingService): void $addCallback */
         $addCallback = null;
         switch ($status) {
             case self::MODULE_REGISTERED:
@@ -443,7 +440,9 @@ class Package
      */
     private function moduleProgress(string $moduleId, string $status, ?array $serviceIds = null): void
     {
-        isset($this->moduleStatus[$status]) or $this->moduleStatus[$status] = [];
+        if (!isset($this->moduleStatus[$status])) {
+            $this->moduleStatus[$status] = [];
+        }
         $this->moduleStatus[$status][] = $moduleId;
         if ($serviceIds === null || $serviceIds === [] || !$this->properties->isDebug()) {
             $this->moduleStatus[self::MODULES_ALL][] = "{$moduleId} {$status}";
@@ -590,7 +589,7 @@ class Package
      * @param string $packageName
      * @param string $reason
      * @param bool $throw
-     * @return ($throw is true ? never: false)
+     * @return bool
      */
     private function handleConnectionFailure(string $packageName, string $reason, bool $throw): bool
     {
@@ -642,6 +641,7 @@ class Package
         do_action('deprecated_argument_run', $function, $message, $version);
         if (apply_filters('deprecated_argument_trigger_error', \true)) {
             do_action('wp_trigger_error_run', $function, $message, \E_USER_DEPRECATED);
+            // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_trigger_error
             trigger_error(esc_html($message), \E_USER_DEPRECATED);
         }
     }

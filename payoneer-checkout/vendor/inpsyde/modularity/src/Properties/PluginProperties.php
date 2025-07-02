@@ -81,7 +81,7 @@ class PluginProperties extends BaseProperties
         return (bool) $this->get(self::PROP_NETWORK, \false);
     }
     /**
-     * @return array
+     * @return string[]
      */
     public function requiresPlugins(): array
     {

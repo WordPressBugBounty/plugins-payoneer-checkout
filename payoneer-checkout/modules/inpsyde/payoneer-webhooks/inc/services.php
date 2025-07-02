@@ -12,20 +12,13 @@ use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Webhooks\Controller\PaymentWebhoo
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Webhooks\Controller\PayoneerWebhooksController;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Webhooks\Controller\OrderPaymentWebhookStrategyHandler;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Webhooks\LogIncomingWebhookRequest;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Webhooks\OrderFinder\HposOrderFinder;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Webhooks\OrderFinder\OrderFinderInterface;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Webhooks\OrderPaymentWebhookHandler\CustomerRegistrationHandler;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Webhooks\OrderPaymentWebhookHandler\FailedPaymentHandler;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Webhooks\OrderPaymentWebhookHandler\ChargeBackPaymentHandler;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Webhooks\OrderPaymentWebhookHandler\ChargedPaymentHandler;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Webhooks\OrderPaymentWebhookHandler\RefundedPaymentHandler;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Webhooks\Controller\WpRestApiControllerInterface;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Webhooks\OrderFinder\AddTransactionIdFieldSupport;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Webhooks\OrderFinder\OrderFinder;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Webhooks\OrderWebhookFinder\OrderWebhookFinder;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Webhooks\RefundFinder\AddPayoutIdFieldSupport;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Webhooks\RefundFinder\RefundFinder;
-use Syde\Vendor\Psr\Container\ContainerInterface;
 return static function (): array {
     $moduleRoot = \dirname(__DIR__);
     return [
@@ -38,20 +31,14 @@ return static function (): array {
                 return $restApiController->handleWpRestRequest($request);
             };
         }),
-        'webhooks.controller.payment_webhook_controller' => new Constructor(PaymentWebhookController::class, ['webhooks.order.security_header_field_name', 'webhooks.order_finder', 'webhooks.order_webhook_finder', 'webhooks.order.processed_id_field_name', 'webhooks.controller.payment_webhook_strategy_handler']),
+        'webhooks.controller.payment_webhook_controller' => new Constructor(PaymentWebhookController::class, ['webhooks.order.security_header_field_name', 'wp.order_finder', 'webhooks.order_webhook_finder', 'webhooks.order.processed_id_field_name', 'webhooks.controller.payment_webhook_strategy_handler']),
         'webhooks.controller.payment_webhook_strategy_handler' => new Constructor(OrderPaymentWebhookStrategyHandler::class, ['webhooks.failed_payment_handler', 'webhooks.chargeback_payment_handler', 'webhooks.refunded_payment_handler', 'webhooks.charged_payment_handler', 'webhooks.customer_registration_handler']),
         'webhooks.log_incoming_webhooks_request' => new Constructor(LogIncomingWebhookRequest::class, ['webhooks.security_header_name']),
         'webhooks.failed_payment_handler' => new Constructor(FailedPaymentHandler::class),
         'webhooks.chargeback_payment_handler' => new Constructor(ChargeBackPaymentHandler::class),
-        'webhooks.refunded_payment_handler' => new Constructor(RefundedPaymentHandler::class, ['webhooks.order.charge_id_field_name', 'webhooks.order_refund.payout_id_field_name', 'webhooks.refund_finder']),
+        'webhooks.refunded_payment_handler' => new Constructor(RefundedPaymentHandler::class, ['webhooks.order.charge_id_field_name', 'webhooks.order_refund.payout_id_field_name', 'wp.refund_finder']),
         'webhooks.charged_payment_handler' => new Constructor(ChargedPaymentHandler::class, ['webhooks.order.charge_id_field_name']),
         'webhooks.customer_registration_handler' => new Constructor(CustomerRegistrationHandler::class, ['webhooks.customer_registration_id_field_name']),
-        'webhooks.order_finder' => static function (ContainerInterface $container): OrderFinderInterface {
-            $transactionIdFieldName = (string) $container->get('webhooks.order.transaction_id_field_name');
-            $hposEnabled = (bool) $container->get('wc.hpos.is_enabled');
-            return $hposEnabled ? new HposOrderFinder($transactionIdFieldName) : new OrderFinder($transactionIdFieldName);
-        },
-        'webhooks.refund_finder' => new Constructor(RefundFinder::class, ['webhooks.order_refund.payout_id_field_name']),
         'webhooks.order_webhook_finder' => new Constructor(OrderWebhookFinder::class, ['webhooks.order.processed_id_field_name']),
         'webhooks.controller.webhooks_controller' => new Factory(['webhooks.controller.payment_webhook_controller'], static function (WpRestApiControllerInterface $paymentWebhookController): WpRestApiControllerInterface {
             return new PayoneerWebhooksController($paymentWebhookController);
@@ -62,8 +49,6 @@ return static function (): array {
             //https://www.optile.io/opg#8493049
             return [\WP_REST_Server::READABLE, \WP_REST_Server::CREATABLE];
         },
-        'webhooks.add_transaction_id_field_support' => new Constructor(AddTransactionIdFieldSupport::class, ['webhooks.order.transaction_id_field_name']),
-        'webhooks.add_payout_id_field_support' => new Constructor(AddPayoutIdFieldSupport::class, ['webhooks.order_refund.payout_id_field_name']),
         'webhooks.settings.fields' => Service::fromFile("{$moduleRoot}/inc/fields.php"),
         'webhooks.security_header_name' => new Value('List-Security-Token'),
     ];

@@ -5,8 +5,8 @@ namespace Syde\Vendor\Inpsyde\Modularity\Container;
 
 use Syde\Vendor\Psr\Container\ContainerInterface;
 /**
- * @psalm-import-type Service from \Inpsyde\Modularity\Module\ServiceModule
- * @psalm-import-type ExtendingService from \Inpsyde\Modularity\Module\ExtendingModule
+ * @phpstan-import-type Service from \Inpsyde\Modularity\Module\ServiceModule
+ * @phpstan-import-type ExtendingService from \Inpsyde\Modularity\Module\ExtendingModule
  */
 class ContainerConfigurator
 {
@@ -100,7 +100,7 @@ class ContainerConfigurator
     /**
      * @return ContainerInterface
      *
-     * @psalm-assert ContainerInterface $this->compiledContainer
+     * @phpstan-assert ContainerInterface $this->compiledContainer
      */
     public function createReadOnlyContainer(): ContainerInterface
     {

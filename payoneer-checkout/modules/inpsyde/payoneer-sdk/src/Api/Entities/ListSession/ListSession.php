@@ -9,7 +9,6 @@ use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Identification\IdentificationIn
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Network\NetworksInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Payment\PaymentInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Product\ProductInterface;
-use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\ProcessingModel\ProcessingModelInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Redirect\RedirectInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Status\StatusInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Style\StyleInterface;
@@ -48,10 +47,6 @@ class ListSession implements ListInterface
      */
     protected $division;
     /**
-     * @var ProcessingModelInterface|null
-     */
-    protected $processingModel;
-    /**
      * @var ProductInterface[]
      */
     protected $products = [];
@@ -69,9 +64,8 @@ class ListSession implements ListInterface
      * @param RedirectInterface|null $redirect Object containing redirect details.
      * @param string|null $division Division name of this transaction
      * @param ProductInterface[] $products Products in the current LIST session
-     * @param ProcessingModelInterface|null $processingModel
      */
-    public function __construct(array $links, IdentificationInterface $identification, StatusInterface $status, PaymentInterface $payment = null, CustomerInterface $customer = null, StyleInterface $style = null, RedirectInterface $redirect = null, string $division = null, array $products = null, ProcessingModelInterface $processingModel = null, NetworksInterface $networks = null)
+    public function __construct(array $links, IdentificationInterface $identification, StatusInterface $status, PaymentInterface $payment = null, CustomerInterface $customer = null, StyleInterface $style = null, RedirectInterface $redirect = null, string $division = null, array $products = null, NetworksInterface $networks = null)
     {
         $this->customer = $customer;
         $this->payment = $payment;
@@ -84,7 +78,6 @@ class ListSession implements ListInterface
         if ($products) {
             $this->products = $products;
         }
-        $this->processingModel = $processingModel;
         $this->networks = $networks;
     }
     /**
@@ -164,16 +157,6 @@ class ListSession implements ListInterface
     public function getProducts(): array
     {
         return $this->products;
-    }
-    /**
-     * @inheritDoc
-     */
-    public function getProcessingModel(): ProcessingModelInterface
-    {
-        if (!$this->processingModel) {
-            throw new ApiException('No processing model found in the LIST session');
-        }
-        return $this->processingModel;
     }
     /**
      * @inheritDoc

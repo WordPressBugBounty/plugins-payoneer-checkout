@@ -33,8 +33,7 @@ interface ListSerializerInterface
      *      description?: string,
      *      taxCode?: string,
      *     }[]
-     *     division?: string,
-     *     processingModel?: array{code: string, type: string},
+     *     division?: string
      * } Serialized LIST session
      */
     public function serializeListSession(ListInterface $listSession): array;

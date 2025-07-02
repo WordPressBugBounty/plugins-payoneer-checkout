@@ -9,7 +9,6 @@ use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Identification\IdentificationIn
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Network\NetworksInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Payment\PaymentInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Product\ProductInterface;
-use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\ProcessingModel\ProcessingModelInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Redirect\RedirectInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Status\StatusInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Style\StyleInterface;
@@ -36,5 +35,5 @@ interface ListFactoryInterface
      *
      * @throws ApiExceptionInterface If something went wrong.
      */
-    public function createList(array $links, IdentificationInterface $identification, StatusInterface $status, PaymentInterface $payment = null, CustomerInterface $customer = null, StyleInterface $style = null, RedirectInterface $redirect = null, string $division = null, array $products = null, ProcessingModelInterface $processingModel = null, NetworksInterface $networks = null): ListInterface;
+    public function createList(array $links, IdentificationInterface $identification, StatusInterface $status, PaymentInterface $payment = null, CustomerInterface $customer = null, StyleInterface $style = null, RedirectInterface $redirect = null, string $division = null, array $products = null, NetworksInterface $networks = null): ListInterface;
 }

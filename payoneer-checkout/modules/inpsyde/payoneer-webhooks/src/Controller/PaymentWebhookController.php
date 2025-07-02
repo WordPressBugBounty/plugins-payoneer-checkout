@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Webhooks\Controller;
 
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Webhooks\OrderFinder\OrderFinderInterface;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Wp\OrderFinder\OrderFinderInterface;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Webhooks\OrderWebhookFinder\OrderWebhookFinderInterface;
 use WC_Order;
 use WP_REST_Request;
@@ -53,7 +53,11 @@ class PaymentWebhookController implements WpRestApiControllerInterface
     public function handleWpRestRequest(WP_REST_Request $request): WP_REST_Response
     {
         $transactionId = (string) $request->get_param('transactionId');
-        $order = $this->orderFinder->findOrderByTransactionId($transactionId);
+        $orders = $this->orderFinder->findOrdersByTransactionId($transactionId, 20);
+        if (count($orders) > 1) {
+            do_action('payoneer-checkout.webhook_request.multiple_orders_found_for_transaction_id', ['transactionId' => $transactionId, 'orders' => array_map(static fn(WC_Order $order) => $order->get_id(), $orders)]);
+        }
+        $order = $orders[0];
         $longId = (string) $request->get_param('longId');
         if (!$order instanceof WC_Order) {
             do_action('payoneer-checkout.webhook_request.order_not_found', ['transactionId' => $transactionId, 'longId' => $longId]);

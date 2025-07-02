@@ -5,8 +5,8 @@ namespace Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\GatewayIcons
 
 use Syde\Vendor\Inpsyde\PaymentGateway\Icon;
 use Syde\Vendor\Inpsyde\PaymentGateway\IconProviderInterface;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionManager;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionProvider;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\PaymentContext;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\ListSession\ListInterface;
 /**
  * DynamicIconProvider is responsible for dynamically generating a list of icons based on the
@@ -19,7 +19,7 @@ use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\ListSession\ListInterface;
 class DynamicIconProvider implements IconProviderInterface
 {
     protected ListSessionProvider $listSessionProvider;
-    /** @var array<string, string> $networkMap*/
+    /** @var array<string, string> $networkMap */
     protected array $networkMap;
     protected IconProviderInterface $default;
     /**
@@ -72,6 +72,6 @@ class DynamicIconProvider implements IconProviderInterface
      */
     private function getList(): ListInterface
     {
-        return $this->listSessionProvider->provide(ListSessionManager::determineContextFromGlobals());
+        return $this->listSessionProvider->provide(new PaymentContext());
     }
 }

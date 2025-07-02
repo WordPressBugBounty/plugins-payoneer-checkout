@@ -14,6 +14,8 @@ interface CustomerInterface
 {
     /**
      * @return string Customer identifier given by merchant.
+     *
+     * @throws ApiExceptionInterface If this field not set.
      */
     public function getNumber(): string;
     /**

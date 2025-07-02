@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Webhooks\OrderPaymentWebhookHandler;
 
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Webhooks\RefundFinder\RefundFinderInterface;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Wp\RefundFinder\RefundFinderInterface;
 use WC_Order;
 use WC_Order_Refund;
 use WP_Error;

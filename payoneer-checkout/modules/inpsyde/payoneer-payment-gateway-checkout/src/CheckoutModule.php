@@ -9,11 +9,6 @@ use Syde\Vendor\Inpsyde\Modularity\Module\ExtendingModule;
 use Syde\Vendor\Inpsyde\Modularity\Module\ModuleClassNameIdTrait;
 use Syde\Vendor\Inpsyde\Modularity\Module\ServiceModule;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Checkout\MisconfigurationDetector\MisconfigurationDetectorInterface;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\CheckoutContext;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionManager;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionPersistor;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionProvider;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\PaymentContext;
 use Syde\Vendor\Psr\Container\ContainerInterface;
 use RuntimeException;
 use WC_Order;
@@ -54,9 +49,6 @@ class CheckoutModule implements ServiceModule, ExecutableModule, ExtendingModule
         $this->registerCheckoutSetup($container);
         $this->registerCacheSaltUpdating($container);
         $this->setupFiringPaymentCompleteAction($container);
-        $this->registerClearingListIfHppFallbackFlagSet($container);
-        $this->registerClearingListOnFailedOrderPayment($container);
-        $this->registerMovingListToCreatedOrder($container);
         $this->registerAddingLiveModeNotice($container);
         $notificationReceivedOptionName = (string) $container->get('checkout.notification_received.option_name');
         $this->addIncomingWebhookListener($notificationReceivedOptionName);
@@ -87,102 +79,6 @@ class CheckoutModule implements ServiceModule, ExecutableModule, ExtendingModule
         }
     }
     /**
-     * If forcing hosted payment page flow flag is set, this means we are in the embedded payment
-     * flow mode, and payment widget wasn't properly set up on the frontend, so we have to switch
-     * to the HPP mode on the go. Therefore, we need to remove saved LIST session because it was
-     * created for the embedded flow. The new one will be created automatically.
-     *
-     * @param ContainerInterface $container
-     *
-     * @return void
-     */
-    protected function registerClearingListIfHppFallbackFlagSet(ContainerInterface $container): void
-    {
-        add_action(
-            'woocommerce_checkout_order_processed',
-            function ($_orderId, $_postedData, $order) use ($container): void {
-                if (!$order instanceof WC_Order) {
-                    return;
-                }
-                if (!$this->isPayoneerOrderPaymentMethod($container, $order)) {
-                    return;
-                }
-                $isForceHppFlagSet = (bool) $container->get('checkout.payment_flow_override_flag.is_set');
-                if ($isForceHppFlagSet) {
-                    $listSessionManager = $container->get('list_session.manager');
-                    assert($listSessionManager instanceof ListSessionManager);
-                    $listSessionManager->persist(null, new CheckoutContext());
-                }
-            },
-            9,
-            //Clear the List before we will try to move it to the created order
-            3
-        );
-    }
-    /**
-     * When the API reports an unrecoverable state during processing, it means the LIST
-     * session needs to be restarted. Here, we flush the LIST session
-     * from any context in such an event
-     *
-     * @param ContainerInterface $container
-     *
-     * @return void
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
-     */
-    protected function registerClearingListOnFailedOrderPayment(ContainerInterface $container): void
-    {
-        add_action(
-            'payoneer-checkout.payment_processing_failure',
-            /** @throws CheckoutExceptionInterface */
-            static function (array $args = null) use ($container) {
-                $listRemover = $container->get('list_session.manager');
-                assert($listRemover instanceof ListSessionManager);
-                /**
-                 * Flush the LIST from the customer session
-                 */
-                $listRemover->persist(null, new CheckoutContext());
-                /**
-                 * Now check if there was already an order passed as context.
-                 * If yes, flush it from the order as well
-                 */
-                $order = $args['order'] ?? null;
-                if (!$order instanceof WC_Order) {
-                    return;
-                }
-                $listRemover->persist(null, new PaymentContext($order));
-            }
-        );
-    }
-    protected function registerMovingListToCreatedOrder(ContainerInterface $container): void
-    {
-        add_action('woocommerce_checkout_order_processed', function (
-            $_orderId,
-            //underscore is for psalm to not complain about unused variable
-            $_postedData,
-            $order
-        ) use ($container): void {
-            if (!$order instanceof WC_Order) {
-                return;
-            }
-            if (!$this->isPayoneerOrderPaymentMethod($container, $order)) {
-                return;
-            }
-            $listManager = $container->get('list_session.manager');
-            assert($listManager instanceof ListSessionPersistor);
-            assert($listManager instanceof ListSessionProvider);
-            /**
-             * This may look weird, but this is what we want to do. We are getting List with
-             * checkout context and saving it with payment context.
-             *
-             * Since this is a transition moment between session and a new order right before
-             * payment processing, this should be ok.
-             **/
-            $list = $listManager->provide(new CheckoutContext());
-            $listManager->persist($list, new PaymentContext($order));
-        }, 10, 3);
-    }
-    /**
      * We are not in control of the CHARGE call, but we need the CHARGE longId
      * for refunds via webhooks
      * Luckily, we receive that ID as a GET parameter on the redirect to the success-Url
@@ -195,12 +91,8 @@ class CheckoutModule implements ServiceModule, ExecutableModule, ExtendingModule
      *
      * @return void
      */
-    protected function onThankYouPage(WC_Order $order, ListSessionPersistor $listSessionPersistor, string $metaKey)
+    protected function onThankYouPage(WC_Order $order, string $metaKey)
     {
-        /**
-         * Prevent re-using the List inside the WC_Session
-         */
-        $listSessionPersistor->persist(null, new CheckoutContext());
         $chargeLongId = filter_input(\INPUT_GET, 'longId', \FILTER_CALLBACK, ['options' => 'sanitize_text_field']);
         if ($chargeLongId && !$order->meta_exists($metaKey)) {
             /**
@@ -285,11 +177,10 @@ class CheckoutModule implements ServiceModule, ExecutableModule, ExtendingModule
      * So we inspect the GET parameters here to synchronously update the order status
      *
      * @param WC_Order $order
-     * @param ListSessionPersistor $listSessionPersistor
      *
      * @return void
      */
-    protected function beforeOrderPay(WC_Order $order, ListSessionPersistor $listSessionPersistor): void
+    protected function beforeOrderPay(WC_Order $order): void
     {
         $interactionCode = filter_input(\INPUT_GET, 'interactionCode', \FILTER_CALLBACK, ['options' => 'sanitize_text_field']);
         if (!$interactionCode || $order->is_paid()) {
@@ -321,9 +212,6 @@ class CheckoutModule implements ServiceModule, ExecutableModule, ExtendingModule
             }
             $order->update_status('failed');
             $order->save();
-        }
-        if ($interactionCode === 'ABORT') {
-            $listSessionPersistor->persist(null, new PaymentContext($order));
         }
     }
     protected function addCustomerNotice(string $interactionReason): void
@@ -358,9 +246,7 @@ class CheckoutModule implements ServiceModule, ExecutableModule, ExtendingModule
             if (!in_array($wcOrder->get_payment_method(), $payoneerGatewayIds, \true)) {
                 return;
             }
-            $listSessionManager = $container->get('list_session.manager');
-            assert($listSessionManager instanceof ListSessionManager);
-            $this->beforeOrderPay($wcOrder, $listSessionManager);
+            $this->beforeOrderPay($wcOrder);
         }, 0);
         add_action('woocommerce_before_thankyou', function (int $orderId) use ($container) {
             $wcOrder = wc_get_order($orderId);
@@ -372,10 +258,8 @@ class CheckoutModule implements ServiceModule, ExecutableModule, ExtendingModule
             if (!in_array($wcOrder->get_payment_method(), $payoneerGatewayIds, \true)) {
                 return;
             }
-            $listSessionManager = $container->get('list_session.manager');
-            assert($listSessionManager instanceof ListSessionManager);
             $chargeIdFieldName = (string) $container->get('inpsyde_payment_gateway.charge_id_field_name');
-            $this->onThankYouPage($wcOrder, $listSessionManager, $chargeIdFieldName);
+            $this->onThankYouPage($wcOrder, $chargeIdFieldName);
         });
         /**
          * This is a temporary solution because we need a little styling for the CC icons.

@@ -13,7 +13,6 @@ use Syde\Vendor\Inpsyde\Modularity\Module\ModuleClassNameIdTrait;
 use Syde\Vendor\Inpsyde\Modularity\Module\ServiceModule;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\AjaxOrderPay\AjaxPayAction;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\AjaxOrderPay\OrderPayload;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\CheckoutContext;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionManager;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionProvider;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\PaymentContext;
@@ -106,7 +105,6 @@ class EmbeddedPaymentModule implements ExecutableModule, ServiceModule, Extendin
         $interactionCode = filter_input(\INPUT_GET, 'interactionCode', \FILTER_CALLBACK, ['options' => 'sanitize_text_field']);
         $onBeforeServerError = filter_input(\INPUT_GET, $onBeforeServerErrorFlag, \FILTER_CALLBACK, ['options' => 'sanitize_text_field']);
         if ($onBeforeServerError) {
-            $listSessionManager->persist(null, new PaymentContext($order));
             /**
              * Safely redirect without the $onBeforeServerError flag.
              */
@@ -116,8 +114,6 @@ class EmbeddedPaymentModule implements ExecutableModule, ServiceModule, Extendin
         if (!$interactionCode || $order->is_paid()) {
             return;
         }
-        $listSessionManager->persist(null, new CheckoutContext());
-        $listSessionManager->persist(null, new PaymentContext($order));
         if (!in_array($interactionCode, ['RETRY', 'ABORT'], \true)) {
             return;
         }
@@ -175,7 +171,7 @@ class EmbeddedPaymentModule implements ExecutableModule, ServiceModule, Extendin
             }
             woocommerce_store_api_register_endpoint_data(['endpoint' => CartSchema::IDENTIFIER, 'namespace' => 'payoneer-checkout', 'data_callback' => function () use ($container): array {
                 return $this->provideCartExtensionData($container);
-            }, 'schema_callback' => fn() => ['longId' => ['description' => 'LongId of the LIST session', 'type' => 'string', 'readonly' => \true], 'environment' => ['description' => 'The current environment', 'type' => 'string', 'readonly' => \true], 'sdkVersion' => ['description' => 'Pinned WebSDK script version', 'type' => 'string', 'readonly' => \true], 'sdkIntegrity' => ['description' => 'WebSDK integrity hash', 'type' => 'string', 'readonly' => \true]], 'schema_type' => \ARRAY_A]);
+            }, 'schema_callback' => fn() => ['longId' => ['description' => 'LongId of the LIST session', 'type' => 'string', 'readonly' => \true], 'environment' => ['description' => 'The current environment', 'type' => 'string', 'readonly' => \true], 'sdkVersion' => ['description' => 'Pinned WebSDK script version', 'type' => 'string', 'readonly' => \true], 'sdkIntegrity' => ['description' => 'WebSDK integrity hash', 'type' => 'string', 'readonly' => \true], 'comment' => ['description' => 'Arbitrary text with debugging info, error description, etc.', 'type' => 'string', 'readonly' => \true]], 'schema_type' => \ARRAY_A]);
         });
     }
     private function provideCartExtensionData(ContainerInterface $container): array
@@ -195,14 +191,21 @@ class EmbeddedPaymentModule implements ExecutableModule, ServiceModule, Extendin
          * @see \Automattic\WooCommerce\Blocks\Assets\AssetDataRegistry::hydrate_api_request
          */
         $isStoreApi = $container->get('wc.is_store_api_request');
+        $emptyResponse = ['longId' => null, 'environment' => null, 'sdkVersion' => null, 'sdkIntegrity' => null];
         if (!$isStoreApi) {
-            return ['longId' => null, 'environment' => null, 'sdkVersion' => null, 'sdkIntegrity' => null];
+            $emptyResponse['comment'] = 'Current request is not Store REST API request';
+            return $emptyResponse;
         }
         $listProvider = $container->get('list_session.manager');
         assert($listProvider instanceof ListSessionProvider);
         $envExtractor = $container->get('embedded_payment.list_url_environment_extractor');
         assert($envExtractor instanceof ListUrlEnvironmentExtractor);
-        $list = $listProvider->provide(ListSessionManager::determineContextFromGlobals());
+        try {
+            $list = $listProvider->provide(new PaymentContext());
+        } catch (\Throwable $throwable) {
+            $emptyResponse['comment'] = 'Cannot get List, throwable caught: ' . $throwable->getMessage();
+            return $emptyResponse;
+        }
         // TODO: Refactor the environment detection to use the current WP options.
         // Extract the environment name from the LIST response.
         $environment = $envExtractor->extract($list->getLinks()['self'] ?? '');

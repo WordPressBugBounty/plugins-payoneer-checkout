@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession;
 
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\ListSession\ListInterface;
-class ListSessionManagerProxy implements ListSessionProvider, ListSessionPersistor
+class ListSessionManagerProxy implements ListSessionProvider
 {
     /**
      * @var callable():ListSessionManager
@@ -25,10 +25,6 @@ class ListSessionManagerProxy implements ListSessionProvider, ListSessionPersist
         }
         assert($manager instanceof ListSessionManager);
         return $manager;
-    }
-    public function persist(?ListInterface $list, ContextInterface $context): bool
-    {
-        return $this->ensureManager()->persist($list, $context);
     }
     public function provide(ContextInterface $context): ListInterface
     {

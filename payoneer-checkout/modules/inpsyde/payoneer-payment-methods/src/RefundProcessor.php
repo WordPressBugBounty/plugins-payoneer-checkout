@@ -4,8 +4,6 @@ declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods;
 
 use Exception;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionProvider;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\PaymentContext;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\ApiExceptionInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\PayoutCommandInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Payment\PaymentFactoryInterface;
@@ -17,37 +15,25 @@ use Syde\Vendor\Inpsyde\PaymentGateway\RefundProcessorInterface;
 use WC_Order_Refund;
 class RefundProcessor implements RefundProcessorInterface
 {
-    /**
-     * @var ListSessionProvider
-     */
-    protected $listSessionProvider;
-    /**
-     * @var PaymentFactoryInterface
-     */
-    protected $paymentFactory;
-    /**
-     * @var PayoneerInterface
-     */
-    protected $payoneer;
-    /**
-     * @var string
-     */
-    protected $chargeIdFieldName;
+    protected string $transactionIdFieldName;
+    protected PaymentFactoryInterface $paymentFactory;
+    protected PayoneerInterface $payoneer;
+    protected string $chargeIdFieldName;
     protected string $payoutIdFieldName;
     protected string $refundReasonSuffixTemplate;
     protected array $payoneerPaymentGatewaysIds;
     /**
      * @param PayoneerInterface $payoneer
-     * @param ListSessionProvider $listSessionProvider
+     * @param string $transactionIdFieldName
      * @param PaymentFactoryInterface $paymentFactory
      * @param string $chargeIdFieldName
      * @param string $payoutIdFieldName
      * @param string $refundReasonSuffixTemplate
      */
-    public function __construct(PayoneerInterface $payoneer, ListSessionProvider $listSessionProvider, PaymentFactoryInterface $paymentFactory, string $chargeIdFieldName, string $payoutIdFieldName, string $refundReasonSuffixTemplate, array $payoneerPaymentGatewaysIds)
+    public function __construct(PayoneerInterface $payoneer, string $transactionIdFieldName, PaymentFactoryInterface $paymentFactory, string $chargeIdFieldName, string $payoutIdFieldName, string $refundReasonSuffixTemplate, array $payoneerPaymentGatewaysIds)
     {
         $this->payoneer = $payoneer;
-        $this->listSessionProvider = $listSessionProvider;
+        $this->transactionIdFieldName = $transactionIdFieldName;
         $this->paymentFactory = $paymentFactory;
         $this->chargeIdFieldName = $chargeIdFieldName;
         $this->payoutIdFieldName = $payoutIdFieldName;
@@ -82,12 +68,7 @@ class RefundProcessor implements RefundProcessorInterface
      */
     protected function configurePayoutCommand(WC_Order $order, float $amount, string $reason): PayoutCommandInterface
     {
-        try {
-            $listSession = $this->listSessionProvider->provide(new PaymentContext($order));
-        } catch (RuntimeException $exception) {
-            throw new InvalidArgumentException('Failed to process refund: order has no associated LIST session.', 0, $exception);
-        }
-        $transactionId = $listSession->getIdentification()->getTransactionId();
+        $transactionId = (string) $order->get_meta($this->transactionIdFieldName, \true);
         try {
             $payment = $this->paymentFactory->createPayment($reason, $amount, 0, $amount, $order->get_currency(), $order->get_order_number());
         } catch (ApiExceptionInterface $exception) {
@@ -106,6 +87,7 @@ class RefundProcessor implements RefundProcessorInterface
      * @param string $payoutLongId
      *
      * @return void
+     * @throws \WC_Data_Exception
      */
     protected function setupSavingPayoutData(string $payoutLongId): void
     {

@@ -5,6 +5,7 @@ namespace Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\Availability
 
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\AjaxOrderPay\OrderPayload;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionManager;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\PaymentContext;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\ListCondition\ListConditionInterface;
 use WC_Payment_Gateway;
 class ListConditionAvailabilityCallback implements AvailabilityCallbackInterface
@@ -26,7 +27,7 @@ class ListConditionAvailabilityCallback implements AvailabilityCallbackInterface
                 $orderPayload = OrderPayload::fromGlobals();
                 $order = $orderPayload->getOrder();
             }
-            $listSession = $this->listSessionManager->provide(ListSessionManager::determineContextFromGlobals($order));
+            $listSession = $this->listSessionManager->provide(new PaymentContext($order));
         } catch (\Throwable $exception) {
             return \false;
         }

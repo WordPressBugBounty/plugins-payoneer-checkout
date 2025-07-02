@@ -23,9 +23,9 @@ class Renderer
      *
      * @param string $title The title.
      * @param StatusReportItem[]  $items The items.
-     * @return false|string
+     * @return string
      */
-    public function render(string $title, array $items)
+    public function render(string $title, array $items): string
     {
         ob_start();
         ?>
@@ -66,6 +66,6 @@ class Renderer
             </tbody>
         </table>
         <?php 
-        return ob_get_clean();
+        return (string) ob_get_clean();
     }
 }

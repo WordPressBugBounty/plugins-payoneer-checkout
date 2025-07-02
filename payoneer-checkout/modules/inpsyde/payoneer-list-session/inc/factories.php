@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Syde\Vendor;
 
+use Syde\Vendor\Dhii\Services\Factory;
 use Syde\Vendor\Psr\Container\ContainerInterface;
 return static function (): array {
     return [
@@ -35,5 +36,18 @@ return static function (): array {
             return (float) $cart->get_total('') > 0;
         },
         'list_session.can_try_create_list' => static fn(ContainerInterface $container) => $container->get('list_session.can_persist') && $container->get('list_session.can_create'),
+        'wc.order_under_payment' => new Factory(['wc.order_awaiting_payment', 'wc.pay_for_order_id'], static function (int $orderAwaitingPayment, int $payForOrderId): int {
+            if ($payForOrderId) {
+                return $payForOrderId;
+            }
+            return $orderAwaitingPayment;
+        }),
+        'wc.pay_for_order_id' => new Factory(['wc.pay_for_order_id.from_header', 'wc'], static function (int $orderIdFromHeader): int {
+            $orderPay = \get_query_var('order-pay');
+            if (\is_numeric($orderPay) && (int) $orderPay > 0) {
+                return (int) $orderPay;
+            }
+            return $orderIdFromHeader;
+        }),
     ];
 };

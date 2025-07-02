@@ -144,11 +144,8 @@ return static function (): array {
             }
             return $settingsPageDescription;
         }),
-        'payment_methods.availability_callback.checkout_predicate' => static function (ContainerInterface $container): callable {
-            return static function () use ($container): bool {
-                return (bool) $container->get('list_session.can_try_create_list');
-            };
-        },
+        //todo: think about moving this to factories
+        'payment_methods.availability_callback.checkout_predicate' => new Alias('list_session.can_try_create_list.callable'),
         'payment_methods.availability_callback.live_mode' => new Constructor(LiveModeAvailabilityCallback::class, ['payment_methods.is_live_mode', 'wc.admin_permission', 'payment_methods.show_payment_widget_to_customers_in_sandbox_mode']),
         'payment_methods.payoneer-hosted.availability_callback' => new Factory(['payment_methods.availability_callback.live_mode', 'list_session.manager', 'embedded_payment.ajax_order_pay.is_ajax_order_pay', 'payment_methods.availability_callback.checkout_predicate'], static function (AvailabilityCallbackInterface $liveModeCallback, ListSessionManager $listSessionManager, bool $isAjaxOrderPay, callable $checkoutPredicate): AvailabilityCallbackInterface {
             $callbacks = [$liveModeCallback];
@@ -181,13 +178,13 @@ return static function (): array {
         }),
         'payment_methods.transaction_url_template_field_name' => new Value('_transaction_url_template'),
         'payment_gateway.payoneer-hosted.payment_processor' => new Factory(['list_session.manager', 'payment_methods.order.transaction_id_field_name', 'hosted_payment.misconfiguration_detector', 'hosted_payment.order_based_update_command_factory', 'checkout.security_token_generator', 'checkout.order.security_header_field_name', 'hosted_payment.payment_flow_override_flag.is_set', 'checkout.session_hash_key'], static function (ListSessionManager $listSessionManager, string $transactionIdFieldName, MisconfigurationDetectorInterface $misconfigurationDetector, WcOrderBasedUpdateCommandFactoryInterface $updateCommandFactory, TokenGeneratorInterface $tokenGenerator, string $tokenKey, bool $fallbackToHostedModeFlag, string $sessionHashKey): PaymentProcessorInterface {
-            return new HostedPaymentProcessor($listSessionManager, $transactionIdFieldName, $misconfigurationDetector, $listSessionManager, $updateCommandFactory, $tokenGenerator, $tokenKey, $fallbackToHostedModeFlag, $sessionHashKey);
+            return new HostedPaymentProcessor($transactionIdFieldName, $misconfigurationDetector, $listSessionManager, $updateCommandFactory, $tokenGenerator, $tokenKey, $fallbackToHostedModeFlag, $sessionHashKey);
         }),
         'payment_gateway.payoneer-checkout.payment_processor' => new Factory(['inpsyde_payoneer_api.update_command_factory', 'list_session.manager', 'payment_methods.order.transaction_id_field_name', 'checkout.payment_flow_override_flag', 'embedded_payment.misconfiguration_detector', 'checkout.security_token_generator', 'checkout.order.security_header_field_name', 'checkout.session_hash_key', 'wp.is_rest_api_request'], static function (WcOrderBasedUpdateCommandFactoryInterface $updateCommandFactory, ListSessionManager $listSessionManager, string $transactionIdFieldName, string $hostedModeOverrideFlag, MisconfigurationDetectorInterface $misconfigurationDetector, TokenGeneratorInterface $tokenGenerator, string $tokenKey, string $sessionHashKey, bool $isRestRequest): PaymentProcessorInterface {
-            return new EmbeddedPaymentProcessor($updateCommandFactory, $listSessionManager, $listSessionManager, $tokenGenerator, $tokenKey, $transactionIdFieldName, $hostedModeOverrideFlag, $misconfigurationDetector, $sessionHashKey, $isRestRequest);
+            return new EmbeddedPaymentProcessor($updateCommandFactory, $listSessionManager, $tokenGenerator, $tokenKey, $transactionIdFieldName, $hostedModeOverrideFlag, $misconfigurationDetector, $sessionHashKey, $isRestRequest);
         }),
         'payment_gateway.payoneer-afterpay.payment_processor' => new Alias('payment_gateway.payoneer-checkout.payment_processor'),
-        'payment_gateway.payoneer-checkout.refund_processor' => new Constructor(RefundProcessor::class, ['inpsyde_payment_gateway.payoneer', 'list_session.manager', 'inpsyde_payment_gateway.payment_factory', 'inpsyde_payment_gateway.charge_id_field_name', 'payment_methods.payout_id_field_name', 'payment_methods.refund_reason_suffix_template', 'payment_gateways']),
+        'payment_gateway.payoneer-checkout.refund_processor' => new Constructor(RefundProcessor::class, ['inpsyde_payment_gateway.payoneer', 'inpsyde_payment_gateway.transaction_id_field_name', 'inpsyde_payment_gateway.payment_factory', 'inpsyde_payment_gateway.charge_id_field_name', 'payment_methods.payout_id_field_name', 'payment_methods.refund_reason_suffix_template', 'payment_gateways']),
         'payment_gateway.payoneer-hosted.refund_processor' => new Alias('payment_gateway.payoneer-checkout.refund_processor'),
         'payment_gateway.payoneer-afterpay.refund_processor' => new Alias('payment_gateway.payoneer-checkout.refund_processor'),
         'payment_methods.refund_reason_suffix_template' => static function (): string {
@@ -209,7 +206,7 @@ return static function (): array {
         'payment_gateway.payoneer-checkout.gateway_icons_renderer' => new Factory(['payment_gateway.payoneer-checkout.method_icon_provider'], static function (IconProviderInterface $iconProvider): GatewayIconsRendererInterface {
             return new DefaultIconsRenderer($iconProvider);
         }),
-        'payment_methods.icon_provider_factory' => new Constructor(IconProviderFactory::class, ['core.main_plugin_file', 'payment_methods.path.assets', 'list_session.can_try_create_list', 'list_session.manager', 'payment_methods.network_icon_map']),
+        'payment_methods.icon_provider_factory' => new Constructor(IconProviderFactory::class, ['core.main_plugin_file', 'payment_methods.path.assets', 'list_session.can_try_create_list.callable', 'list_session.manager', 'payment_methods.network_icon_map']),
         'payment_gateway.payoneer-hosted.method_icon_provider' => new Factory(['payment_methods.icon_provider_factory', 'payment_methods.payoneer-hosted.default_icons'], static function (IconProviderFactory $iconProviderFactory, array $defaultIcons): IconProviderInterface {
             return $iconProviderFactory->create($defaultIcons);
         }),

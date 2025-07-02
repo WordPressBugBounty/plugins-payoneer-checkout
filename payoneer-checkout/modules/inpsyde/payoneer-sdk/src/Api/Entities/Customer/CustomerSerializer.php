@@ -42,10 +42,18 @@ class CustomerSerializer implements CustomerSerializerInterface
     }
     /**
      * @inheritDoc
+     *
+     * @todo: consider refactoring
      */
+    // phpcs:ignore Inpsyde.CodeQuality.FunctionLength.TooLong
     public function serializeCustomer(CustomerInterface $customer): array
     {
-        $serializedCustomer = ['number' => $customer->getNumber()];
+        $serializedCustomer = [];
+        try {
+            $serializedCustomer['number'] = $customer->getNumber();
+        } catch (ApiExceptionInterface $apiException) {
+            //this is an optional field, so it's ok to not have it
+        }
         try {
             $customerPhones = $customer->getPhones();
         } catch (ApiExceptionInterface $apiException) {

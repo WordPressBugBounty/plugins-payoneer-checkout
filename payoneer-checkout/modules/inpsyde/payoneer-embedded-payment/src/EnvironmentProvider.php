@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment;
 
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionManager;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionProvider;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\PaymentContext;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\ListSession\ListInterface;
 class EnvironmentProvider
 {
@@ -22,8 +22,7 @@ class EnvironmentProvider
     }
     protected function getList(): ListInterface
     {
-        $context = ListSessionManager::determineContextFromGlobals();
-        return $this->listSessionProvider->provide($context);
+        return $this->listSessionProvider->provide(new PaymentContext());
     }
     protected function getListLongId(): string
     {

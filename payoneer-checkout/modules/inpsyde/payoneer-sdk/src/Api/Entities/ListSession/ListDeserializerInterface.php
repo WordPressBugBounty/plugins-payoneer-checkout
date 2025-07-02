@@ -44,11 +44,7 @@ interface ListDeserializerInterface
      *                  description?: string,
      *                  taxCode?: string,
      *              }[],
-     *              division?: string,
-     *              processingModel?: array{
-     *                  code: string,
-     *                  type: string
-     *              }
+     *              division?: string
      * } $listData
      *
      * @return ListInterface Created instance.

@@ -2,4 +2,4 @@
 
 namespace Syde\Vendor;
 
-return array('dependencies' => array(), 'version' => 'a471735326cf6485a583');
+return array('dependencies' => array(), 'version' => '56c23b532049ed5b3065');

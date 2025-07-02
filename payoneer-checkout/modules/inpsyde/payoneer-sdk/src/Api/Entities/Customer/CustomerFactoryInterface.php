@@ -16,7 +16,7 @@ interface CustomerFactoryInterface
     /**
      * Create a new Customer instance.
      *
-     * @param string $number Customer identifier provided by merchant.
+     * @param string|null $number Customer identifier provided by merchant.
      * @param array{mobile: PhoneInterface}|null $phones Map of customer phones.
      * @param array{billing: AddressInterface, shipping?: AddressInterface}|null $addresses Addresses.
      * @param string|null $email Customer email address.
@@ -28,5 +28,5 @@ interface CustomerFactoryInterface
      *
      * @throws ApiExceptionInterface If failed to create customer object.
      */
-    public function createCustomer(string $number, array $phones = null, array $addresses = null, string $email = null, string $deliveryEmail = null, RegistrationInterface $registration = null, NameInterface $name = null): CustomerInterface;
+    public function createCustomer(string $number = null, array $phones = null, array $addresses = null, string $email = null, string $deliveryEmail = null, RegistrationInterface $registration = null, NameInterface $name = null): CustomerInterface;
 }

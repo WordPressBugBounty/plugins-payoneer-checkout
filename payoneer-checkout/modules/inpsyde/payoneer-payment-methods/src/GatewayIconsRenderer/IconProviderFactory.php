@@ -11,14 +11,15 @@ class IconProviderFactory
 {
     protected string $mainPluginFile;
     protected string $assetPath;
-    protected bool $canTryCreateList;
+    /** @var callable */
+    protected $canTryCreateList;
     protected ListSessionProvider $listSessionProvider;
     /** @var array<string, string> */
     protected array $iconMap;
     /**
      * @param array<string, string> $networkMap
      */
-    public function __construct(string $mainPluginFile, string $assetPath, bool $canTryCreateList, ListSessionProvider $listSessionProvider, array $networkMap)
+    public function __construct(string $mainPluginFile, string $assetPath, callable $canTryCreateList, ListSessionProvider $listSessionProvider, array $networkMap)
     {
         $this->mainPluginFile = $mainPluginFile;
         $this->assetPath = $assetPath;
@@ -35,7 +36,7 @@ class IconProviderFactory
         /**
          * If it is safe to boot a LIST, we can inspect real data
          */
-        if (!$this->canTryCreateList) {
+        if (!($this->canTryCreateList)()) {
             return $defaultIconProvider;
         }
         /**

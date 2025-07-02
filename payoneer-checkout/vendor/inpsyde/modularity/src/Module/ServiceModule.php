@@ -5,7 +5,7 @@ namespace Syde\Vendor\Inpsyde\Modularity\Module;
 
 use Syde\Vendor\Psr\Container\ContainerInterface;
 /**
- * @psalm-type Service = callable(ContainerInterface $container):mixed
+ * @phpstan-type Service callable(ContainerInterface $container): mixed
  */
 interface ServiceModule extends Module
 {

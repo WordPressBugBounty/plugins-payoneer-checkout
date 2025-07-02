@@ -6,8 +6,8 @@ namespace Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment;
 use Syde\Vendor\Inpsyde\PaymentGateway\PaymentGateway;
 use Syde\Vendor\Inpsyde\PaymentGateway\PaymentRequestValidatorInterface;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Checkout\RequestHeaderUtil;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\CheckoutContext;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionProvider;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\PaymentContext;
 /**
  * Validates payment requests by checking the presence and value of a custom header.
  *
@@ -61,7 +61,7 @@ class ListLongIdPaymentRequestValidator implements PaymentRequestValidatorInterf
             );
         }
         $headerValue = $headerUtil->getHeader($longIdHeader);
-        $currentLongId = $this->listSessionProvider->provide(new CheckoutContext())->getIdentification()->getLongId();
+        $currentLongId = $this->listSessionProvider->provide(new PaymentContext())->getIdentification()->getLongId();
         if ($headerValue !== $currentLongId) {
             throw new \UnexpectedValueException(
                 /* translators: This implies that we have a bug in the code. Merchant/Customer cannot fix it and should ideally never see it */

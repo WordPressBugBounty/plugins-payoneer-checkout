@@ -30,12 +30,6 @@ class WebhooksModule implements ExecutableModule, ServiceModule, ExtendingModule
             $permissionCallback = $container->get('webhooks.permission_callback');
             register_rest_route($namespace, $route, ['methods' => $methods, 'callback' => $callback, 'permission_callback' => $permissionCallback]);
         });
-        /** @var callable():void $addTransactionIdFieldSupport */
-        $addTransactionIdFieldSupport = $container->get('webhooks.add_transaction_id_field_support');
-        $addTransactionIdFieldSupport();
-        /** @var callable():void $addPayoutIdFieldSupport */
-        $addPayoutIdFieldSupport = $container->get('webhooks.add_payout_id_field_support');
-        $addPayoutIdFieldSupport();
         /** @var callable(WP_Rest_Request):void $logIncomingWebhookRequest */
         $logIncomingWebhookRequest = $container->get('webhooks.log_incoming_webhooks_request');
         add_action('payoneer-checkout.webhook_request', $logIncomingWebhookRequest);

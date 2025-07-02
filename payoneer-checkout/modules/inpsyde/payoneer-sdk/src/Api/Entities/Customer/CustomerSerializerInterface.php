@@ -14,7 +14,7 @@ interface CustomerSerializerInterface
      * @param CustomerInterface $customer Object containing data.
      *
      * @return array {
-     *     number: string,
+     *     number?: string,
      *     phones?: array{mobile: array{unstructuredNumber: string}},
      *     addresses?: array{billing: AddressInterface, shipping?: AddressInterface},
      *     email?: string,

@@ -780,17 +780,17 @@
         },
         {
             "name": "inpsyde\/modularity",
-            "version": "1.11.0",
-            "version_normalized": "1.11.0.0",
+            "version": "1.12.0",
+            "version_normalized": "1.12.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/inpsyde\/modularity.git",
-                "reference": "c79bb3682f55e1a2ece67f36e70d04fa2ab8c65d"
+                "reference": "e1ca1c81b7b663355906b586525d21ac5d46bc65"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/inpsyde\/modularity\/zipball\/c79bb3682f55e1a2ece67f36e70d04fa2ab8c65d",
-                "reference": "c79bb3682f55e1a2ece67f36e70d04fa2ab8c65d",
+                "url": "https:\/\/api.github.com\/repos\/inpsyde\/modularity\/zipball\/e1ca1c81b7b663355906b586525d21ac5d46bc65",
+                "reference": "e1ca1c81b7b663355906b586525d21ac5d46bc65",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -801,19 +801,22 @@
             },
             "require": {
                 "ext-json": "*",
-                "php": ">=7.4 <8.4",
+                "php": ">=7.4",
                 "psr\/container": "^1.1.0 || ^2"
             },
             "require-dev": {
                 "brain\/monkey": "^2.6.1",
-                "inpsyde\/php-coding-standards": "^2@dev",
-                "inpsyde\/wp-stubs-versions": "dev-latest",
+                "inpsyde\/wp-stubs-versions": "6.7",
                 "mikey179\/vfsstream": "^v1.6.11",
+                "phpstan\/phpstan": "^2.1.1",
+                "phpstan\/phpstan-deprecation-rules": "^2.0.1",
+                "phpstan\/phpstan-mockery": "^2.0.0",
+                "phpstan\/phpstan-phpunit": "^2.0.4",
                 "phpunit\/phpunit": "^9.6.19",
-                "roots\/wordpress-no-content": "@dev",
-                "vimeo\/psalm": "^5.24.0"
+                "swissspidy\/phpstan-no-private": "^v1.0.0",
+                "syde\/phpcs": "^1.0.0"
             },
-            "time": "2024-11-28T09:34:00+00:00",
+            "time": "2025-05-09T12:13:17+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -841,23 +844,23 @@
             "description": "Modular PSR-11 implementation for WordPress plugins, themes or libraries.",
             "support": {
                 "issues": "https:\/\/github.com\/inpsyde\/modularity\/issues",
-                "source": "https:\/\/github.com\/inpsyde\/modularity\/tree\/1.11.0"
+                "source": "https:\/\/github.com\/inpsyde\/modularity\/tree\/1.12.0"
             },
             "install-path": "..\/inpsyde\/modularity"
         },
         {
             "name": "inpsyde\/payment-gateway",
-            "version": "2.4.1",
-            "version_normalized": "2.4.1.0",
+            "version": "2.7.1",
+            "version_normalized": "2.7.1.0",
             "source": {
                 "type": "git",
                 "url": "git@github.com:inpsyde\/payment-gateway.git",
-                "reference": "48be2bbdb6c0056d587cc13b65acc375cb40ad32"
+                "reference": "00260a21acbe2614e9ddcef5e0182b4dbbb3011b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/inpsyde\/payment-gateway\/zipball\/48be2bbdb6c0056d587cc13b65acc375cb40ad32",
-                "reference": "48be2bbdb6c0056d587cc13b65acc375cb40ad32",
+                "url": "https:\/\/api.github.com\/repos\/inpsyde\/payment-gateway\/zipball\/00260a21acbe2614e9ddcef5e0182b4dbbb3011b",
+                "reference": "00260a21acbe2614e9ddcef5e0182b4dbbb3011b",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -883,7 +886,7 @@
                 "phpunit\/phpunit": "^8.0 | ^9.0",
                 "vimeo\/psalm": "^4.3"
             },
-            "time": "2025-02-26T20:08:41+00:00",
+            "time": "2025-06-20T14:31:21+00:00",
             "type": "inpsyde-module",
             "extra": {
                 "hooks": {
@@ -972,15 +975,15 @@
                 }
             ],
             "support": {
-                "source": "https:\/\/github.com\/inpsyde\/payment-gateway\/tree\/2.4.1",
+                "source": "https:\/\/github.com\/inpsyde\/payment-gateway\/tree\/2.7.1",
                 "issues": "https:\/\/github.com\/inpsyde\/payment-gateway\/issues"
             },
             "install-path": "..\/..\/modules\/inpsyde\/payment-gateway"
         },
         {
             "name": "inpsyde\/payoneer-admin-banner",
-            "version": "dev-release\/3.3.0",
-            "version_normalized": "dev-release\/3.3.0",
+            "version": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
+            "version_normalized": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/admin-banner",
@@ -1031,8 +1034,8 @@
         },
         {
             "name": "inpsyde\/payoneer-analytics",
-            "version": "dev-release\/3.3.0",
-            "version_normalized": "dev-release\/3.3.0",
+            "version": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
+            "version_normalized": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/analytics",
@@ -1080,8 +1083,8 @@
         },
         {
             "name": "inpsyde\/payoneer-api",
-            "version": "dev-release\/3.3.0",
-            "version_normalized": "dev-release\/3.3.0",
+            "version": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
+            "version_normalized": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/api",
@@ -1129,8 +1132,8 @@
         },
         {
             "name": "inpsyde\/payoneer-embedded-payment",
-            "version": "dev-release\/3.3.0",
-            "version_normalized": "dev-release\/3.3.0",
+            "version": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
+            "version_normalized": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/embedded-payment",
@@ -1183,8 +1186,8 @@
         },
         {
             "name": "inpsyde\/payoneer-hosted-payment",
-            "version": "dev-release\/3.3.0",
-            "version_normalized": "dev-release\/3.3.0",
+            "version": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
+            "version_normalized": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/hosted-payment",
@@ -1236,8 +1239,8 @@
         },
         {
             "name": "inpsyde\/payoneer-list-session",
-            "version": "dev-release\/3.3.0",
-            "version_normalized": "dev-release\/3.3.0",
+            "version": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
+            "version_normalized": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/list-session",
@@ -1278,8 +1281,8 @@
         },
         {
             "name": "inpsyde\/payoneer-migrator",
-            "version": "dev-release\/3.3.0",
-            "version_normalized": "dev-release\/3.3.0",
+            "version": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
+            "version_normalized": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/migration",
@@ -1326,8 +1329,8 @@
         },
         {
             "name": "inpsyde\/payoneer-page-detector",
-            "version": "dev-release\/3.3.0",
-            "version_normalized": "dev-release\/3.3.0",
+            "version": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
+            "version_normalized": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/page-detector",
@@ -1374,8 +1377,8 @@
         },
         {
             "name": "inpsyde\/payoneer-payment-gateway-checkout",
-            "version": "dev-release\/3.3.0",
-            "version_normalized": "dev-release\/3.3.0",
+            "version": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
+            "version_normalized": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/checkout",
@@ -1425,8 +1428,8 @@
         },
         {
             "name": "inpsyde\/payoneer-payment-methods",
-            "version": "dev-release\/3.3.0",
-            "version_normalized": "dev-release\/3.3.0",
+            "version": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
+            "version_normalized": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/payment-methods",
@@ -1476,17 +1479,17 @@
         },
         {
             "name": "inpsyde\/payoneer-sdk",
-            "version": "v3.0.1",
-            "version_normalized": "3.0.1.0",
+            "version": "v4.1.0",
+            "version_normalized": "4.1.0.0",
             "source": {
                 "type": "git",
                 "url": "git@github.com:inpsyde\/payoneer-sdk.git",
-                "reference": "98b31667d643446cddd0bf3a1f623c133bef2cd0"
+                "reference": "096f3db439f7d77bef2d165dbecd406cc4210550"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/inpsyde\/payoneer-sdk\/zipball\/98b31667d643446cddd0bf3a1f623c133bef2cd0",
-                "reference": "98b31667d643446cddd0bf3a1f623c133bef2cd0",
+                "url": "https:\/\/api.github.com\/repos\/inpsyde\/payoneer-sdk\/zipball\/096f3db439f7d77bef2d165dbecd406cc4210550",
+                "reference": "096f3db439f7d77bef2d165dbecd406cc4210550",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1523,7 +1526,7 @@
                 "vimeo\/psalm": "^4.0",
                 "webmozart\/path-util": "^2.3@stable"
             },
-            "time": "2025-01-23T10:46:21+00:00",
+            "time": "2025-06-23T07:27:08+00:00",
             "type": "inpsyde-module",
             "installation-source": "dist",
             "autoload": {
@@ -1538,25 +1541,27 @@
             },
             "notification-url": "https:\/\/repo.packagist.com\/inpsyde\/downloads\/",
             "license": [
-                "MIT"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
-                    "name": "Inpsyde",
-                    "email": "hello@inpsyde.com"
+                    "name": "Syde GmbH",
+                    "homepage": "https:\/\/syde.com\/",
+                    "email": "hello@syde.com",
+                    "role": "Company"
                 }
             ],
             "description": "Payoneer SDK module for inpsyde\/modularity.",
             "support": {
-                "source": "https:\/\/github.com\/inpsyde\/payoneer-sdk\/tree\/v3.0.1",
+                "source": "https:\/\/github.com\/inpsyde\/payoneer-sdk\/tree\/v4.1.0",
                 "issues": "https:\/\/github.com\/inpsyde\/payoneer-sdk\/issues"
             },
             "install-path": "..\/..\/modules\/inpsyde\/payoneer-sdk"
         },
         {
             "name": "inpsyde\/payoneer-settings",
-            "version": "dev-release\/3.3.0",
-            "version_normalized": "dev-release\/3.3.0",
+            "version": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
+            "version_normalized": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/settings",
@@ -1604,8 +1609,8 @@
         },
         {
             "name": "inpsyde\/payoneer-status-report",
-            "version": "dev-release\/3.3.0",
-            "version_normalized": "dev-release\/3.3.0",
+            "version": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
+            "version_normalized": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/status-report",
@@ -1651,8 +1656,8 @@
         },
         {
             "name": "inpsyde\/payoneer-third-party-compat",
-            "version": "dev-release\/3.3.0",
-            "version_normalized": "dev-release\/3.3.0",
+            "version": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
+            "version_normalized": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/third-party-compat",
@@ -1691,8 +1696,8 @@
         },
         {
             "name": "inpsyde\/payoneer-webhooks",
-            "version": "dev-release\/3.3.0",
-            "version_normalized": "dev-release\/3.3.0",
+            "version": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
+            "version_normalized": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/webhooks",
@@ -1744,8 +1749,8 @@
         },
         {
             "name": "inpsyde\/payoneer-websdk",
-            "version": "dev-release\/3.3.0",
-            "version_normalized": "dev-release\/3.3.0",
+            "version": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
+            "version_normalized": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/websdk",
@@ -1794,8 +1799,8 @@
         },
         {
             "name": "inpsyde\/payoneer-wp",
-            "version": "dev-release\/3.3.0",
-            "version_normalized": "dev-release\/3.3.0",
+            "version": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
+            "version_normalized": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/wp",
@@ -2605,17 +2610,17 @@
         },
         {
             "name": "sniccowp\/php-scoper-wordpress-excludes",
-            "version": "6.7.2",
-            "version_normalized": "6.7.2.0",
+            "version": "6.8.1",
+            "version_normalized": "6.8.1.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/snicco\/php-scoper-wordpress-excludes.git",
-                "reference": "1e65b207d6f4753904774430ccfc06cb6bfa486e"
+                "reference": "c2c18f89a9aa2d7ef1998d233b9ed00d0deff5dd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/snicco\/php-scoper-wordpress-excludes\/zipball\/1e65b207d6f4753904774430ccfc06cb6bfa486e",
-                "reference": "1e65b207d6f4753904774430ccfc06cb6bfa486e",
+                "url": "https:\/\/api.github.com\/repos\/snicco\/php-scoper-wordpress-excludes\/zipball\/c2c18f89a9aa2d7ef1998d233b9ed00d0deff5dd",
+                "reference": "c2c18f89a9aa2d7ef1998d233b9ed00d0deff5dd",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -2627,10 +2632,10 @@
             "require-dev": {
                 "php": "^7.4",
                 "php-stubs\/wordpress-globals": "0.2.0",
-                "php-stubs\/wordpress-stubs": "6.7.2",
+                "php-stubs\/wordpress-stubs": "6.8.1",
                 "sniccowp\/php-scoper-excludes": "dev-master"
             },
-            "time": "2025-02-06T00:29:24+00:00",
+            "time": "2025-05-03T00:01:53+00:00",
             "type": "library",
             "installation-source": "dist",
             "notification-url": "https:\/\/repo.packagist.com\/inpsyde\/downloads\/",
@@ -2655,23 +2660,23 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/snicco\/php-scoper-wordpress-excludes\/issues",
-                "source": "https:\/\/github.com\/snicco\/php-scoper-wordpress-excludes\/tree\/6.7.2"
+                "source": "https:\/\/github.com\/snicco\/php-scoper-wordpress-excludes\/tree\/6.8.1"
             },
             "install-path": "..\/sniccowp\/php-scoper-wordpress-excludes"
         },
         {
             "name": "symfony\/polyfill-php80",
-            "version": "v1.31.0",
-            "version_normalized": "1.31.0.0",
+            "version": "v1.32.0",
+            "version_normalized": "1.32.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/polyfill-php80.git",
-                "reference": "60328e362d4c2c802a54fcbf04f9d3fb892b4cf8"
+                "reference": "0cc9dd0f17f61d8131e7df6b84bd344899fe2608"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/polyfill-php80\/zipball\/60328e362d4c2c802a54fcbf04f9d3fb892b4cf8",
-                "reference": "60328e362d4c2c802a54fcbf04f9d3fb892b4cf8",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/polyfill-php80\/zipball\/0cc9dd0f17f61d8131e7df6b84bd344899fe2608",
+                "reference": "0cc9dd0f17f61d8131e7df6b84bd344899fe2608",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -2683,12 +2688,12 @@
             "require": {
                 "php": ">=7.2"
             },
-            "time": "2024-09-09T11:45:10+00:00",
+            "time": "2025-01-02T08:10:11+00:00",
             "type": "library",
             "extra": {
                 "thanks": {
-                    "name": "symfony\/polyfill",
-                    "url": "https:\/\/github.com\/symfony\/polyfill"
+                    "url": "https:\/\/github.com\/symfony\/polyfill",
+                    "name": "symfony\/polyfill"
                 }
             },
             "installation-source": "dist",
@@ -2730,7 +2735,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/polyfill-php80\/tree\/v1.31.0"
+                "source": "https:\/\/github.com\/symfony\/polyfill-php80\/tree\/v1.32.0"
             },
             "funding": [
                 {

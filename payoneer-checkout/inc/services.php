@@ -285,7 +285,7 @@ return static function (string $rootPath): array {
         }),
         # core.refund
         # =================================================================
-        'core.refund.refund_finder' => new Alias('webhooks.refund_finder'),
+        'core.refund.refund_finder' => new Alias('wp.refund_finder'),
         # core.data
         # =================================================================
         'core.data.dictionary_factory' => new Constructor(DictionaryFactory::class, []),
@@ -613,7 +613,7 @@ return static function (string $rootPath): array {
         'inpsyde_payment_gateway.header_factory' => new Alias('core.header_factory'),
         'inpsyde_payment_gateway.address_factory' => new Alias('core.address_factory'),
         'inpsyde_payment_gateway.name_factory' => new Alias('core.name_factory'),
-        'inpsyde_payment_gateway.order_finder' => new Alias('webhooks.order_finder'),
+        'inpsyde_payment_gateway.order_finder' => new Alias('wp.order_finder'),
         'inpsyde_payment_gateway.product_factory' => new Alias('core.product_factory'),
         'inpsyde_payment_gateway.list_hash_container_id' => new Alias('core.list_hash_container_id'),
         'inpsyde_payment_gateway.checkout_hash_provider' => new Alias('core.checkout_hash_provider'),

@@ -4,7 +4,7 @@ Tags: payment, woocommerce, checkout
 Requires at least: 5.3
 Tested up to: 6.8.1
 Requires PHP: 7.4
-Stable tag: 3.3.2
+Stable tag: 3.4.0
 License: MPL-2.0
 License URI: https://www.mozilla.org/en-US/MPL/2.0/
 
@@ -58,6 +58,20 @@ Our global banking and payment networks stretch around the world so we can suppo
 == Screenshots ==
 
 == Changelog ==
+
+= [3.4.0] - 2025-07-02 =
+* Added:
+  * Automated generation of System Status Reports and Logfiles to assist support processes.
+
+* Fixed:
+  * Resolved payment rejection issue caused by an incorrect Security header.
+  * Fixed compatibility issue with WordPress Multisite.
+  * Addressed an incompatibility with WooCommerce Multilingual & Multicurrency that caused the _Pay for Order_ page to break.
+  * Ensured available payment methods in the LIST are correctly updated after changes to the total amount.
+
+* Changed:
+  * Adjusted value handling to not include customer.number as a required value in SDK.
+  * Removed the ProcessingModel entity for MoR from the SDK.
 
 = [3.3.2] - 2025-06-02 =
 * Fixed:

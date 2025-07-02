@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit110142e4fa6f6a2d282d7cc0c0e60c1d
+class ComposerStaticInitc969959659ee1e06936dad4bf64e751f
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -610,22 +610,19 @@ class ComposerStaticInit110142e4fa6f6a2d282d7cc0c0e60c1d
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\ListSession\\ListSessionModule' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-list-session/src/ListSessionModule.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\ListSession\\ListSession\\AbstractContext' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-list-session/src/ListSession/AbstractContext.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\ListSession\\ListSession\\ApiListSessionProvider' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-list-session/src/ListSession/ApiListSessionProvider.php',
-        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\ListSession\\ListSession\\CheckoutContext' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-list-session/src/ListSession/CheckoutContext.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\ListSession\\ListSession\\ContextInterface' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-list-session/src/ListSession/ContextInterface.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\ListSession\\ListSession\\ListSessionManager' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-list-session/src/ListSession/ListSessionManager.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\ListSession\\ListSession\\ListSessionManagerProxy' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-list-session/src/ListSession/ListSessionManagerProxy.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\ListSession\\ListSession\\ListSessionMiddleware' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-list-session/src/ListSession/ListSessionMiddleware.php',
-        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\ListSession\\ListSession\\ListSessionPersistor' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-list-session/src/ListSession/ListSessionPersistor.php',
-        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\ListSession\\ListSession\\ListSessionPersistorMiddleware' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-list-session/src/ListSession/ListSessionPersistorMiddleware.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\ListSession\\ListSession\\ListSessionProvider' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-list-session/src/ListSession/ListSessionProvider.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\ListSession\\ListSession\\ListSessionProviderMiddleware' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-list-session/src/ListSession/ListSessionProviderMiddleware.php',
-        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\ListSession\\ListSession\\NoopListSessionPersistor' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-list-session/src/ListSession/NoopListSessionPersistor.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\ListSession\\ListSession\\PaymentContext' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-list-session/src/ListSession/PaymentContext.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\ListSession\\ListSession\\Runner' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-list-session/src/ListSession/Runner.php',
+        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\ListSession\\Middleware\\FetchingMiddleware' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-list-session/src/Middleware/FetchingMiddleware.php',
+        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\ListSession\\Middleware\\IsProcessingTrait' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-list-session/src/Middleware/IsProcessingTrait.php',
+        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\ListSession\\Middleware\\ListCache' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-list-session/src/Middleware/ListCache.php',
+        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\ListSession\\Middleware\\ListCacheInterface' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-list-session/src/Middleware/ListCacheInterface.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\ListSession\\Middleware\\UpdatingMiddleware' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-list-session/src/Middleware/UpdatingMiddleware.php',
-        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\ListSession\\Middleware\\ValidatingMiddleware' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-list-session/src/Middleware/ValidatingMiddleware.php',
-        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\ListSession\\Middleware\\WcOrderMiddleware' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-list-session/src/Middleware/WcOrderMiddleware.php',
-        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\ListSession\\Middleware\\WcSessionMiddleware' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-list-session/src/Middleware/WcSessionMiddleware.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Migration\\MigrationModule' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-migrator/src/MigrationModule.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Migration\\Migrator' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-migrator/src/Migrator.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Migration\\MigratorInterface' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-migrator/src/MigratorInterface.php',
@@ -669,6 +666,21 @@ class ComposerStaticInit110142e4fa6f6a2d282d7cc0c0e60c1d
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Settings\\Merchant\\MerchantSerializerInterface' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-settings/src/Merchant/MerchantSerializerInterface.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Settings\\Merchant\\SaveMerchantCommandInterface' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-settings/src/Merchant/SaveMerchantCommandInterface.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Settings\\SettingsModule' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-settings/src/SettingsModule.php',
+        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\StatusReport\\Data\\LogCollector\\DbLogCollector' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-status-report/src/Data/LogCollector/DbLogCollector.php',
+        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\StatusReport\\Data\\LogCollector\\FileLogCollector' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-status-report/src/Data/LogCollector/FileLogCollector.php',
+        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\StatusReport\\Data\\LogCollector\\LegacyFileLogCollector' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-status-report/src/Data/LogCollector/LegacyFileLogCollector.php',
+        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\StatusReport\\Data\\LogCollector\\LogCollectorFactory' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-status-report/src/Data/LogCollector/LogCollectorFactory.php',
+        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\StatusReport\\Data\\LogCollector\\LogCollectorInterface' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-status-report/src/Data/LogCollector/LogCollectorInterface.php',
+        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\StatusReport\\Data\\SystemReportCollector' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-status-report/src/Data/SystemReportCollector.php',
+        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\StatusReport\\Data\\SystemReportCollectorInterface' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-status-report/src/Data/SystemReportCollectorInterface.php',
+        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\StatusReport\\Data\\SystemReportDataDTO' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-status-report/src/Data/SystemReportDataDTO.php',
+        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\StatusReport\\Data\\SystemReportParamsDTO' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-status-report/src/Data/SystemReportParamsDTO.php',
+        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\StatusReport\\Email\\SystemReportEmailSender' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-status-report/src/Email/SystemReportEmailSender.php',
+        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\StatusReport\\Email\\SystemReportEmailSenderInterface' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-status-report/src/Email/SystemReportEmailSenderInterface.php',
+        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\StatusReport\\Email\\SystemReportFormatter' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-status-report/src/Email/SystemReportFormatter.php',
+        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\StatusReport\\Email\\SystemReportFormatterInterface' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-status-report/src/Email/SystemReportFormatterInterface.php',
+        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\StatusReport\\Endpoint\\SystemReportEndpointController' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-status-report/src/Endpoint/SystemReportEndpointController.php',
+        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\StatusReport\\Permission\\SystemReportPermissionHandler' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-status-report/src/Permission/SystemReportPermissionHandler.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\StatusReport\\Renderer' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-status-report/src/Renderer.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\StatusReport\\StatusReportModule' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-status-report/src/StatusReportModule.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\ThirdPartyCompat\\ThirdPartyCompatModule' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-third-party-compat/src/ThirdPartyCompatModule.php',
@@ -681,11 +693,6 @@ class ComposerStaticInit110142e4fa6f6a2d282d7cc0c0e60c1d
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Webhooks\\Controller\\PayoneerWebhooksController' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-webhooks/src/Controller/PayoneerWebhooksController.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Webhooks\\Controller\\WpRestApiControllerInterface' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-webhooks/src/Controller/WpRestApiControllerInterface.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Webhooks\\LogIncomingWebhookRequest' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-webhooks/src/LogIncomingWebhookRequest.php',
-        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Webhooks\\OrderFinder\\AbstractOrderFinder' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-webhooks/src/OrderFinder/AbstractOrderFinder.php',
-        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Webhooks\\OrderFinder\\AddTransactionIdFieldSupport' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-webhooks/src/OrderFinder/AddTransactionIdFieldSupport.php',
-        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Webhooks\\OrderFinder\\HposOrderFinder' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-webhooks/src/OrderFinder/HposOrderFinder.php',
-        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Webhooks\\OrderFinder\\OrderFinder' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-webhooks/src/OrderFinder/OrderFinder.php',
-        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Webhooks\\OrderFinder\\OrderFinderInterface' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-webhooks/src/OrderFinder/OrderFinderInterface.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Webhooks\\OrderPaymentWebhookHandler\\ChargeBackPaymentHandler' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-webhooks/src/OrderPaymentWebhookHandler/ChargeBackPaymentHandler.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Webhooks\\OrderPaymentWebhookHandler\\ChargedPaymentHandler' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-webhooks/src/OrderPaymentWebhookHandler/ChargedPaymentHandler.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Webhooks\\OrderPaymentWebhookHandler\\CustomerRegistrationHandler' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-webhooks/src/OrderPaymentWebhookHandler/CustomerRegistrationHandler.php',
@@ -694,13 +701,18 @@ class ComposerStaticInit110142e4fa6f6a2d282d7cc0c0e60c1d
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Webhooks\\OrderPaymentWebhookHandler\\RefundedPaymentHandler' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-webhooks/src/OrderPaymentWebhookHandler/RefundedPaymentHandler.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Webhooks\\OrderWebhookFinder\\OrderWebhookFinder' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-webhooks/src/OrderWebhookFinder/OrderWebhookFinder.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Webhooks\\OrderWebhookFinder\\OrderWebhookFinderInterface' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-webhooks/src/OrderWebhookFinder/OrderWebhookFinderInterface.php',
-        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Webhooks\\RefundFinder\\AddPayoutIdFieldSupport' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-webhooks/src/RefundFinder/AddPayoutIdFieldSupport.php',
-        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Webhooks\\RefundFinder\\RefundFinder' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-webhooks/src/RefundFinder/RefundFinder.php',
-        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Webhooks\\RefundFinder\\RefundFinderInterface' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-webhooks/src/RefundFinder/RefundFinderInterface.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Webhooks\\WebhookEntities' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-webhooks/src/WebhookEntities.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Webhooks\\WebhooksModule' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-webhooks/src/WebhooksModule.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Wp\\LocaleProviderInterface' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-wp/src/LocaleProviderInterface.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Wp\\NormalizingLocaleProviderISO639ISO3166' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-wp/src/NormalizingLocaleProviderISO639ISO3166.php',
+        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Wp\\OrderFinder\\AbstractOrderFinder' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-wp/src/OrderFinder/AbstractOrderFinder.php',
+        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Wp\\OrderFinder\\AddTransactionIdFieldSupport' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-wp/src/OrderFinder/AddTransactionIdFieldSupport.php',
+        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Wp\\OrderFinder\\HposOrderFinder' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-wp/src/OrderFinder/HposOrderFinder.php',
+        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Wp\\OrderFinder\\OrderFinder' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-wp/src/OrderFinder/OrderFinder.php',
+        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Wp\\OrderFinder\\OrderFinderInterface' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-wp/src/OrderFinder/OrderFinderInterface.php',
+        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Wp\\RefundFinder\\AddPayoutIdFieldSupport' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-wp/src/RefundFinder/AddPayoutIdFieldSupport.php',
+        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Wp\\RefundFinder\\RefundFinder' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-wp/src/RefundFinder/RefundFinder.php',
+        'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Wp\\RefundFinder\\RefundFinderInterface' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-wp/src/RefundFinder/RefundFinderInterface.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerForWoocommerce\\Wp\\WpModule' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-wp/src/WpModule.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerSdk\\Api\\ApiException' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-sdk/src/Api/ApiException.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerSdk\\Api\\ApiExceptionInterface' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-sdk/src/Api/ApiExceptionInterface.php',
@@ -824,14 +836,6 @@ class ComposerStaticInit110142e4fa6f6a2d282d7cc0c0e60c1d
         'Syde\\Vendor\\Inpsyde\\PayoneerSdk\\Api\\Entities\\Phone\\PhoneInterface' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-sdk/src/Api/Entities/Phone/PhoneInterface.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerSdk\\Api\\Entities\\Phone\\PhoneSerializer' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-sdk/src/Api/Entities/Phone/PhoneSerializer.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerSdk\\Api\\Entities\\Phone\\PhoneSerializerInterface' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-sdk/src/Api/Entities/Phone/PhoneSerializerInterface.php',
-        'Syde\\Vendor\\Inpsyde\\PayoneerSdk\\Api\\Entities\\ProcessingModel\\ProcessingModel' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-sdk/src/Api/Entities/ProcessingModel/ProcessingModel.php',
-        'Syde\\Vendor\\Inpsyde\\PayoneerSdk\\Api\\Entities\\ProcessingModel\\ProcessingModelDeserializer' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-sdk/src/Api/Entities/ProcessingModel/ProcessingModelDeserializer.php',
-        'Syde\\Vendor\\Inpsyde\\PayoneerSdk\\Api\\Entities\\ProcessingModel\\ProcessingModelDeserializerInterface' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-sdk/src/Api/Entities/ProcessingModel/ProcessingModelDeserializerInterface.php',
-        'Syde\\Vendor\\Inpsyde\\PayoneerSdk\\Api\\Entities\\ProcessingModel\\ProcessingModelFactory' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-sdk/src/Api/Entities/ProcessingModel/ProcessingModelFactory.php',
-        'Syde\\Vendor\\Inpsyde\\PayoneerSdk\\Api\\Entities\\ProcessingModel\\ProcessingModelFactoryInterface' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-sdk/src/Api/Entities/ProcessingModel/ProcessingModelFactoryInterface.php',
-        'Syde\\Vendor\\Inpsyde\\PayoneerSdk\\Api\\Entities\\ProcessingModel\\ProcessingModelInterface' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-sdk/src/Api/Entities/ProcessingModel/ProcessingModelInterface.php',
-        'Syde\\Vendor\\Inpsyde\\PayoneerSdk\\Api\\Entities\\ProcessingModel\\ProcessingModelSerializer' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-sdk/src/Api/Entities/ProcessingModel/ProcessingModelSerializer.php',
-        'Syde\\Vendor\\Inpsyde\\PayoneerSdk\\Api\\Entities\\ProcessingModel\\ProcessingModelSerializerInterface' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-sdk/src/Api/Entities/ProcessingModel/ProcessingModelSerializerInterface.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerSdk\\Api\\Entities\\Product\\Product' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-sdk/src/Api/Entities/Product/Product.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerSdk\\Api\\Entities\\Product\\ProductDeserializer' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-sdk/src/Api/Entities/Product/ProductDeserializer.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerSdk\\Api\\Entities\\Product\\ProductDeserializerInterface' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-sdk/src/Api/Entities/Product/ProductDeserializerInterface.php',
@@ -969,9 +973,9 @@ class ComposerStaticInit110142e4fa6f6a2d282d7cc0c0e60c1d
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit110142e4fa6f6a2d282d7cc0c0e60c1d::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit110142e4fa6f6a2d282d7cc0c0e60c1d::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit110142e4fa6f6a2d282d7cc0c0e60c1d::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitc969959659ee1e06936dad4bf64e751f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitc969959659ee1e06936dad4bf64e751f::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitc969959659ee1e06936dad4bf64e751f::$classMap;
 
         }, null, ClassLoader::class);
     }

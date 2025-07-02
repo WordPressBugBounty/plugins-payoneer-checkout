@@ -31,7 +31,7 @@ return static function (): array {
          * @var callable(ContainerInterface):PaymentProcessorInterface $factory
          */
         $factory = new Factory(['list_session.manager', 'inpsyde_payment_gateway.transaction_id_field_name', 'hosted_payment.misconfiguration_detector', 'hosted_payment.order_based_update_command_factory', 'checkout.security_token_generator', 'checkout.order.security_header_field_name', 'hosted_payment.payment_flow_override_flag.is_set', 'checkout.session_hash_key'], static function (ListSessionManager $listSessionManager, string $transactionIdFieldName, MisconfigurationDetectorInterface $misconfigurationDetector, WcOrderBasedUpdateCommandFactoryInterface $updateCommandFactory, TokenGeneratorInterface $tokenGenerator, string $tokenKey, bool $fallbackToHostedModeFlag, string $sessionHashKey): PaymentProcessorInterface {
-            return new HostedPaymentProcessor($listSessionManager, $transactionIdFieldName, $misconfigurationDetector, $listSessionManager, $updateCommandFactory, $tokenGenerator, $tokenKey, $fallbackToHostedModeFlag, $sessionHashKey);
+            return new HostedPaymentProcessor($transactionIdFieldName, $misconfigurationDetector, $listSessionManager, $updateCommandFactory, $tokenGenerator, $tokenKey, $fallbackToHostedModeFlag, $sessionHashKey);
         });
         return $factory($container);
     }, 'checkout.payment_field_renderers' => static function (array $renderers, ContainerInterface $container): array {

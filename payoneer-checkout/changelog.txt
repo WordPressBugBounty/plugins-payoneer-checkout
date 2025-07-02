@@ -2,18 +2,33 @@
 
 = [next-version] - yyyy-mm-dd =
 
-= [3.3.2] - 2025-06-02 =
+= [3.4.0] - 2025-06-30 =
+* Added
+    * Automated generation of System Status Reports and Logfiles to assist support processes.
+
+* Fixed
+    * Resolved payment rejection issue caused by an incorrect Security header.
+    * Fixed compatibility issue with WordPress Multisite.
+    * Addressed an incompatibility with WooCommerce Multilingual & Multicurrency that caused the Pay for Order page to break.
+    * Ensured available payment methods in the LIST are correctly updated after changes to the total amount.
+
+* Changed
+    * Adjust value handling to not include customer.number as a required value in SDK
+    * Removed the ProcessingModel entity for MoR from the SDK.
+
+= [3.3.2] - 2025-05-26 =
 * Fixed:
   * Issue allowing checkout form to be submitted with invalid cards fields
   * Issue with additional payment method icons being displayed on Payoneer Checkout at checkout and block cart page
   * PHP 8+ errors caused during API calls after 3.3.0 release
   * PHP 7.4 errors caused during API calls after 3.3.0 release
+
 * Changed:
   * Repeated payment attempts no longer generate new orders. The original order is now reused, with its status set to On hold after checkout and updated to Failed if the payment is declined.
 
 = [3.3.1] - 2025-04-02 =
 * Added
-    * SRI integrity hash (security enhancement for PSI/DSS 4.0 compatibility)
+    * SRI integrity hash (security enhancement for PCI-DSS 4.0 compatibility)
 
 = [3.3.0] - 2025-03-24 =
 * Added

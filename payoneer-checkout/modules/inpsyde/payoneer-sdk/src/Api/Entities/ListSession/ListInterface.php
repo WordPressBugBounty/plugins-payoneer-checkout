@@ -9,7 +9,6 @@ use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Identification\IdentificationIn
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Network\NetworksInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Payment\PaymentInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Product\ProductInterface;
-use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\ProcessingModel\ProcessingModelInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Redirect\RedirectInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Status\StatusInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Style\StyleInterface;
@@ -88,14 +87,6 @@ interface ListInterface
      * @return ProductInterface[] Products in the LIST.
      */
     public function getProducts(): array;
-    /**
-     * Return processing model
-     *
-     * @return ProcessingModelInterface
-     *
-     * @throws ApiExceptionInterface If no processing model set.
-     */
-    public function getProcessingModel(): ProcessingModelInterface;
     /**
      * Return networks
      *

@@ -1,3 +1,41 @@
+## [2.7.1](https://github.com/inpsyde/payment-gateway/compare/2.7.0...2.7.1) (2025-06-20)
+
+
+### Bug Fixes
+
+* 🔧 Change WooCommerce hook from `woocommerce_blocks_loaded` to `woocommerce_init` ([#50](https://github.com/inpsyde/payment-gateway/issues/50)) ([b9919e8](https://github.com/inpsyde/payment-gateway/commit/b9919e8f98dcf8cee99b2dfe0cdbdc89f47c641b))
+
+# [2.7.0](https://github.com/inpsyde/payment-gateway/compare/2.6.0...2.7.0) (2025-04-02)
+
+
+### Bug Fixes
+
+* Add id in ContentField ([a3747d9](https://github.com/inpsyde/payment-gateway/commit/a3747d90f9b804598158289434f41a2f8b32ef1b))
+
+
+### Features
+
+* Add render_directly option in ContentField ([6becaaf](https://github.com/inpsyde/payment-gateway/commit/6becaaf304cbe676f648f40b769ceccdfb8b36a6))
+
+# [2.6.0](https://github.com/inpsyde/payment-gateway/compare/2.5.0...2.6.0) (2025-03-14)
+
+
+### Features
+
+* Allow to override savedTokenComponent in blocks ([#48](https://github.com/inpsyde/payment-gateway/issues/48)) ([11d99eb](https://github.com/inpsyde/payment-gateway/commit/11d99ebf4fff9272884c87bac89055148d3b09a8))
+
+# [2.5.0](https://github.com/inpsyde/payment-gateway/compare/2.4.1...2.5.0) (2025-03-14)
+
+
+### Bug Fixes
+
+* 📝 Remove redundant `get_form_fields` method and streamline form fields handling ([#47](https://github.com/inpsyde/payment-gateway/issues/47)) ([0b17b89](https://github.com/inpsyde/payment-gateway/commit/0b17b89e26460ba0e02e10fe559e61823f1e5051)), closes [#123](https://github.com/inpsyde/payment-gateway/issues/123)
+
+
+### Features
+
+* Add support for plugin_slug property ([#45](https://github.com/inpsyde/payment-gateway/issues/45)) ([d7fd64c](https://github.com/inpsyde/payment-gateway/commit/d7fd64c96b649d14796368b76ca86fb4b7ece525))
+
 ## [2.4.1](https://github.com/inpsyde/payment-gateway/compare/2.4.0...2.4.1) (2025-02-26)
 
 

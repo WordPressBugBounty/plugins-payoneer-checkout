@@ -45,14 +45,9 @@ You may need to rebuild Docker for changes (like WP version) to take effect: `ma
 For Windows users: `make` is not included out-of-the-box but you can simply copy the commands from [Makefile](/Makefile) to `cmd`,
 e.g. `docker-compose run --rm test vendor/bin/phpunit` instead of `make test`.
 
-## Crafted by Inpsyde
+## Copyright and License
 
-The team at [Inpsyde][] is engineering the Web since 2006.
-
-## License
-
-This module is provided under the [MIT](https://opensource.org/licenses/MIT) license.
-
+This package is [free software](https://www.gnu.org/philosophy/free-sw.en.html) distributed under the terms of the GNU General Public License version 2 or (at your option) any later version. For the full license, see [LICENSE](./LICENSE).
 
 ## Contributing
 
@@ -63,4 +58,4 @@ All feedback / bug reports / pull requests are welcome.
 [PSR-7(HTTP Message)]: https://packagist.org/providers/psr/http-message-implementation
 [PSR-17(HTTP Factory)]: https://packagist.org/providers/psr/http-factory-implementation
 [PSR-18(HTTP Client)]: https://packagist.org/providers/psr/http-client-implementation
-[Inpsyde]: https://inpsyde.com
+[Syde]: https://syde.com

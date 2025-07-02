@@ -89,14 +89,14 @@ interface Properties
     /**
      * Optional. Specify the minimum required PHP version.
      *
-     * @return string
+     * @return string|null
      */
     public function requiresPhp(): ?string;
     /**
      * Optional. Currently, only available for Theme and Library.
      * Plugins do not have support for "tags"/"keywords" in header.
      *
-     * @return array
+     * @return string[]
      *
      * @see https://developer.wordpress.org/reference/classes/wp_theme/#properties
      * @see https://getcomposer.org/doc/04-schema.md#keywords

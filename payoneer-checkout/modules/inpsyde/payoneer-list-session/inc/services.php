@@ -20,12 +20,9 @@ use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\Factory\Product\WcBas
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\Factory\Product\WcCartBasedProductListFactory;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ApiListSessionProvider;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionManager;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionManagerProxy;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\NoopListSessionPersistor;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\Middleware\ListCache;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\Middleware\UpdatingMiddleware;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\Middleware\ValidatingMiddleware;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\Middleware\WcOrderMiddleware;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\Middleware\WcSessionMiddleware;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\Middleware\FetchingMiddleware;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Api\Gateway\WcProductSerializer\WcProductSerializerInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Callback\CallbackFactoryInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Payment\PaymentFactoryInterface;
@@ -65,42 +62,19 @@ return static function (): array {
         'list_session.hosted_version' => static function (): string {
             return 'v5';
         },
-        'list_session.default_persistor' => new Constructor(NoopListSessionPersistor::class, []),
-        'list_session.creator' => new Constructor(ApiListSessionProvider::class, ['list_session.list_session_factory', 'list_session.order_based_list_session_factory', 'list_session.integration_type', 'list_session.can_try_create_list', 'list_session.hosted_version']),
-        'list_session.middlewares.validating' => new Constructor(ValidatingMiddleware::class, ['payoneer_sdk.commands.fetch', 'list_session.manager.proxy']),
-        'list_session.middlewares.wc-order' => new Constructor(WcOrderMiddleware::class, ['checkout.order_list_session_field_name', 'core.list_serializer', 'core.list_deserializer']),
-        'list_session.middlewares.wc-session' => new Constructor(WcSessionMiddleware::class, ['wc.session', 'checkout.list_session_manager.cache_key', 'core.list_serializer', 'core.list_deserializer']),
-        'list_session.middlewares.wc-session-update' => new Constructor(UpdatingMiddleware::class, ['list_session.manager.proxy', 'list_session.list_session_factory', 'checkout.checkout_hash_provider', 'checkout.session_hash_key', 'core.order_based_update_command_factory', 'wp.is_rest_api_request']),
-        'list_session.middlewares' => new ServiceList([
-            /**
-             * WcOrderMiddleware only operates on PaymentContext, otherwise just calls next
-             * middleware. PaymentContext always contains order, so it is safe to always have
-             * WcOrderMiddleware.
-             *
-             * @todo: consider doing the same with the WC_Session List provider
-             */
-            'list_session.middlewares.wc-order',
-            'list_session.creator',
-            'list_session.default_persistor',
-        ]),
+        'list_session.creator' => new Constructor(ApiListSessionProvider::class, ['list_session.list_session_factory', 'list_session.order_based_list_session_factory', 'list_session.integration_type', 'list_session.can_try_create_list.callable', 'list_session.hosted_version']),
+        'list_session.list_cache' => new Constructor(ListCache::class),
+        'list_session.middlewares.fetching' => new Constructor(FetchingMiddleware::class, ['payoneer_sdk.commands.fetch', 'list_session.list_cache', 'list_session.selected_payment_flow']),
+        'list_session.middlewares.wc-session-update' => new Constructor(UpdatingMiddleware::class, ['list_session.list_session_factory', 'checkout.checkout_hash_provider', 'checkout.session_hash_key', 'core.order_based_update_command_factory', 'wp.is_rest_api_request', 'list_session.list_cache']),
+        'list_session.middlewares' => new ServiceList(['list_session.middlewares.wc-session-update', 'list_session.middlewares.fetching', 'list_session.creator']),
         'list_session.manager' => new Constructor(ListSessionManager::class, ['list_session.middlewares']),
         /**
-         * An unpleasant helper to break a recursive dependency chain.
+         * Callback returning can_try_create_list value.
          *
+         * Since this value may change during the request processing (note this is factories,
+         * not services), we want to have the actual value in the class, not the one saved
+         * as a class property when it was created.
          */
-        'list_session.manager.proxy' => static function (ContainerInterface $container): ListSessionManagerProxy {
-            /**
-             * @return ListSessionManager
-             * @var callable():ListSessionManager $factory
-             */
-            $factory = static function () use ($container): ListSessionManager {
-                /**
-                 * @var ListSessionManager $manager
-                 */
-                $manager = $container->get('list_session.manager');
-                return $manager;
-            };
-            return new ListSessionManagerProxy($factory);
-        },
+        'list_session.can_try_create_list.callable' => static fn(ContainerInterface $container) => static fn() => $container->get('list_session.can_try_create_list'),
     ];
 };
