@@ -3,11 +3,7 @@
 declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Checkout;
 
-use Syde\Vendor\Dhii\Services\Factory;
-use Syde\Vendor\Inpsyde\PaymentGateway\PaymentProcessorInterface;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Checkout\Authentication\TokenGenerator;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Checkout\PaymentProcessor\MetadataSavingProcessorDecorator;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Settings\Merchant\MerchantInterface;
 use Syde\Vendor\Inpsyde\Wp\HttpClient\Client as WpClient;
 use Syde\Vendor\Psr\Container\ContainerInterface;
 use Syde\Vendor\Psr\Http\Client\ClientInterface;
@@ -33,26 +29,6 @@ return static function (): array {
         /** @var array<string, array-key> $generalSettingsFields */
         $generalSettingsFields = $container->get('checkout.settings.general_settings_fields');
         return array_merge($previous, $generalSettingsFields);
-    }, 'payment_gateway.payoneer-hosted.payment_processor' => static function (PaymentProcessorInterface $previous, ContainerInterface $container): PaymentProcessorInterface {
-        /**
-         * @var callable(ContainerInterface):PaymentProcessorInterface $factory
-         */
-        $factory = new Factory(['payoneer_settings.merchant', 'payoneer_settings.merchant_id_field_name', 'payment_methods.transaction_url_template_field_name'], static function (MerchantInterface $merchant, string $merchantIdFieldName, string $transactionUrlTemplateFieldName) use ($previous): PaymentProcessorInterface {
-            return new MetadataSavingProcessorDecorator($previous, $merchant, $merchantIdFieldName, $transactionUrlTemplateFieldName);
-        });
-        return $factory($container);
-    }, 'payment_gateway.payoneer-checkout.payment_processor' => static function (PaymentProcessorInterface $paymentProcessor, ContainerInterface $container): PaymentProcessorInterface {
-        if ($container->get('checkout.payment_flow_override_flag.is_set')) {
-            $paymentProcessor = $container->get('payment_gateway.payoneer-hosted.payment_processor');
-            assert($paymentProcessor instanceof PaymentProcessorInterface);
-        }
-        /**
-         * @var callable(ContainerInterface):PaymentProcessorInterface $factory
-         */
-        $factory = new Factory(['payoneer_settings.merchant', 'payoneer_settings.merchant_id_field_name', 'payment_methods.transaction_url_template_field_name'], static function (MerchantInterface $merchant, string $merchantIdFieldName, string $transactionUrlTemplateFieldName) use ($paymentProcessor): PaymentProcessorInterface {
-            return new MetadataSavingProcessorDecorator($paymentProcessor, $merchant, $merchantIdFieldName, $transactionUrlTemplateFieldName);
-        });
-        return $factory($container);
     }, 'payoneer_sdk.http_client' => static function (ClientInterface $previous, ContainerInterface $container): ClientInterface {
         /**
          * Our decorator works by modifying WP hooks, so we only apply it if our

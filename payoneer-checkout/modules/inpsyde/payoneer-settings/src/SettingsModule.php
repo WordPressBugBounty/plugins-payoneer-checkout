@@ -57,16 +57,6 @@ class SettingsModule implements ServiceModule, ExecutableModule
                 $delegate($container)();
             }
         });
-        add_action('woocommerce_settings_saved', function () use ($container) {
-            $delegate = new FuncService(['payoneer_settings.is_settings_page', 'core.http.settings_url'], \Closure::fromCallable([$this, 'reloadSettingsPage']));
-            /** @psalm-suppress MixedFunctionCall */
-            $delegate($container)();
-        });
-        add_action('woocommerce_settings_start', function () use ($container) {
-            $delegate = new FuncService(['payoneer_settings.is_settings_page'], \Closure::fromCallable([$this, 'transferGatewayErrorsAfterReload']));
-            /** @psalm-suppress MixedFunctionCall */
-            $delegate($container)();
-        });
         /**
          * Append gateway Icons to method title on Payment admin screen
          */
@@ -81,9 +71,11 @@ class SettingsModule implements ServiceModule, ExecutableModule
                 if (!in_array($gatewayId, $payoneerMethods, \true)) {
                     return $title;
                 }
-                $gateway = $container->get('payment_methods.' . $gatewayId . '.instance');
-                assert($gateway instanceof \WC_Payment_Gateway);
-                return $title . ' ' . $gateway->get_icon();
+                $gateway = wc()->payment_gateways()->payment_gateways()[$gatewayId] ?? null;
+                if ($gateway instanceof \WC_Payment_Gateway) {
+                    return $title . ' ' . $gateway->get_icon();
+                }
+                return $title;
             }, 10, 2);
         });
         $this->setUpPaymentPageAjaxCallback($container);
@@ -151,86 +143,6 @@ class SettingsModule implements ServiceModule, ExecutableModule
             );
             printf('<div class="%1$s"><h4>%2$s</h4><p>%3$s</p></div>', esc_attr($class), esc_html__('Payoneer Checkout Live mode is disabled', 'payoneer-checkout'), wp_kses($disableTestMode, ['a' => ['href' => []]], ['http', 'https']));
         }, 11);
-    }
-    /**
-     * This method is supposed to be called right after saving settings.
-     * It could be that one of our field configs depends on another field's value. A good example
-     * would be 'is_sandbox' or 'payment_flow'
-     * These are read before they're updated, so the page being rendered
-     * is based on obsolete information. Here we reload the page after saving the settings
-     * so we get to start fresh with correct values.
-     *
-     * Additionally, here we take care of leaving user on the same settings tab.
-     *
-     * @param bool $isSettingsPage
-     * @param UriInterface $settingsUrl
-     *
-     * @return void
-     */
-    public function reloadSettingsPage(bool $isSettingsPage, UriInterface $settingsUrl): void
-    {
-        if (!$isSettingsPage) {
-            return;
-        }
-        $errorParams = [];
-        $paymentGateway = $this->getMainGateway();
-        $currentSection = $GLOBALS['current_section'] ?? null;
-        if ($currentSection) {
-            $settingsUrl = $this->addSectionToUrl($settingsUrl, (string) $currentSection);
-        }
-        foreach ($paymentGateway->errors as $i => $error) {
-            assert(is_string($error));
-            $errorParams["error[{$i}]"] = urlencode($error);
-        }
-        $settingsUrl = add_query_arg($errorParams, $settingsUrl);
-        wp_safe_redirect($settingsUrl);
-        exit;
-    }
-    /**
-     * Set query parameter 'section' to given URI.
-     *
-     * @param UriInterface $uri
-     * @param string $section
-     *
-     * @return UriInterface
-     */
-    protected function addSectionToUrl(UriInterface $uri, string $section): UriInterface
-    {
-        $query = $uri->getQuery();
-        parse_str($query, $parsedQuery);
-        $parsedQuery['section'] = $section;
-        $query = http_build_query($parsedQuery);
-        return $uri->withQuery($query);
-    }
-    /**
-     * When reloading the settings page we serialize validation errors into URL parameters,
-     * so they do not get lost. This method fetches them and adds them back to the PaymentGateway
-     * @param bool $isSettingsPage
-     *
-     * @return void
-     */
-    public function transferGatewayErrorsAfterReload(bool $isSettingsPage): void
-    {
-        if (!$isSettingsPage) {
-            return;
-        }
-        //phpcs:disable WordPress.Security.NonceVerification.Recommended
-        //phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-        $received = wp_unslash($_GET['error'] ?? []);
-        if (!$received) {
-            return;
-        }
-        $paymentGateway = $this->getMainGateway();
-        assert(is_array($received));
-        $errors = [];
-        foreach ($received as $error) {
-            assert(is_string($error));
-            $errors[] = wp_kses_post(urldecode($error));
-        }
-        //phpcs:enable WordPress.Security.NonceVerification.Recommended
-        //phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-        /** @psalm-var array<int|string> $errors */
-        $paymentGateway->errors = $errors;
     }
     /**
      * Return instance of the payment gateway responsible for handling settings.

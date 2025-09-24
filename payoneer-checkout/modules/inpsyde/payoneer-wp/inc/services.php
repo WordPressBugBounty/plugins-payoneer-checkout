@@ -7,13 +7,18 @@ use Automattic\WooCommerce\Utilities\OrderUtil;
 use Syde\Vendor\Dhii\Collection\MutableContainerInterface;
 use Syde\Vendor\Dhii\Services\Factories\Alias;
 use Syde\Vendor\Dhii\Services\Factories\Constructor;
+use Syde\Vendor\Dhii\Services\Factories\StringService;
 use Syde\Vendor\Dhii\Services\Factories\Value;
 use Syde\Vendor\Dhii\Services\Factory;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Checkout\RequestHeaderUtil;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Core\Exception\PayoneerException;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Environment\WpEnvironmentInterface;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Wp\AdminNotice\AdminNoticeEndpointController;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Wp\AdminNotice\AdminNoticeRenderer;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Wp\AdminNotice\AdminNoticeRestEndpoint;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Wp\NormalizingLocaleProviderISO639ISO3166;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Wp\LocaleProviderInterface;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Wp\OrderAdmin\OrderDetailsPage;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Wp\OrderFinder\AddTransactionIdFieldSupport;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Wp\OrderFinder\HposOrderFinder;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Wp\OrderFinder\OrderFinder;
@@ -200,5 +205,16 @@ return static function (): array {
         'wp.add_transaction_id_field_support' => new Constructor(AddTransactionIdFieldSupport::class, ['webhooks.order.transaction_id_field_name']),
         'wp.refund_finder' => new Constructor(RefundFinder::class, ['webhooks.order_refund.payout_id_field_name']),
         'wp.add_payout_id_field_support' => new Constructor(AddPayoutIdFieldSupport::class, ['webhooks.order_refund.payout_id_field_name']),
+        // Asset loader.
+        'wp.path.assets' => new StringService('{0}/payoneer-wp/assets/', ['core.local_modules_directory_name']),
+        // Order UI changes.
+        'wp.order_admin.details_page' => new Constructor(OrderDetailsPage::class, ['core.main_plugin_file', 'wp.path.assets', 'wp.admin_notice.renderer', 'wc.hpos.is_enabled']),
+        // Admin notices.
+        'wp.admin_notice.renderer' => new Constructor(AdminNoticeRenderer::class, ['core.main_plugin_file', 'wp.path.assets', 'wp.admin_notice.dismiss_rest_endpoint']),
+        'wp.admin_notice.rest_controller' => new Constructor(AdminNoticeEndpointController::class),
+        'wp.admin_notice.rest_endpoint.namespace' => new Alias('core.webhooks.namespace'),
+        'wp.admin_notice.rest_endpoint.dismiss_route' => new Value('/admin-notice/dismiss'),
+        'wp.admin_notice.rest_endpoint.dismiss_capability' => new Value('edit_others_shop_orders'),
+        'wp.admin_notice.dismiss_rest_endpoint' => new Constructor(AdminNoticeRestEndpoint::class, ['wp.admin_notice.rest_controller', 'wp.admin_notice.rest_endpoint.namespace', 'wp.admin_notice.rest_endpoint.dismiss_route', 'wp.admin_notice.rest_endpoint.dismiss_capability']),
     ];
 };

@@ -1,3 +1,16 @@
+# [2.8.0](https://github.com/inpsyde/payment-gateway/compare/2.7.1...2.8.0) (2025-07-02)
+
+
+### Bug Fixes
+
+* 🚀 Update payment gateway active check to use direct property access ([94268ce](https://github.com/inpsyde/payment-gateway/commit/94268cee859aa859bfc0be0bf4e6f43ff41f6f02))
+* Update `orderButtonText` to return empty string instead of null. ([bf9648c](https://github.com/inpsyde/payment-gateway/commit/bf9648c64b205cdd23ea090a1f03ea9f667b12b2))
+
+
+### Features
+
+* 🚀 Add method to check if payment method is enabled ([fc98a88](https://github.com/inpsyde/payment-gateway/commit/fc98a881a3b34fa9efa62ed885e41ebf1cfe35e4))
+
 ## [2.7.1](https://github.com/inpsyde/payment-gateway/compare/2.7.0...2.7.1) (2025-06-20)
 
 

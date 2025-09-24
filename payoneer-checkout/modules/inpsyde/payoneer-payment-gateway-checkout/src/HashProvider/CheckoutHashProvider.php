@@ -44,7 +44,8 @@ class CheckoutHashProvider implements HashProviderInterface
             throw new CheckoutException('Failed to prepare checkout hash, customer must be initialized first.');
         }
         /**
-         * We have to retrieve a cart, a country and a currency in the runtime to have actual information.
+         * We have to retrieve a cart, a country and a currency in the runtime
+         * to have actual information.
          */
         return [$cart->get_total('edit'), get_woocommerce_currency(), $customer->get_billing_country(), $customer->get_shipping_country()];
     }

@@ -174,9 +174,9 @@ return static function (): array {
             $script->canEnqueue($canEnqueue);
             return $script;
         }),
-        'payoneer_settings.assets.js.payment_methods.data' => new Factory(['core.http.settings_url'], static function (UriInterface $generalSettingsUrl) {
+        'payoneer_settings.assets.js.payment_methods.data' => new Factory(['core.http.settings_url', 'payment_methods.all'], static function (UriInterface $generalSettingsUrl, $paymentMethods) {
             return [
-                'paymentMethods' => ['payoneer-checkout', 'payoneer-hosted', 'payoneer-afterpay'],
+                'paymentMethods' => $paymentMethods,
                 /* translators: Help tip displayed next to the greyed-out toggle on the Payments settings page */
                 'helpTipMessage' => \esc_html__('Payoneer payment methods are de/activated globally on the gateway settings page', 'payoneer-checkout'),
                 'generalSettingsUrl' => (string) $generalSettingsUrl,
@@ -223,15 +223,10 @@ return static function (): array {
             }
         ),
         'payoneer-settings.settings-tabs' => static fn() => [
-            /* translators: Title of the settings tab */
-            'payoneer-checkout' => \__('Credit / Debit cards', 'payoneer-checkout'),
-            /* translators: Title of the settings tab */
-            'payoneer-hosted' => \__('Hosted payment page', 'payoneer-checkout'),
-            /* translators: Title of the settings tab */
-            'payoneer-afterpay' => \__('Afterpay', 'payoneer-checkout'),
-            //We want to keep payoneer-checkout as a Cards gateway id because of backward
-            //compatibility. Therefore, we need a tab for that payment method to have the same id.
-            //As a result, the tab called for users 'Payoneer Checkout' must have another id.
+            /**
+             * We register once settings tab for general merchant credentials and global settings
+             * Other modules may add additional tabs via service extensions
+             */
             /* translators: Title of the settings tab */
             'payoneer-general' => \__('Payoneer Checkout', 'payoneer-checkout'),
         ],

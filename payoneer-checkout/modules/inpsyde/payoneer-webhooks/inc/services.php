@@ -36,7 +36,7 @@ return static function (): array {
         'webhooks.log_incoming_webhooks_request' => new Constructor(LogIncomingWebhookRequest::class, ['webhooks.security_header_name']),
         'webhooks.failed_payment_handler' => new Constructor(FailedPaymentHandler::class),
         'webhooks.chargeback_payment_handler' => new Constructor(ChargeBackPaymentHandler::class),
-        'webhooks.refunded_payment_handler' => new Constructor(RefundedPaymentHandler::class, ['webhooks.order.charge_id_field_name', 'webhooks.order_refund.payout_id_field_name', 'wp.refund_finder']),
+        'webhooks.refunded_payment_handler' => new Constructor(RefundedPaymentHandler::class, ['wp.refund.service.orchestrator']),
         'webhooks.charged_payment_handler' => new Constructor(ChargedPaymentHandler::class, ['webhooks.order.charge_id_field_name']),
         'webhooks.customer_registration_handler' => new Constructor(CustomerRegistrationHandler::class, ['webhooks.customer_registration_id_field_name']),
         'webhooks.order_webhook_finder' => new Constructor(OrderWebhookFinder::class, ['webhooks.order.processed_id_field_name']),

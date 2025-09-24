@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Syde\Vendor;
 
+// phpcs:disable Inpsyde.CodeQuality.LineLength.TooLong -- this file intentionally contains longer lines.
 use Syde\Vendor\Inpsyde\Modularity\Package;
 use Syde\Vendor\Inpsyde\Modularity\Properties\PluginProperties;
 use Syde\Vendor\Psr\Container\ContainerInterface;
@@ -26,8 +27,11 @@ return static function (): array {
             return $pluginProperties->name();
         },
         'inpsyde_logger.log_events' => static function (array $previous, ContainerInterface $container): array {
-            /** @var string $cardsGatewayId */
-            $cardsGatewayId = $container->get('payment_methods.payoneer-checkout.id');
+            /**
+             * TODO: We probably need to register one log event per payment method.
+             * Or refactor to use a generic event name
+             */
+            $cardsGatewayId = 'payoneer-checkout';
             $gatewayIds = $container->get('payment_gateways');
             \assert(\is_array($gatewayIds));
             $gatewaysProcessingSuccess = \array_map(static function (string $gatewayId): array {
@@ -44,7 +48,7 @@ return static function (): array {
                  */
                 $headers = $args['headers'];
                 return \sprintf('Missing required HTTP header for checkout validation. Headers received: %1$s.', (string) \wc_print_r(\array_keys($headers), \true));
-            }], ['name' => 'payoneer-checkout.status-report.email-sent', 'log_level' => LogLevel::INFO, 'message' => 'System report - Successfully sent the email.'], ['name' => 'payoneer-checkout.status-report.email-failed', 'log_level' => LogLevel::ERROR, 'message' => 'System report - Failed to send the email.'], ['name' => 'payoneer-checkout.status-report.cannot-add-attachments', 'log_level' => LogLevel::ERROR, 'message' => 'System report - The PHPMailer instance cannot add string attachments.'], ['name' => 'payoneer-checkout.status-report.attachment-failed', 'log_level' => LogLevel::ERROR, 'message' => 'System report - Failed to attach "{filename}" to the email.']];
+            }], ['name' => 'payoneer-checkout.status-report.email-sent', 'log_level' => LogLevel::INFO, 'message' => 'System report - Successfully sent the email.'], ['name' => 'payoneer-checkout.status-report.email-failed', 'log_level' => LogLevel::ERROR, 'message' => 'System report - Failed to send the email.'], ['name' => 'payoneer-checkout.status-report.cannot-add-attachments', 'log_level' => LogLevel::ERROR, 'message' => 'System report - The PHPMailer instance cannot add string attachments.'], ['name' => 'payoneer-checkout.status-report.attachment-failed', 'log_level' => LogLevel::ERROR, 'message' => 'System report - Failed to attach "{filename}" to the email.'], ['name' => 'payoneer-checkout.refund.status_changed', 'log_level' => LogLevel::INFO, 'message' => 'Refund status - Order {orderId} changed from "{fromStatus}" to "{toStatus}".'], ['name' => 'payoneer-checkout.refund.invalid_status_transition', 'log_level' => LogLevel::ERROR, 'message' => 'Refund status - Order {orderId} failed to change from "{fromStatus}" to "{toStatus}".'], ['name' => 'payoneer-checkout.refund.deserialization_failed', 'log_level' => LogLevel::ERROR, 'message' => 'Refund status - Could not restore refund intention for order {orderId}: {error}'], ['name' => 'payoneer-checkout.refund.map_refund_to_payout', 'log_level' => LogLevel::INFO, 'message' => 'Map WC refund {refundId} to payout {payoutId}.'], ['name' => 'payoneer-checkout.refund-handler.amount_mismatch', 'log_level' => LogLevel::WARNING, 'message' => 'Refund - Amount mismatch between webhook ({webhookAmount}) and intention ({intentionAmount}) for refund {refundId} (order {orderId}). Using webhook amount.'], ['name' => 'payoneer-checkout.refund-handler.api_result', 'log_level' => LogLevel::INFO, 'message' => 'Payout API request result: {message}'], ['name' => 'payoneer-checkout.refund-handler.webhook_result', 'log_level' => LogLevel::INFO, 'message' => 'Payout notification result: {message}'], ['name' => 'payoneer-checkout.refund.failure-email-sent', 'log_level' => LogLevel::INFO, 'message' => 'Refund email - Successfully sent the email to {recipient}.'], ['name' => 'payoneer-checkout.refund.failure-email-error', 'log_level' => LogLevel::ERROR, 'message' => 'Refund email - Failed to send the email to {recipient}.'], ['name' => 'payoneer-checkout.admin-notice.dismiss', 'log_level' => LogLevel::INFO, 'message' => 'Admin Notice - Dismissed the admin notice for "{type} {id}".']];
             return \array_merge($previous, $logEventsToAdd, $gatewaysProcessingSuccess);
         },
         'payoneer_sdk.remote_api_url.base_string' => static function (string $_prev, ContainerInterface $container): string {

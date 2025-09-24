@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Webhooks\OrderPaymentWebhookHandler;
 
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\RefundContext;
 use WC_Order;
 use WP_REST_Request;
 class FailedPaymentHandler implements OrderPaymentWebhookHandlerInterface
@@ -12,6 +13,11 @@ class FailedPaymentHandler implements OrderPaymentWebhookHandlerInterface
      */
     public function accepts(WP_REST_Request $request, WC_Order $order): bool
     {
+        $refundContext = RefundContext::fromRestRequest($request);
+        if ($refundContext->hasRefundReason()) {
+            // Ignore "failed refund" notifications.
+            return \false;
+        }
         $status = (string) $request->get_param('statusCode');
         $failureStatuses = ['failed', 'canceled', 'declined', 'rejected', 'aborted'];
         return in_array($status, $failureStatuses, \true);

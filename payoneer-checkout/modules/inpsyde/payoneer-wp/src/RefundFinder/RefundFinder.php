@@ -6,13 +6,7 @@ namespace Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Wp\RefundFinder;
 use WC_Order_Refund;
 class RefundFinder implements RefundFinderInterface
 {
-    /**
-     * @var string
-     */
-    protected $payoutIdFieldName;
-    /**
-     * @param string $payoutIdFieldName
-     */
+    protected string $payoutIdFieldName;
     public function __construct(string $payoutIdFieldName)
     {
         $this->payoutIdFieldName = $payoutIdFieldName;

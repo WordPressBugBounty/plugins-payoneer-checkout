@@ -13,6 +13,16 @@ return (static function () {
     };
     return static function (\Throwable $exception) use ($formatValidationError) {
         $message = $exception->getMessage();
+        /**
+         * We add more developer-friendly error output if the PAYONEER_DEBUG
+         * env var is set
+         */
+        if ((bool) \getenv('PAYONEER_DEBUG')) {
+            while ($previousException = $exception->getPrevious()) {
+                $message .= '</br>' . $previousException->getMessage();
+                $exception = $previousException;
+            }
+        }
         if ($exception instanceof ValidationFailedExceptionInterface) {
             $errors = [];
             foreach ($exception->getValidationErrors() as $validationError) {

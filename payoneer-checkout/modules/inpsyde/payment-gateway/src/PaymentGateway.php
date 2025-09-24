@@ -55,6 +55,7 @@ class PaymentGateway extends WC_Payment_Gateway
         unset($this->method_description);
         unset($this->icon);
         unset($this->form_fields);
+        unset($this->enabled);
         add_action('woocommerce_update_options_payment_gateways_' . $this->id, [$this, 'process_admin_options']);
         add_action('woocommerce_settings_checkout', [$this, 'display_errors']);
         add_filter('woocommerce_settings_api_sanitized_fields_' . $this->id, [$this, 'filterVirtualFields'], -1000);
@@ -455,6 +456,9 @@ class PaymentGateway extends WC_Payment_Gateway
     }
     public function __get($name)
     {
+        if ($name === 'enabled') {
+            return $this->locate('is_enabled') ? 'yes' : 'no';
+        }
         if ($name === 'order_button_text') {
             return $this->locate($name);
         }

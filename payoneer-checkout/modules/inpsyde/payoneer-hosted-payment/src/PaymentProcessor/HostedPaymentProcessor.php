@@ -1,34 +1,29 @@
 <?php
 
-declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\PayoneerForWoocommerce\HostedPayment\PaymentProcessor;
 
 use Exception;
 use Syde\Vendor\Inpsyde\PaymentGateway\PaymentGateway;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Checkout\Authentication\TokenGeneratorInterface;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Checkout\MisconfigurationDetector\MisconfigurationDetectorInterface;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Checkout\PaymentProcessor\AbstractPaymentProcessor;
+use Syde\Vendor\Inpsyde\PaymentGateway\PaymentProcessorInterface;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionProvider;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\PaymentContext;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Api\Gateway\CommandFactory\WcOrderBasedUpdateCommandFactoryInterface;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\PaymentProcessor\PayoneerCommonPaymentProcessor;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\ApiExceptionInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\Exception\CommandExceptionInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\Exception\InteractionExceptionInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\ListSession\ListInterface;
 use WC_Order;
 /**
- * @psalm-import-type PaymentResult from AbstractPaymentProcessor
+ * @psalm-import-type PaymentResult from PayoneerCommonPaymentProcessor
  */
-class HostedPaymentProcessor extends AbstractPaymentProcessor
+class HostedPaymentProcessor implements PaymentProcessorInterface
 {
-    /**
-     * @var bool
-     */
-    protected bool $fallbackToHostedModeFlag;
-    public function __construct(string $transactionIdFieldName, MisconfigurationDetectorInterface $misconfigurationDetector, ListSessionProvider $sessionProvider, WcOrderBasedUpdateCommandFactoryInterface $updateCommandFactory, TokenGeneratorInterface $tokenGenerator, string $tokenKey, bool $fallbackToHostedModeFlag, string $checkoutSessionHashKey)
+    private PayoneerCommonPaymentProcessor $commonProcessor;
+    private ListSessionProvider $sessionProvider;
+    public function __construct(PayoneerCommonPaymentProcessor $commonProcessor, ListSessionProvider $sessionProvider)
     {
-        parent::__construct($misconfigurationDetector, $sessionProvider, $updateCommandFactory, $tokenGenerator, $tokenKey, $transactionIdFieldName, $checkoutSessionHashKey);
-        $this->fallbackToHostedModeFlag = $fallbackToHostedModeFlag;
+        $this->commonProcessor = $commonProcessor;
+        $this->sessionProvider = $sessionProvider;
     }
     /**
      * @inheritDoc
@@ -47,7 +42,7 @@ class HostedPaymentProcessor extends AbstractPaymentProcessor
          * at the moment.
          */
         try {
-            parent::processPayment($order, $gateway);
+            $this->commonProcessor->processPayment($order, $gateway);
         } catch (InteractionExceptionInterface $exception) {
             //do nothing here
         } catch (CommandExceptionInterface $exception) {
@@ -68,17 +63,17 @@ class HostedPaymentProcessor extends AbstractPaymentProcessor
             try {
                 $list = $this->sessionProvider->provide(new PaymentContext($order));
             } catch (Exception $exception) {
-                return $this->handleFailedPaymentProcessing($order, $exceptionWrapper ?? $exception);
+                return $this->commonProcessor->handleFailedPaymentProcessing($order, $exceptionWrapper ?? $exception);
             }
         }
         //Make sure we have the latest List saved with order.
         //It may happen that parent::processPayment failed to update List, and we created a new one
         //in the `provide()` call above.
-        $this->updateOrderWithSessionData($order, $list);
+        $this->commonProcessor->updateOrderWithSessionData($order, $list);
         $redirectUrl = $this->createRedirectUrl($list);
         /* translators: Order note added when processing an order in hosted flow */
         $note = __('The customer is being redirected to the hosted payment page.', 'payoneer-checkout');
-        $this->putOrderOnHold($order, $note);
+        $this->commonProcessor->putOrderOnHold($order, $note);
         return ['result' => 'success', 'redirect' => $redirectUrl];
     }
     /**
@@ -91,7 +86,7 @@ class HostedPaymentProcessor extends AbstractPaymentProcessor
      * @return string
      * @throws ApiExceptionInterface
      */
-    protected function createRedirectUrl(ListInterface $list): string
+    private function createRedirectUrl(ListInterface $list): string
     {
         $redirect = $list->getRedirect();
         $baseUrl = $redirect->getUrl();

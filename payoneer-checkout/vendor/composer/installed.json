@@ -850,17 +850,17 @@
         },
         {
             "name": "inpsyde\/payment-gateway",
-            "version": "2.7.1",
-            "version_normalized": "2.7.1.0",
+            "version": "2.8.0",
+            "version_normalized": "2.8.0.0",
             "source": {
                 "type": "git",
                 "url": "git@github.com:inpsyde\/payment-gateway.git",
-                "reference": "00260a21acbe2614e9ddcef5e0182b4dbbb3011b"
+                "reference": "a1558c085ad026bf95220a1ef2abe83070993fdb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/inpsyde\/payment-gateway\/zipball\/00260a21acbe2614e9ddcef5e0182b4dbbb3011b",
-                "reference": "00260a21acbe2614e9ddcef5e0182b4dbbb3011b",
+                "url": "https:\/\/api.github.com\/repos\/inpsyde\/payment-gateway\/zipball\/a1558c085ad026bf95220a1ef2abe83070993fdb",
+                "reference": "a1558c085ad026bf95220a1ef2abe83070993fdb",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -886,7 +886,7 @@
                 "phpunit\/phpunit": "^8.0 | ^9.0",
                 "vimeo\/psalm": "^4.3"
             },
-            "time": "2025-06-20T14:31:21+00:00",
+            "time": "2025-07-02T13:34:25+00:00",
             "type": "inpsyde-module",
             "extra": {
                 "hooks": {
@@ -975,15 +975,15 @@
                 }
             ],
             "support": {
-                "source": "https:\/\/github.com\/inpsyde\/payment-gateway\/tree\/2.7.1",
+                "source": "https:\/\/github.com\/inpsyde\/payment-gateway\/tree\/2.8.0",
                 "issues": "https:\/\/github.com\/inpsyde\/payment-gateway\/issues"
             },
             "install-path": "..\/..\/modules\/inpsyde\/payment-gateway"
         },
         {
             "name": "inpsyde\/payoneer-admin-banner",
-            "version": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
-            "version_normalized": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
+            "version": "dev-feature\/PN-2333-stripe-connect-integration",
+            "version_normalized": "dev-feature\/PN-2333-stripe-connect-integration",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/admin-banner",
@@ -1034,8 +1034,8 @@
         },
         {
             "name": "inpsyde\/payoneer-analytics",
-            "version": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
-            "version_normalized": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
+            "version": "dev-feature\/PN-2333-stripe-connect-integration",
+            "version_normalized": "dev-feature\/PN-2333-stripe-connect-integration",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/analytics",
@@ -1083,8 +1083,8 @@
         },
         {
             "name": "inpsyde\/payoneer-api",
-            "version": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
-            "version_normalized": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
+            "version": "dev-feature\/PN-2333-stripe-connect-integration",
+            "version_normalized": "dev-feature\/PN-2333-stripe-connect-integration",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/api",
@@ -1132,8 +1132,8 @@
         },
         {
             "name": "inpsyde\/payoneer-embedded-payment",
-            "version": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
-            "version_normalized": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
+            "version": "dev-feature\/PN-2333-stripe-connect-integration",
+            "version_normalized": "dev-feature\/PN-2333-stripe-connect-integration",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/embedded-payment",
@@ -1186,8 +1186,8 @@
         },
         {
             "name": "inpsyde\/payoneer-hosted-payment",
-            "version": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
-            "version_normalized": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
+            "version": "dev-feature\/PN-2333-stripe-connect-integration",
+            "version_normalized": "dev-feature\/PN-2333-stripe-connect-integration",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/hosted-payment",
@@ -1239,8 +1239,8 @@
         },
         {
             "name": "inpsyde\/payoneer-list-session",
-            "version": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
-            "version_normalized": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
+            "version": "dev-feature\/PN-2333-stripe-connect-integration",
+            "version_normalized": "dev-feature\/PN-2333-stripe-connect-integration",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/list-session",
@@ -1281,8 +1281,8 @@
         },
         {
             "name": "inpsyde\/payoneer-migrator",
-            "version": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
-            "version_normalized": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
+            "version": "dev-feature\/PN-2333-stripe-connect-integration",
+            "version_normalized": "dev-feature\/PN-2333-stripe-connect-integration",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/migration",
@@ -1329,8 +1329,8 @@
         },
         {
             "name": "inpsyde\/payoneer-page-detector",
-            "version": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
-            "version_normalized": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
+            "version": "dev-feature\/PN-2333-stripe-connect-integration",
+            "version_normalized": "dev-feature\/PN-2333-stripe-connect-integration",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/page-detector",
@@ -1377,8 +1377,8 @@
         },
         {
             "name": "inpsyde\/payoneer-payment-gateway-checkout",
-            "version": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
-            "version_normalized": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
+            "version": "dev-feature\/PN-2333-stripe-connect-integration",
+            "version_normalized": "dev-feature\/PN-2333-stripe-connect-integration",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/checkout",
@@ -1428,8 +1428,8 @@
         },
         {
             "name": "inpsyde\/payoneer-payment-methods",
-            "version": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
-            "version_normalized": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
+            "version": "dev-feature\/PN-2333-stripe-connect-integration",
+            "version_normalized": "dev-feature\/PN-2333-stripe-connect-integration",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/payment-methods",
@@ -1560,8 +1560,8 @@
         },
         {
             "name": "inpsyde\/payoneer-settings",
-            "version": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
-            "version_normalized": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
+            "version": "dev-feature\/PN-2333-stripe-connect-integration",
+            "version_normalized": "dev-feature\/PN-2333-stripe-connect-integration",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/settings",
@@ -1609,8 +1609,8 @@
         },
         {
             "name": "inpsyde\/payoneer-status-report",
-            "version": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
-            "version_normalized": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
+            "version": "dev-feature\/PN-2333-stripe-connect-integration",
+            "version_normalized": "dev-feature\/PN-2333-stripe-connect-integration",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/status-report",
@@ -1656,8 +1656,8 @@
         },
         {
             "name": "inpsyde\/payoneer-third-party-compat",
-            "version": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
-            "version_normalized": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
+            "version": "dev-feature\/PN-2333-stripe-connect-integration",
+            "version_normalized": "dev-feature\/PN-2333-stripe-connect-integration",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/third-party-compat",
@@ -1696,8 +1696,8 @@
         },
         {
             "name": "inpsyde\/payoneer-webhooks",
-            "version": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
-            "version_normalized": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
+            "version": "dev-feature\/PN-2333-stripe-connect-integration",
+            "version_normalized": "dev-feature\/PN-2333-stripe-connect-integration",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/webhooks",
@@ -1749,8 +1749,8 @@
         },
         {
             "name": "inpsyde\/payoneer-websdk",
-            "version": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
-            "version_normalized": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
+            "version": "dev-feature\/PN-2333-stripe-connect-integration",
+            "version_normalized": "dev-feature\/PN-2333-stripe-connect-integration",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/websdk",
@@ -1799,8 +1799,8 @@
         },
         {
             "name": "inpsyde\/payoneer-wp",
-            "version": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
-            "version_normalized": "dev-fix\/PN-2320-no-scripts-present-when-plugin-activated-on-a-multisite-site",
+            "version": "dev-feature\/PN-2333-stripe-connect-integration",
+            "version_normalized": "dev-feature\/PN-2333-stripe-connect-integration",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/wp",

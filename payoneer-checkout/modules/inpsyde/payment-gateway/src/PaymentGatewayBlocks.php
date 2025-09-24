@@ -36,7 +36,7 @@ class PaymentGatewayBlocks extends AbstractPaymentMethodType
     public function is_active()
     {
         $gateway = $this->gateway();
-        return filter_var($gateway->get_option('enabled', \false), \FILTER_VALIDATE_BOOLEAN);
+        return filter_var($gateway->enabled, \FILTER_VALIDATE_BOOLEAN);
     }
     /**
      * Returns an array of scripts/handles to be registered for this payment method.

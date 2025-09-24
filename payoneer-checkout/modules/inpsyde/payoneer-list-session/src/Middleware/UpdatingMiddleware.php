@@ -73,8 +73,7 @@ class UpdatingMiddleware implements ListSessionProviderMiddleware
             $customer = $context->getCustomer();
             $session = $context->getSession();
             $cart = $context->getCart();
-            $invoiceId = $list->getPayment()->getInvoiceId();
-            if ($session !== null && $cart !== null && $customer !== null && substr($invoiceId, 0, 4) === 'inv_') {
+            if ($session !== null && $cart !== null && $customer !== null) {
                 $list = $this->updateBasedOnSession($list, $session, $customer, $cart, $context->offsetExists('pristine'));
             }
         } catch (\Throwable $exception) {

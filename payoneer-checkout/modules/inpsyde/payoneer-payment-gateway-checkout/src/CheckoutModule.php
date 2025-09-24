@@ -16,6 +16,10 @@ class CheckoutModule implements ServiceModule, ExecutableModule, ExtendingModule
 {
     use ModuleClassNameIdTrait;
     /**
+     * Interaction codes signalizing payment failure.
+     */
+    protected const FAILED_PAYMENT_INTERACTION_CODES = ['RETRY', 'ABORT', 'TRY_OTHER_ACCOUNT', 'TRY_OTHER_NETWORK'];
+    /**
      * @var array<string, callable>
      * @psalm-var array<string, callable(ContainerInterface): mixed>
      */
@@ -186,7 +190,7 @@ class CheckoutModule implements ServiceModule, ExecutableModule, ExtendingModule
         if (!$interactionCode || $order->is_paid()) {
             return;
         }
-        if (!in_array($interactionCode, ['RETRY', 'ABORT'], \true)) {
+        if (!in_array($interactionCode, self::FAILED_PAYMENT_INTERACTION_CODES, \true)) {
             return;
         }
         $interactionReason = filter_input(\INPUT_GET, 'interactionReason', \FILTER_CALLBACK, ['options' => 'sanitize_text_field']);

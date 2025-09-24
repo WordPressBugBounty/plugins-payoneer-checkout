@@ -6,15 +6,21 @@ namespace Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment;
 use Syde\Vendor\Inpsyde\PaymentGateway\PaymentFieldsRendererInterface;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\PaymentFieldsRenderer\ListDebugFieldRenderer;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\PaymentFieldsRenderer\WidgetPlaceholderFieldRenderer;
+use Syde\Vendor\Psr\Container\ContainerExceptionInterface;
 use Syde\Vendor\Psr\Container\ContainerInterface;
+use Syde\Vendor\Psr\Container\NotFoundExceptionInterface;
 class PaymentFieldsRendererFactory
 {
     /**
      * @param string $component
+     * @param ContainerInterface $container
+     * @param string $description
      *
      * @return list<PaymentFieldsRendererInterface>
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
-    public static function forComponent(string $component, ContainerInterface $container): array
+    public static function forComponent(string $component, ContainerInterface $container, string $description): array
     {
         $renderers = [];
         $isCheckout = (bool) $container->get('wc.is_checkout');
@@ -26,10 +32,8 @@ class PaymentFieldsRendererFactory
         }
         $hostedFlowOverrideFlag = $container->get('embedded_payment.payment_fields_renderer.hosted_override_flag');
         assert($hostedFlowOverrideFlag instanceof PaymentFieldsRendererInterface);
-        $placeholderRenderer = $container->get("embedded_payment.payment_fields_renderer.placeholder.{$component}");
-        assert($placeholderRenderer instanceof WidgetPlaceholderFieldRenderer);
         $renderers[] = $hostedFlowOverrideFlag;
-        $renderers[] = $placeholderRenderer;
+        $renderers[] = new WidgetPlaceholderFieldRenderer('payoneer-payment-fields-container', 'data-component', $component, $description);
         $isDebug = (bool) $container->get('checkout.is_debug');
         if ($isDebug && $shouldRenderList) {
             $debugRenderer = $container->get('embedded_payment.payment_fields_renderer.debug');

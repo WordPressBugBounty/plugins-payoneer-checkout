@@ -2,9 +2,9 @@
 Contributors: payoneercheckout, inpsyde
 Tags: payment, woocommerce, checkout
 Requires at least: 5.3
-Tested up to: 6.8.1
+Tested up to: 6.8.2
 Requires PHP: 7.4
-Stable tag: 3.4.0
+Stable tag: 3.5.0
 License: MPL-2.0
 License URI: https://www.mozilla.org/en-US/MPL/2.0/
 
@@ -58,6 +58,16 @@ Our global banking and payment networks stretch around the world so we can suppo
 == Screenshots ==
 
 == Changelog ==
+
+= [3.5.0] - 2025-09-24 =
+* Added
+    * Plugin compatibility with Checkout WebSDK and Stripe Connect.
+    * Handling of asynchronous refund flow.
+    * Admin view UX updates in order to handle async refund flow and notifications.
+    * Extended support for additional payment methods for updated Checkout solution: Apple Pay, Google Pay, Afterpay, Klarna, Affirm, P24, EPS, Bancontact, iDEAL & Multibanco.
+
+* Fixed
+    * Security vulnerability (CVE-2025-58795)
 
 = [3.4.0] - 2025-07-02 =
 * Added:

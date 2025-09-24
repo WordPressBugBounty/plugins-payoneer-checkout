@@ -40,6 +40,9 @@ class FetchingMiddleware implements ListSessionProviderMiddleware
             } catch (CommandExceptionInterface $exception) {
                 $list = $next->provide($context);
             }
+            if ($list->getStatus()->getCode() !== 'listed') {
+                $list = $next->provide($context);
+            }
             $longId = $this->listCache->cacheList($list);
             $this->storeLongId($longId, $context);
         }

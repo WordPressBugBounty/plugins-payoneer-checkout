@@ -6,6 +6,7 @@ namespace Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Wp;
 use Syde\Vendor\Inpsyde\Modularity\Module\ExecutableModule;
 use Syde\Vendor\Inpsyde\Modularity\Module\FactoryModule;
 use Syde\Vendor\Inpsyde\Modularity\Module\ServiceModule;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Wp\AdminNotice\AdminNoticeRestEndpoint;
 use Syde\Vendor\Psr\Container\ContainerInterface;
 /**
  * The WP core features module.
@@ -54,6 +55,13 @@ class WpModule implements ServiceModule, FactoryModule, ExecutableModule
         /** @var callable():void $addPayoutIdFieldSupport */
         $addPayoutIdFieldSupport = $container->get('wp.add_payout_id_field_support');
         $addPayoutIdFieldSupport();
+        $this->setupAdminNotices($container);
         return \true;
+    }
+    private function setupAdminNotices(ContainerInterface $container): void
+    {
+        $restEndpoint = $container->get('wp.admin_notice.dismiss_rest_endpoint');
+        assert($restEndpoint instanceof AdminNoticeRestEndpoint);
+        add_action('rest_api_init', [$restEndpoint, 'registerRoute']);
     }
 }

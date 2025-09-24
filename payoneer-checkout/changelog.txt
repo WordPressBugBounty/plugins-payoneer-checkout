@@ -2,6 +2,16 @@
 
 = [next-version] - yyyy-mm-dd =
 
+= [3.5.0] - 2025-09-24 =
+* Added
+    * Plugin compatibility with Checkout WebSDK and Stripe Connect.
+    * Handling of asynchronous refund flow.
+    * Admin view UX updates in order to handle async refund flow and notifications.
+    * Extended support for additional payment methods for updated Checkout solution: Apple Pay, Google Pay, Afterpay, Klarna, Affirm, P24, EPS, Bancontact, iDEAL & Multibanco.
+
+* Fixed
+    * Security vulnerability (CVE-2025-58795)
+
 = [3.4.0] - 2025-06-30 =
 * Added
     * Automated generation of System Status Reports and Logfiles to assist support processes.

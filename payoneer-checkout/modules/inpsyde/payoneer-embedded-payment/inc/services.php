@@ -64,7 +64,7 @@ return static function (): array {
             $moduleRelativePath = \sprintf('%1$s/%2$s', $modulesDirectoryRelativePath, 'payoneer-embedded-payment');
             return \sprintf('%1$s/assets/', $moduleRelativePath);
         }),
-        'embedded_payment.assets.can_enqueue' => new FuncService(['wc.is_checkout', 'payment_methods.payoneer-checkout.is_enabled', 'wc.is_order_received_page'], static function (bool $isCheckout, bool $isGatewayEnabled, bool $isOrderReceivedPage): bool {
+        'embedded_payment.assets.can_enqueue' => new FuncService(['wc.is_checkout', 'payment_gateway.payoneer-checkout.is_enabled', 'wc.is_order_received_page'], static function (bool $isCheckout, bool $isGatewayEnabled, bool $isOrderReceivedPage): bool {
             return $isCheckout && !$isOrderReceivedPage && $isGatewayEnabled;
         }),
         'embedded_payment.assets.js.websdk' => new Factory(['embedded_payment.assets.js.websdk.url', 'embedded_payment.assets.can_enqueue'], static function (string $webSdkJsUrl, callable $canEnqueue): Script {

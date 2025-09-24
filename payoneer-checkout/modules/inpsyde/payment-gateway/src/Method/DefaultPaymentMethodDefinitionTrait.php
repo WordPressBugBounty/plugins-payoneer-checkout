@@ -10,6 +10,7 @@ use Syde\Vendor\Inpsyde\PaymentGateway\NoopPaymentProcessor;
 use Syde\Vendor\Inpsyde\PaymentGateway\NoopPaymentRequestValidator;
 use Syde\Vendor\Inpsyde\PaymentGateway\NoopRefundProcessor;
 use Syde\Vendor\Inpsyde\PaymentGateway\PaymentFieldsRendererInterface;
+use Syde\Vendor\Inpsyde\PaymentGateway\PaymentGateway;
 use Syde\Vendor\Inpsyde\PaymentGateway\PaymentProcessorInterface;
 use Syde\Vendor\Inpsyde\PaymentGateway\PaymentRequestValidatorInterface;
 use Syde\Vendor\Inpsyde\PaymentGateway\RefundProcessorInterface;
@@ -23,13 +24,34 @@ use Syde\Vendor\Psr\Container\NotFoundExceptionInterface;
  */
 trait DefaultPaymentMethodDefinitionTrait
 {
-    private function ensureServiceKeyGenerator(): ServiceKeyGenerator
+    protected function ensureServiceKeyGenerator(): ServiceKeyGenerator
     {
         static $keyGen;
         if (!$keyGen) {
             $keyGen = new ServiceKeyGenerator($this->id());
         }
         return $keyGen;
+    }
+    /**
+     * Retrieves the PaymentGateway instance associated with this definition.
+     * It is identified by $this->id() and requires the Gateway
+     * to be registered to WooCommerce already.
+     *
+     * @return PaymentGateway
+     */
+    protected function fetchInstance(): PaymentGateway
+    {
+        $instance = wp_filter_object_list(\WC_Payment_Gateways::instance()->payment_gateways(), ['id' => $this->id()]);
+        $mine = reset($instance);
+        if (!$mine instanceof PaymentGateway) {
+            throw new \RuntimeException("Payment Gateway {$this->id()} not registered before accessing");
+        }
+        return $mine;
+    }
+    public function isEnabled(ContainerInterface $container): bool
+    {
+        $instance = $this->fetchInstance();
+        return $instance->get_option('enabled') === 'yes';
     }
     public function paymentProcessor(ContainerInterface $container): PaymentProcessorInterface
     {
@@ -116,9 +138,9 @@ trait DefaultPaymentMethodDefinitionTrait
     {
         return \true;
     }
-    public function orderButtonText(ContainerInterface $container): ?string
+    public function orderButtonText(ContainerInterface $container): string
     {
-        return null;
+        return '';
     }
     public function customSettings(): CustomSettingsFieldsDefinition
     {

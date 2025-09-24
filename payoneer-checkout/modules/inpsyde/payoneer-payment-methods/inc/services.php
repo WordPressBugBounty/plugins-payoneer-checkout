@@ -5,33 +5,27 @@ namespace Syde\Vendor;
 
 use Syde\Vendor\Dhii\Services\Factories\Alias;
 use Syde\Vendor\Dhii\Services\Factories\Constructor;
-use Syde\Vendor\Dhii\Services\Factories\ServiceList;
 use Syde\Vendor\Dhii\Services\Factories\Value;
 use Syde\Vendor\Dhii\Services\Factory;
-use Syde\Vendor\Inpsyde\PaymentGateway\DefaultIconsRenderer;
-use Syde\Vendor\Inpsyde\PaymentGateway\GatewayIconsRendererInterface;
-use Syde\Vendor\Inpsyde\PaymentGateway\IconProviderInterface;
-use Syde\Vendor\Inpsyde\PaymentGateway\PaymentFieldsRendererInterface;
-use Syde\Vendor\Inpsyde\PaymentGateway\PaymentProcessorInterface;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Api\Gateway\CommandFactory\WcOrderBasedUpdateCommandFactoryInterface;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Checkout\Authentication\TokenGeneratorInterface;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Checkout\MisconfigurationDetector\MisconfigurationDetectorInterface;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Checkout\PaymentFieldsRenderer\CompoundPaymentFieldsRenderer;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\PaymentProcessor\EmbeddedPaymentProcessor;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\HostedPayment\PaymentProcessor\HostedPaymentProcessor;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionManager;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\AvailabilityCallback\AvailabilityCallbackInterface;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\AvailabilityCallback\CompoundAvailabilityCallback;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\AvailabilityCallback\ConditionalCallbackDecorator;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\AvailabilityCallback\FilteredAvailabilityCallback;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\AvailabilityCallback\ListConditionAvailabilityCallback;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionProvider;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\AvailabilityCallback\LiveModeAvailabilityCallback;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\ExcludeNotSupportedCountries;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\GatewayIconsRenderer\IconProviderFactory;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\ListCondition\MatchNetworkCodeCondition;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\ListCondition\MatchNetworkGroupingCondition;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\ListCondition\NoopListCondition;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\PaymentProcessor\PayoneerCommonPaymentProcessor;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\RefundProcessor;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\Refunds\Admin\AsyncRefundGlobalNotices;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\Refunds\Admin\RefundFailureEmailSender;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Settings\Merchant\MerchantInterface;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\Refunds\Admin\AsyncRefundAdminUi;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\Refunds\RefundTextContents;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\Refunds\Service\RefundState;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\Refunds\Service\RefundOrchestrator;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\Refunds\Storage\AsyncFailedRefundRegistry;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\Refunds\Storage\AsyncRefundIntentStorage;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\Refunds\Storage\AsyncRefundStatusStorage;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\Refunds\Storage\PayoutToRefundMapping;
 use Syde\Vendor\Psr\Container\ContainerInterface;
 return static function (): array {
     return [
@@ -42,78 +36,7 @@ return static function (): array {
             $moduleRelativePath = \sprintf('%1$s/%2$s', $modulesDirectoryRelativePath, 'payoneer-payment-methods');
             return \sprintf('%1$s/assets/', $moduleRelativePath);
         }),
-        'payment_methods.all' => new ServiceList(['payment_methods.payoneer-checkout.id', 'payment_methods.payoneer-hosted.id', 'payment_methods.payoneer-afterpay.id']),
-        'payment_methods.payoneer-checkout.id' => new Value('payoneer-checkout'),
-        'payment_methods.payoneer-hosted.id' => new Value('payoneer-hosted'),
-        'payment_methods.payoneer-afterpay.id' => new Value('payoneer-afterpay'),
-        'payment_methods.payoneer-checkout.instance' => new Factory(['wc', 'payment_methods.payoneer-checkout.id'], static function (\WooCommerce $wooCommerce, string $id) {
-            $gateways = $wooCommerce->payment_gateways()->payment_gateways();
-            return $gateways[$id];
-        }),
-        'payment_methods.payoneer-hosted.instance' => new Factory(['wc', 'payment_methods.payoneer-hosted.id'], static function (\WooCommerce $wooCommerce, string $id) {
-            $gateways = $wooCommerce->payment_gateways()->payment_gateways();
-            return $gateways[$id];
-        }),
-        'payment_methods.payoneer-afterpay.instance' => new Factory(['wc', 'payment_methods.payoneer-afterpay.id'], static function (\WooCommerce $wooCommerce, string $id) {
-            $gateways = $wooCommerce->payment_gateways()->payment_gateways();
-            return $gateways[$id];
-        }),
-        'payment_gateway.payoneer-checkout.supports' => new Value(['products', 'refunds']),
-        'payment_gateway.payoneer-hosted.supports' => new Alias('payment_gateway.payoneer-checkout.supports'),
-        'payment_gateway.payoneer-afterpay.supports' => new Alias('payment_gateway.payoneer-checkout.supports'),
-        'payment_gateway.payoneer-checkout.register_blocks' => fn() => \true,
-        'payment_gateway.payoneer-hosted.register_blocks' => fn() => \true,
-        'payment_gateway.payoneer-afterpay.register_blocks' => fn() => \true,
-        'payment_gateway.payoneer-checkout.method_title' => new Factory([], static function (): string {
-            return \__('Payoneer Checkout - Credit / Debit cards', 'payoneer-checkout');
-        }),
         'payment_methods.fallback_title' => fn() => \__('Pay with', 'payoneer-checkout'),
-        'payment_gateway.payoneer-checkout.title' => new Factory(['wc.is_checkout', 'payment_methods.is_live_mode', 'payment_methods.payoneer-checkout.instance', 'payment_methods.fallback_title', 'wc.is_store_api_request'], static function (bool $isCheckout, bool $isLiveMode, \WC_Payment_Gateway $gateway, string $fallbackTitle, bool $isStoreApiRequest): string {
-            $baseName = (string) $gateway->get_option('title-payoneer-checkout');
-            if ($baseName === '') {
-                $baseName = $fallbackTitle;
-            }
-            if (($isCheckout || $isStoreApiRequest) && !$isLiveMode) {
-                $baseName = \__('Test:', 'payoneer-checkout') . ' ' . $baseName;
-            }
-            return $baseName;
-        }),
-        'payment_gateway.payoneer-hosted.method_title' => new Factory([], static function (): string {
-            return \__('Payoneer Checkout - Hosted payment page', 'payoneer-checkout');
-        }),
-        'payment_gateway.payoneer-hosted.title' => new Factory(['wc.is_checkout', 'payment_methods.is_live_mode', 'payment_methods.payoneer-hosted.instance', 'payment_methods.fallback_title', 'wc.is_store_api_request'], static function (bool $isCheckout, bool $isLiveMode, \WC_Payment_Gateway $gateway, string $fallbackTitle, bool $isStoreApiRequest): string {
-            $baseName = (string) $gateway->get_option('title-payoneer-hosted');
-            if ($baseName === '') {
-                $baseName = $fallbackTitle;
-            }
-            if (($isCheckout || $isStoreApiRequest) && !$isLiveMode) {
-                $baseName = \__('Test:', 'payoneer-checkout') . ' ' . $baseName;
-            }
-            return $baseName;
-        }),
-        'payment_gateway.payoneer-afterpay.method_title' => new Factory([], static function (): string {
-            return \__('Payoneer Checkout - Afterpay', 'payoneer-checkout');
-        }),
-        'payment_gateway.payoneer-afterpay.title' => new Factory(['wc.is_checkout', 'payment_methods.is_live_mode', 'payment_methods.payoneer-afterpay.instance', 'payment_methods.fallback_title', 'wc.is_store_api_request'], static function (bool $isCheckout, bool $isLiveMode, \WC_Payment_Gateway $gateway, string $fallbackTitle, bool $isStoreApiRequest): string {
-            $baseName = (string) $gateway->get_option('title-payoneer-afterpay');
-            if ($baseName === '') {
-                $baseName = $fallbackTitle;
-            }
-            if (($isCheckout || $isStoreApiRequest) && !$isLiveMode) {
-                $baseName = \__('Test:', 'payoneer-checkout') . ' ' . $baseName;
-            }
-            return $baseName;
-        }),
-        'payment_gateway.payoneer-checkout.order_button_text' => new Factory([], static function (): string {
-            return \__('Pay', 'payoneer-checkout');
-        }),
-        'payment_gateway.payoneer-hosted.order_button_text' => fn() => null,
-        'payment_gateway.payoneer-afterpay.order_button_text' => fn() => null,
-        'payment_gateway.payoneer-checkout.description' => fn() => 'payoneer-checkout',
-        'payment_gateway.payoneer-afterpay.description' => fn() => 'payoneer-afterpay',
-        'payment_gateway.payoneer-hosted.description' => new Factory(['payment_methods.payoneer-hosted.instance'], static fn(\WC_Payment_Gateway $gateway): string => (string) $gateway->get_option('description-payoneer-hosted')),
-        'payment_gateway.payoneer-hosted.method_description' => new Alias('payment_gateway.payoneer-checkout.method_description'),
-        'payment_gateway.payoneer-afterpay.method_description' => new Alias('payment_gateway.payoneer-checkout.method_description'),
         'payment_methods.payoneer-checkout.method_description.payments_settings_page' => static function (): string {
             $description = \__('Payoneer Checkout is the next generation of payment processing platforms.', 'payoneer-checkout');
             $descriptionLegal = \sprintf(
@@ -138,136 +61,47 @@ return static function (): array {
                 '</a>'
             );
         }),
-        'payment_gateway.payoneer-checkout.method_description' => new Factory(['payment_methods.payoneer-checkout.method_description.payments_settings_page', 'payment_methods.payoneer-checkout.method_description.settings_page', 'payoneer_settings.is_payments_settings_page'], static function (string $paymentsSettingsPageDescription, string $settingsPageDescription, bool $isPaymentsSettingsPage): string {
-            if ($isPaymentsSettingsPage) {
-                return $paymentsSettingsPageDescription;
-            }
-            return $settingsPageDescription;
-        }),
         //todo: think about moving this to factories
         'payment_methods.availability_callback.checkout_predicate' => new Alias('list_session.can_try_create_list.callable'),
         'payment_methods.availability_callback.live_mode' => new Constructor(LiveModeAvailabilityCallback::class, ['payment_methods.is_live_mode', 'wc.admin_permission', 'payment_methods.show_payment_widget_to_customers_in_sandbox_mode']),
-        'payment_methods.payoneer-hosted.availability_callback' => new Factory(['payment_methods.availability_callback.live_mode', 'list_session.manager', 'embedded_payment.ajax_order_pay.is_ajax_order_pay', 'payment_methods.availability_callback.checkout_predicate'], static function (AvailabilityCallbackInterface $liveModeCallback, ListSessionManager $listSessionManager, bool $isAjaxOrderPay, callable $checkoutPredicate): AvailabilityCallbackInterface {
-            $callbacks = [$liveModeCallback];
-            $callbacks[] = new ConditionalCallbackDecorator($checkoutPredicate, new ListConditionAvailabilityCallback($listSessionManager, new NoopListCondition(), $isAjaxOrderPay));
-            return new CompoundAvailabilityCallback(...$callbacks);
-        }),
-        'payment_methods.payoneer-afterpay.availability_callback' => new Factory(['payment_methods.availability_callback.live_mode', 'list_session.manager', 'embedded_payment.ajax_order_pay.is_ajax_order_pay', 'payment_methods.availability_callback.checkout_predicate'], static function (
-            //todo: consider refactoring, these callbacks are almost the same.
-            AvailabilityCallbackInterface $liveModeCallback,
-            ListSessionManager $listSessionManager,
-            bool $isAjaxOrderPay,
-            callable $checkoutPredicate
-        ): AvailabilityCallbackInterface {
-            $callbacks = [$liveModeCallback];
-            $callbacks[] = new ConditionalCallbackDecorator($checkoutPredicate, new CompoundAvailabilityCallback(new ListConditionAvailabilityCallback($listSessionManager, new MatchNetworkGroupingCondition('DIRECT_DEBIT'), $isAjaxOrderPay), new ListConditionAvailabilityCallback($listSessionManager, new MatchNetworkCodeCondition('AFTERPAY'), $isAjaxOrderPay)));
-            return new CompoundAvailabilityCallback(...$callbacks);
-        }),
-        'payment_methods.payoneer-checkout.availability_callback' => new Factory(['payment_methods.availability_callback.live_mode', 'list_session.manager', 'embedded_payment.ajax_order_pay.is_ajax_order_pay', 'payment_methods.availability_callback.checkout_predicate'], static function (AvailabilityCallbackInterface $liveModeCallback, ListSessionManager $listSessionManager, bool $isAjaxOrderPay, callable $checkoutPredicate): AvailabilityCallbackInterface {
-            $callbacks = [$liveModeCallback];
-            $callbacks[] = new ConditionalCallbackDecorator($checkoutPredicate, new ListConditionAvailabilityCallback($listSessionManager, new MatchNetworkGroupingCondition('CREDIT_CARD'), $isAjaxOrderPay));
-            return new CompoundAvailabilityCallback(...$callbacks);
-        }),
-        'payment_gateway.payoneer-checkout.availability_callback' => new Factory(['payment_methods.payoneer-checkout.availability_callback'], static fn(AvailabilityCallbackInterface $callback): AvailabilityCallbackInterface => new FilteredAvailabilityCallback($callback)),
-        'payment_gateway.payoneer-hosted.availability_callback' => new Factory(['payment_methods.payoneer-hosted.availability_callback'], static fn(AvailabilityCallbackInterface $callback): AvailabilityCallbackInterface => new FilteredAvailabilityCallback($callback)),
-        'payment_gateway.payoneer-afterpay.availability_callback' => new Factory(['payment_methods.payoneer-afterpay.availability_callback'], static fn(AvailabilityCallbackInterface $callback): AvailabilityCallbackInterface => new FilteredAvailabilityCallback($callback)),
         'payment_methods.live_merchant_id' => new Value(1),
         'payment_methods.sandbox_merchant_id' => new Value(2),
         'payment_methods.default_options' => new Factory(['payoneer_sdk.remote_api_url.base_string.live', 'payoneer_sdk.remote_api_url.base_string.sandbox', 'payment_methods.live_merchant_id', 'payment_methods.sandbox_merchant_id', 'payoneer_settings.merchant.label.live', 'payoneer_settings.merchant.label.sandbox'], static function (string $liveUrl, string $sandboxUrl, int $liveMerchantId, int $sandboxMerchantId, string $liveLabel, string $sandboxLabel): array {
             return ['live_mode' => 'no', 'merchant_id' => $liveMerchantId, 'base_url' => $liveUrl, 'label' => $liveLabel, 'sandbox_merchant_id' => $sandboxMerchantId, 'sandbox_base_url' => $sandboxUrl, 'sandbox_label' => $sandboxLabel];
         }),
         'payment_methods.transaction_url_template_field_name' => new Value('_transaction_url_template'),
-        'payment_gateway.payoneer-hosted.payment_processor' => new Factory(['list_session.manager', 'payment_methods.order.transaction_id_field_name', 'hosted_payment.misconfiguration_detector', 'hosted_payment.order_based_update_command_factory', 'checkout.security_token_generator', 'checkout.order.security_header_field_name', 'hosted_payment.payment_flow_override_flag.is_set', 'checkout.session_hash_key'], static function (ListSessionManager $listSessionManager, string $transactionIdFieldName, MisconfigurationDetectorInterface $misconfigurationDetector, WcOrderBasedUpdateCommandFactoryInterface $updateCommandFactory, TokenGeneratorInterface $tokenGenerator, string $tokenKey, bool $fallbackToHostedModeFlag, string $sessionHashKey): PaymentProcessorInterface {
-            return new HostedPaymentProcessor($transactionIdFieldName, $misconfigurationDetector, $listSessionManager, $updateCommandFactory, $tokenGenerator, $tokenKey, $fallbackToHostedModeFlag, $sessionHashKey);
-        }),
-        'payment_gateway.payoneer-checkout.payment_processor' => new Factory(['inpsyde_payoneer_api.update_command_factory', 'list_session.manager', 'payment_methods.order.transaction_id_field_name', 'checkout.payment_flow_override_flag', 'embedded_payment.misconfiguration_detector', 'checkout.security_token_generator', 'checkout.order.security_header_field_name', 'checkout.session_hash_key', 'wp.is_rest_api_request'], static function (WcOrderBasedUpdateCommandFactoryInterface $updateCommandFactory, ListSessionManager $listSessionManager, string $transactionIdFieldName, string $hostedModeOverrideFlag, MisconfigurationDetectorInterface $misconfigurationDetector, TokenGeneratorInterface $tokenGenerator, string $tokenKey, string $sessionHashKey, bool $isRestRequest): PaymentProcessorInterface {
-            return new EmbeddedPaymentProcessor($updateCommandFactory, $listSessionManager, $tokenGenerator, $tokenKey, $transactionIdFieldName, $hostedModeOverrideFlag, $misconfigurationDetector, $sessionHashKey, $isRestRequest);
-        }),
-        'payment_gateway.payoneer-afterpay.payment_processor' => new Alias('payment_gateway.payoneer-checkout.payment_processor'),
-        'payment_gateway.payoneer-checkout.refund_processor' => new Constructor(RefundProcessor::class, ['inpsyde_payment_gateway.payoneer', 'inpsyde_payment_gateway.transaction_id_field_name', 'inpsyde_payment_gateway.payment_factory', 'inpsyde_payment_gateway.charge_id_field_name', 'payment_methods.payout_id_field_name', 'payment_methods.refund_reason_suffix_template', 'payment_gateways']),
-        'payment_gateway.payoneer-hosted.refund_processor' => new Alias('payment_gateway.payoneer-checkout.refund_processor'),
-        'payment_gateway.payoneer-afterpay.refund_processor' => new Alias('payment_gateway.payoneer-checkout.refund_processor'),
-        'payment_methods.refund_reason_suffix_template' => static function (): string {
-            return \__('Refunded by Payoneer Checkout - long ID: %1$s', 'payoneer-checkout');
-        },
-        'payment_gateway.payoneer-checkout.form_fields' => new Alias('payoneer_settings.settings_fields'),
-        'payment_gateway.payoneer-hosted.form_fields' => new Alias('payment_gateway.payoneer-checkout.form_fields'),
-        'payment_gateway.payoneer-afterpay.form_fields' => new Alias('payment_gateway.payoneer-checkout.form_fields'),
-        'payment_gateway.payoneer-checkout.payment_request_validator' => new Alias('inpsyde_payoneer_api.payment_request_validator'),
-        'payment_gateway.payoneer-hosted.payment_request_validator' => new Alias('inpsyde_payoneer_api.payment_request_validator'),
-        'payment_gateway.payoneer-afterpay.payment_request_validator' => new Alias('payment_gateway.payoneer-checkout.payment_request_validator'),
-        'payment_methods.network_icon_map' => new Value(['VISA' => 'visa', 'MASTERCARD' => 'mastercard', 'AMEX' => 'amex', 'DISCOVER' => 'discover', 'DINERS' => 'diners', 'JCB' => 'jcb', 'AFTERPAY' => 'afterpay']),
-        'payment_methods.payoneer-checkout.default_icons' => new Value(['visa', 'mastercard', 'amex', 'discover', 'diners', 'jcb']),
-        'payment_methods.payoneer-hosted.default_icons' => new Value(['visa', 'mastercard', 'amex', 'discover', 'diners', 'jcb', 'afterpay']),
+        'payment_methods.network_icon_map' => new Value(['VISA' => 'visa', 'MASTERCARD' => 'mastercard', 'AMEX' => 'amex', 'DISCOVER' => 'discover', 'DINERS' => 'diners', 'JCB' => 'jcb', 'AFTERPAY' => 'afterpay', 'KLARNA' => 'klarna', 'AFFIRM' => 'affirm', 'BANCONTACT' => 'bancontact', 'EPS' => 'eps', 'IDEAL' => 'ideal', 'MULTIBANCO' => 'multibanco', 'P24' => 'p24', 'UNIONPAY' => 'unionpay']),
+        'payment_methods.payoneer-checkout.default_icons' => new Value(['visa', 'mastercard', 'amex', 'discover', 'diners', 'jcb', 'unionpay']),
+        'payment_methods.payoneer-hosted.default_icons' => new Value(['visa', 'mastercard', 'amex', 'discover', 'diners', 'jcb', 'unionpay', 'afterpay', 'klarna', 'affirm', 'bancontact', 'eps', 'ideal', 'multibanco', 'p24']),
         'payment_methods.payoneer-afterpay.default_icons' => new Value(['afterpay']),
-        'payment_gateway.payoneer-checkout.method_icon_provider' => new Factory(['payment_methods.icon_provider_factory', 'payment_methods.payoneer-checkout.default_icons'], static function (IconProviderFactory $iconProviderFactory, array $defaultIcons): IconProviderInterface {
-            return $iconProviderFactory->create($defaultIcons);
-        }),
-        'payment_gateway.payoneer-checkout.gateway_icons_renderer' => new Factory(['payment_gateway.payoneer-checkout.method_icon_provider'], static function (IconProviderInterface $iconProvider): GatewayIconsRendererInterface {
-            return new DefaultIconsRenderer($iconProvider);
-        }),
-        'payment_methods.icon_provider_factory' => new Constructor(IconProviderFactory::class, ['core.main_plugin_file', 'payment_methods.path.assets', 'list_session.can_try_create_list.callable', 'list_session.manager', 'payment_methods.network_icon_map']),
-        'payment_gateway.payoneer-hosted.method_icon_provider' => new Factory(['payment_methods.icon_provider_factory', 'payment_methods.payoneer-hosted.default_icons'], static function (IconProviderFactory $iconProviderFactory, array $defaultIcons): IconProviderInterface {
-            return $iconProviderFactory->create($defaultIcons);
-        }),
-        'payment_gateway.payoneer-hosted.gateway_icons_renderer' => new Factory(['payment_gateway.payoneer-hosted.method_icon_provider'], static function (IconProviderInterface $iconProvider): GatewayIconsRendererInterface {
-            return new DefaultIconsRenderer($iconProvider);
-        }),
-        'payment_gateway.payoneer-afterpay.method_icon_provider' => new Factory(['payment_methods.icon_provider_factory', 'payment_methods.payoneer-afterpay.default_icons'], static function (IconProviderFactory $iconProviderFactory, array $defaultIcons): IconProviderInterface {
-            return $iconProviderFactory->create($defaultIcons);
-        }),
-        'payment_gateway.payoneer-afterpay.gateway_icons_renderer' => new Factory(['payment_gateway.payoneer-afterpay.method_icon_provider'], static function (IconProviderInterface $iconProvider): GatewayIconsRendererInterface {
-            return new DefaultIconsRenderer($iconProvider);
-        }),
-        'payment_methods.payoneer-checkout.payment_fields_component' => new Value('cards'),
-        /**
-         * Provide the default implementation for checkout fields. A renderer
-         * that prints a list of sub-renderers that can be dynamically extended according
-         * to the chosen payment flow
-         */
-        'payment_gateway.payoneer-checkout.payment_fields_renderers' => new Value([]),
-        'payment_gateway.payoneer-checkout.payment_fields_renderer' => new Factory(['payment_gateway.payoneer-checkout.payment_fields_renderers'], static function (array $renderers): CompoundPaymentFieldsRenderer {
-            /**
-             * @var PaymentFieldsRendererInterface[] $renderers
-             */
-            return new CompoundPaymentFieldsRenderer(...$renderers);
-        }),
-        'payment_methods.payoneer-afterpay.payment_fields_component' => fn() => 'afterpay',
-        /**
-         * Provide the default implementation for checkout fields. A renderer
-         * that prints a list of sub-renderers that can be dynamically extended according
-         * to the chosen payment flow
-         */
-        'payment_gateway.payoneer-afterpay.payment_fields_renderers' => new Value([]),
-        'payment_gateway.payoneer-afterpay.payment_fields_renderer' => new Factory(['payment_gateway.payoneer-afterpay.payment_fields_renderers'], static function (array $renderers): CompoundPaymentFieldsRenderer {
-            /**
-             * @var PaymentFieldsRendererInterface[] $renderers
-             */
-            return new CompoundPaymentFieldsRenderer(...$renderers);
-        }),
-        'payment_gateway.payoneer-checkout.has_fields' => '__return_true',
-        'payment_gateway.payoneer-checkout.option_key' => new Value('woocommerce_payoneer-checkout_settings'),
-        'payment_gateway.payoneer-hosted.option_key' => new Alias('payment_gateway.payoneer-checkout.option_key'),
-        'payment_gateway.payoneer-afterpay.option_key' => new Alias('payment_gateway.payoneer-checkout.option_key'),
+        'payment_methods.payoneer-klarna.default_icons' => new Value(['klarna']),
+        'payment_methods.payoneer-affirm.default_icons' => new Value(['affirm']),
+        'payment_methods.payoneer-bancontact.default_icons' => new Value(['bancontact']),
+        'payment_methods.payoneer-eps.default_icons' => new Value(['eps']),
+        'payment_methods.payoneer-ideal.default_icons' => new Value(['ideal']),
+        'payment_methods.payoneer-multibanco.default_icons' => new Value(['multibanco']),
+        'payment_methods.payoneer-p24.default_icons' => new Value(['p24']),
         'payment_methods.exclude_not_supported_countries' => new Constructor(ExcludeNotSupportedCountries::class, ['payment_methods.not_supported_countries']),
         'payment_methods.is_live_mode' => new Factory(['inpsyde_payment_gateway.options'], static function (ContainerInterface $options): bool {
             $optionValue = $options->get('live_mode');
             $optionValue = $optionValue !== 'no';
             return $optionValue;
         }),
-        'payment_methods.payoneer-checkout.is_enabled' => new Factory(['inpsyde_payment_gateway.options', 'core.payment_gateway.is_enabled'], static function (ContainerInterface $options, bool $payoneerPaymentMethodsEnabled): bool {
-            if (!$payoneerPaymentMethodsEnabled) {
-                return \false;
-            }
-            return $options->get('payment_flow') === 'embedded';
-        }),
-        'payment_methods.payoneer-hosted.is_enabled' => new Factory(['inpsyde_payment_gateway.options', 'core.payment_gateway.is_enabled'], static function (ContainerInterface $options, bool $payoneerPaymentMethodsEnabled): bool {
-            if (!$payoneerPaymentMethodsEnabled) {
-                return \false;
-            }
-            return $options->get('payment_flow') === 'hosted';
-        }),
-        'payment_methods.payoneer-afterpay.is_enabled' => new Alias('payment_methods.payoneer-checkout.is_enabled'),
         'payment_methods.show_payment_widget_to_customers_in_sandbox_mode' => '__return_false',
+        'payment_methods.common_payment_processor' => new Factory(['embedded_payment.misconfiguration_detector', 'list_session.manager', 'inpsyde_payoneer_api.update_command_factory', 'checkout.security_token_generator', 'checkout.order.security_header_field_name', 'payment_methods.order.transaction_id_field_name', 'checkout.session_hash_key', 'payment_methods.transaction_url_template_field_name', 'payoneer_settings.merchant_id_field_name', 'payoneer_settings.merchant'], static function (MisconfigurationDetectorInterface $misconfigurationDetector, ListSessionProvider $sessionProvider, WcOrderBasedUpdateCommandFactoryInterface $updateCommandFactory, TokenGeneratorInterface $tokenGenerator, string $tokenKey, string $transactionIdFieldName, string $sessionHashKey, string $transactionUrlTemplateFieldName, string $merchantIdFieldName, MerchantInterface $merchant) {
+            return new PayoneerCommonPaymentProcessor($misconfigurationDetector, $sessionProvider, $updateCommandFactory, $tokenGenerator, $tokenKey, $transactionIdFieldName, $sessionHashKey, $transactionUrlTemplateFieldName, $merchantIdFieldName, $merchant);
+        }),
+        // Refunds.
+        'payment_methods.common.refund_processor' => new Constructor(RefundProcessor::class, ['inpsyde_payment_gateway.payoneer', 'inpsyde_payment_gateway.transaction_id_field_name', 'inpsyde_payment_gateway.payment_factory', 'inpsyde_payment_gateway.charge_id_field_name', 'wp.is_ajax', 'wp.refund.service.orchestrator']),
+        'wp.refund.storage.failed_refund_registry' => new Constructor(AsyncFailedRefundRegistry::class),
+        'wp.refund.storage.async_refund_intent' => new Constructor(AsyncRefundIntentStorage::class),
+        'wp.refund.storage.async_refund_status' => new Constructor(AsyncRefundStatusStorage::class),
+        'wp.refund.storage.payout_to_refund_mapping' => new Constructor(PayoutToRefundMapping::class, ['webhooks.order_refund.payout_id_field_name']),
+        'wp.refund.service.refund_state' => new Constructor(RefundState::class, ['wp.refund.storage.async_refund_status']),
+        'wp.refund.text_contents' => new Constructor(RefundTextContents::class),
+        'wp.refund.service.orchestrator' => new Constructor(RefundOrchestrator::class, ['payment_gateways', 'wp.refund.text_contents', 'wp.refund.storage.payout_to_refund_mapping', 'wp.refund.service.refund_state', 'wp.refund.storage.async_refund_intent', 'wp.refund.storage.failed_refund_registry', 'wp.refund.admin.refund_failure_email_sender']),
+        'wp.refund.admin.async_refund_order_ui' => new Constructor(AsyncRefundAdminUi::class, ['wp.refund.text_contents', 'wp.refund.service.orchestrator', 'wp.refund.service.refund_state', 'wp.order_admin.details_page']),
+        'wp.refund.admin.async_refund_global_notices' => new Constructor(AsyncRefundGlobalNotices::class, ['wp.refund.text_contents', 'wp.refund.storage.failed_refund_registry', 'wp.admin_notice.renderer', 'wp.order_admin.details_page']),
+        'wp.refund.admin.refund_failure_email_sender' => new Constructor(RefundFailureEmailSender::class, ['wp.refund.text_contents']),
     ];
 };

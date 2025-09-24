@@ -92,7 +92,7 @@ abstract class AbstractMerchantDecorator implements MerchantInterface
     private function createClone(MerchantInterface $merchant): MerchantInterface
     {
         $clone = clone $this;
-        $this->merchant = $merchant;
+        $clone->merchant = $merchant;
         return $clone;
     }
 }
