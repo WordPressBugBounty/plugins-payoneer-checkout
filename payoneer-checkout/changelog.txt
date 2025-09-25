@@ -2,6 +2,10 @@
 
 = [next-version] - yyyy-mm-dd =
 
+= [3.5.1] - 2025-09-25 =
+* Fixed
+    * Fatal error on plugin activation
+
 = [3.5.0] - 2025-09-24 =
 * Added
     * Plugin compatibility with Checkout WebSDK and Stripe Connect.
