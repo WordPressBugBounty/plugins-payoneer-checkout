@@ -26,10 +26,9 @@ class ListLongIdPaymentRequestValidator implements PaymentRequestValidatorInterf
      * @var ListSessionProvider
      */
     protected $listSessionProvider;
-    public function __construct(ListSessionProvider $listSessionProvider, PaymentRequestValidatorInterface $validator = null)
+    public function __construct(ListSessionProvider $listSessionProvider)
     {
         $this->listSessionProvider = $listSessionProvider;
-        $this->validator = $validator;
     }
     /**
      * Validates the payment request by checking the 'x-payoneer-long-id' header.
@@ -61,13 +60,14 @@ class ListLongIdPaymentRequestValidator implements PaymentRequestValidatorInterf
             );
         }
         $headerValue = $headerUtil->getHeader($longIdHeader);
-        $currentLongId = $this->listSessionProvider->provide(new PaymentContext())->getIdentification()->getLongId();
+        $currentLongId = $this->listSessionProvider->provide(new PaymentContext($order))->getIdentification()->getLongId();
         if ($headerValue !== $currentLongId) {
+            do_action('payoneer-checkout.payment_request_validator.validation_failure', ['headerValue' => $headerValue, 'currentLongId' => $currentLongId]);
             throw new \UnexpectedValueException(
                 /* translators: This implies that we have a bug in the code. Merchant/Customer cannot fix it and should ideally never see it */
                 __('It seems your payment has expired. Please try again', 'payoneer-checkout')
             );
         }
-        $this->validator && $this->validator->assertIsValid($order, $gateway);
+        do_action('payoneer-checkout.payment_request_validator.validation_success', ['longId' => $headerValue]);
     }
 }

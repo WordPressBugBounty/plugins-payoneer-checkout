@@ -17,11 +17,7 @@ use Syde\Vendor\Inpsyde\Assets\Asset;
 use Syde\Vendor\Inpsyde\Assets\Script;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PageDetector\PageDetectorInterface;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Settings\Fields\TokenField;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Settings\Merchant\CheckoutMerchantAwareUrlTemplateProvidingMerchant;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Settings\Merchant\ContainerMapMerchantModel;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Settings\Merchant\EnvironmentAwareUrlTemplateProvidingMerchant;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Settings\Merchant\MerchantFactory;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Settings\Merchant\MerchantFactoryInterface;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Settings\Merchant\MerchantInterface;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Settings\Merchant\MerchantQueryInterface;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Settings\Merchant\MerchantSerializer;
@@ -29,7 +25,9 @@ use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Settings\Fields\CssField;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Settings\Fields\PlainTextField;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Settings\Fields\VirtualField;
 use Syde\Vendor\Psr\Container\ContainerExceptionInterface;
+use Syde\Vendor\Psr\Http\Message\UriFactoryInterface;
 use Syde\Vendor\Psr\Http\Message\UriInterface;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Settings\Merchant\Merchant;
 return static function (): array {
     $moduleRoot = \dirname(__FILE__, 2);
     return [
@@ -62,7 +60,6 @@ return static function (): array {
                 return $map;
             };
         }),
-        'payoneer_settings.merchant.factory' => new Constructor(MerchantFactory::class, ['inpsyde_payment_gateway.uri_factory']),
         'payoneer_settings.merchant.serializer' => new Constructor(MerchantSerializer::class, ['payoneer_settings.merchant.default']),
         'payoneer_settings.merchant.deserializer' => new Alias('payoneer_settings.merchant.serializer'),
         /**
@@ -75,11 +72,9 @@ return static function (): array {
             }
             return $merchants;
         }),
-        'payoneer_settings.merchant.default' => new Factory(['payoneer_settings.merchant.factory', 'inpsyde_payment_gateway.order.live_transactions_url_template', 'inpsyde_payment_gateway.order.sandbox_transactions_url_template', 'inpsyde_payment_gateway.order.checkout_transactions_url_template'], static function (MerchantFactoryInterface $merchantFactory, string $liveTransactionUrlTemplate, string $sandboxTransactionUrlTemplate, string $checkoutTransactionUrlTemplate): MerchantInterface {
-            $base = $merchantFactory->createMerchant(null);
-            $orchestrationDecorator = new EnvironmentAwareUrlTemplateProvidingMerchant(['live' => $liveTransactionUrlTemplate, 'sandbox' => $sandboxTransactionUrlTemplate], $base);
-            $checkoutDecorator = new CheckoutMerchantAwareUrlTemplateProvidingMerchant($checkoutTransactionUrlTemplate, $orchestrationDecorator);
-            return $checkoutDecorator;
+        'payoneer_settings.merchant.default' => new Factory(['inpsyde_payment_gateway.uri_factory', 'inpsyde_payment_gateway.order.checkout_transactions_url_template'], static function (UriFactoryInterface $uriFactory, string $urlTemplate): MerchantInterface {
+            $merchant = new Merchant($uriFactory, null);
+            return $merchant->withTransactionUrlTemplate($urlTemplate);
         }),
         'payoneer_settings.merchant.storage_key' => new Value('payoneer-checkout_merchants'),
         'payoneer_settings.merchant.model' => new Constructor(ContainerMapMerchantModel::class, ['inpsyde_payment_gateway.storage', 'payoneer_settings.merchant.storage_key', 'payoneer_settings.merchant.serializer', 'payoneer_settings.merchant.deserializer']),

@@ -1,24 +1,17 @@
 <?php
 
-/*
- * This file is part of the Assets package.
- *
- * (c) Inpsyde GmbH
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\Assets\Handler;
 
 use Syde\Vendor\Inpsyde\Assets\Asset;
+use Syde\Vendor\Inpsyde\Assets\FilterAwareAsset;
 use Syde\Vendor\Inpsyde\Assets\OutputFilter\AssetOutputFilter;
 trait OutputFilterAwareAssetHandlerTrait
 {
     /**
      * @var array<string, callable|class-string<AssetOutputFilter>>
      */
-    protected $outputFilters = [];
+    protected array $outputFilters = [];
     /**
      * @param string $name
      * @param callable $filter
@@ -53,17 +46,27 @@ trait OutputFilterAwareAssetHandlerTrait
                 return $html;
             }
             foreach ($filters as $filter) {
-                /** @psalm-suppress MixedFunctionCall */
+                if (!is_callable($filter)) {
+                    continue;
+                }
                 $html = (string) $filter($html, $asset);
             }
             return $html;
         }, 10, 2);
         return \true;
     }
+    /**
+     * @param Asset $asset
+     *
+     * @return array<class-string<AssetOutputFilter>|callable>
+     */
     protected function currentOutputFilters(Asset $asset): array
     {
         $filters = [];
         $registeredFilters = $this->outputFilters();
+        if (!$asset instanceof FilterAwareAsset) {
+            return $filters;
+        }
         foreach ($asset->filters() as $filter) {
             if (is_callable($filter)) {
                 $filters[] = $filter;

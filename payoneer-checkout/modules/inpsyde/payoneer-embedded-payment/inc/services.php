@@ -55,10 +55,10 @@ return static function (): array {
         'embedded_payment.widget.payment_fields_attribute_component' => new Value('data-component'),
         'embedded_payment.widget.payment_fields_attribute_list_id' => new Value('data-long-id'),
         'embedded_payment.widget.payment_fields_attribute_list_env' => new Value('data-env'),
-        'embedded_payment.widget_script_data' => new Factory(['embedded_payment.widget.payment_fields_container_id', 'embedded_payment.widget.payment_fields_attribute_component', 'checkout.payment_flow_override_flag', 'embedded_payment.pay_order_error_flag', 'embedded_payment.assets.websdk.umd.url.template', 'embedded_payment.widget.websdk_styles', 'wc.is_block_checkout', 'wc.pay_for_order_id', 'embedded_payment.nonce.action.on_payment_declined'], static function (string $paymentFieldsContainerId, string $paymentFieldsComponentAttribute, string $hostedFlowOverrideFlag, string $payOrderErrorFlag, string $webSdkUmdUrlTemplate, array $websdkStyles, bool $isBlockCheckout, int $payForOrderId, string $onPaymentDeclinedNonceAction): array {
-            return ['paymentFieldsContainerId' => $paymentFieldsContainerId, 'paymentFieldsComponentAttribute' => $paymentFieldsComponentAttribute, 'isPayForOrder' => is_wc_endpoint_url('order-pay'), 'hostedFlowOverrideFlag' => $hostedFlowOverrideFlag, 'payOrderErrorFlag' => $payOrderErrorFlag, 'webSdkUmdUrlTemplate' => $webSdkUmdUrlTemplate, 'websdkStyles' => (object) $websdkStyles, 'isBlockCheckout' => $isBlockCheckout, 'payForOrderId' => $payForOrderId ?: '', 'onPaymentDeclinedNonce' => \wp_create_nonce($onPaymentDeclinedNonceAction)];
+        'embedded_payment.widget_script_data' => new Factory(['embedded_payment.widget.payment_fields_container_id', 'embedded_payment.widget.payment_fields_attribute_component', 'checkout.payment_flow_override_flag', 'embedded_payment.pay_order_error_flag', 'embedded_payment.assets.websdk.umd.url.template', 'embedded_payment.widget.websdk_styles', 'wc.is_block_checkout', 'wc.pay_for_order_id', 'embedded_payment.nonce.action.on_payment_unsuccessful'], static function (string $paymentFieldsContainerId, string $paymentFieldsComponentAttribute, string $hostedFlowOverrideFlag, string $payOrderErrorFlag, string $webSdkUmdUrlTemplate, array $websdkStyles, bool $isBlockCheckout, int $payForOrderId, string $onPaymentUnsuccessfulNonceAction): array {
+            return ['paymentFieldsContainerId' => $paymentFieldsContainerId, 'paymentFieldsComponentAttribute' => $paymentFieldsComponentAttribute, 'isPayForOrder' => is_wc_endpoint_url('order-pay'), 'hostedFlowOverrideFlag' => $hostedFlowOverrideFlag, 'payOrderErrorFlag' => $payOrderErrorFlag, 'webSdkUmdUrlTemplate' => $webSdkUmdUrlTemplate, 'websdkStyles' => (object) $websdkStyles, 'isBlockCheckout' => $isBlockCheckout, 'payForOrderId' => $payForOrderId ?: '', 'onPaymentUnsuccessfulNonce' => \wp_create_nonce($onPaymentUnsuccessfulNonceAction), 'dontRefreshCheckoutMessage' => \__('Please wait, and do not refresh the page', 'payoneer-checkout')];
         }),
-        'embedded_payment.nonce.action.on_payment_declined' => fn() => 'payoneer-checkout-payment-declined',
+        'embedded_payment.nonce.action.on_payment_unsuccessful' => fn() => 'payoneer-checkout-payment-unsuccessful',
         'embedded_payment.pay_order_error_flag' => new Value('payoneer-checkout-on-before-server-error'),
         'embedded_payment.path.assets' => new Factory(['core.local_modules_directory_name'], static function (string $modulesDirectoryRelativePath): string {
             $moduleRelativePath = \sprintf('%1$s/%2$s', $modulesDirectoryRelativePath, 'payoneer-embedded-payment');
@@ -73,11 +73,13 @@ return static function (): array {
             $script->canEnqueue($canEnqueue);
             return $script;
         }),
-        'embedded_payment.assets.js.checkout' => new Factory(['core.main_plugin_file', 'embedded_payment.path.assets', 'embedded_payment.widget_script_data', 'embedded_payment.assets.can_enqueue'], static function (string $mainPluginFile, string $assetsPath, array $widgetScriptData, callable $canEnqueue): Script {
+        'embedded_payment.assets.js.checkout' => new Factory(['core.main_plugin_file', 'embedded_payment.path.assets', 'embedded_payment.widget_script_data', 'embedded_payment.assets.can_enqueue', 'wc.is_block_checkout'], static function (string $mainPluginFile, string $assetsPath, array $widgetScriptData, callable $canEnqueue, bool $isBlockCheckout): Script {
             $url = \plugins_url($assetsPath . 'payoneer-checkout.js', $mainPluginFile);
             $script = new Script('payoneer-checkout', $url);
             $script->withLocalize('PayoneerData', $widgetScriptData);
-            $script->withDependencies('inpsyde-blocks');
+            if ($isBlockCheckout) {
+                $script->withDependencies('inpsyde-blocks');
+            }
             /** @psalm-var callable():bool $canEnqueue */
             $script->canEnqueue($canEnqueue);
             return $script;

@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Assets package.
- *
- * (c) Inpsyde GmbH
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\Assets;
 
@@ -19,19 +11,18 @@ trait ConfigureAutodiscoverVersionTrait
      * @see self::disableAutodiscoverVersion()
      * @see self::enableAutodiscoverVersion()
      *
-     * @var bool
      */
-    protected $autodiscoverVersion = \true;
+    protected bool $autodiscoverVersion = \true;
     /**
      * Enable automatic discovering of the version if no version is set.
      *
      * @return static
      *
-     * phpcs:disable Inpsyde.CodeQuality.ReturnTypeDeclaration
+     * phpcs:disable Syde.Functions.ReturnTypeDeclaration.NoReturnType
      */
     public function enableAutodiscoverVersion()
     {
-        // phpcs:enable Inpsyde.CodeQuality.ReturnTypeDeclaration
+        // phpcs:enable Syde.Functions.ReturnTypeDeclaration.NoReturnType
         $this->autodiscoverVersion = \true;
         return $this;
     }
@@ -40,11 +31,11 @@ trait ConfigureAutodiscoverVersionTrait
      *
      * @return static
      *
-     * phpcs:disable Inpsyde.CodeQuality.ReturnTypeDeclaration
+     * phpcs:disable Syde.Functions.ReturnTypeDeclaration.NoReturnType
      */
     public function disableAutodiscoverVersion()
     {
-        // phpcs:enable Inpsyde.CodeQuality.ReturnTypeDeclaration
+        // phpcs:enable Syde.Functions.ReturnTypeDeclaration.NoReturnType
         $this->autodiscoverVersion = \false;
         return $this;
     }

@@ -1,89 +1,51 @@
 <?php
 
-/*
- * This file is part of the Assets package.
- *
- * (c) Inpsyde GmbH
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\Assets;
 
 use Syde\Vendor\Inpsyde\Assets\Handler\AssetHandler;
 use Syde\Vendor\Inpsyde\Assets\Util\AssetPathResolver;
-use Syde\Vendor\Inpsyde\Assets\OutputFilter\AssetOutputFilter;
-use Syde\Vendor\Inpsyde\Assets\OutputFilter\AttributesOutputFilter;
-use Syde\Vendor\Inpsyde\Assets\OutputFilter\InlineAssetOutputFilter;
 /**
- * phpcs:disable Inpsyde.CodeQuality.PropertyPerClassLimit.TooManyProperties
+ * phpcs:disable Syde.Classes.PropertyLimit.TooManyProperties
  */
 abstract class BaseAsset implements Asset
 {
     use ConfigureAutodiscoverVersionTrait;
-    /**
-     * @var string
-     */
-    protected $url = '';
+    protected string $url = '';
     /**
      * Full filePath to an Asset which can
      * be used to auto-discover version or
      * load Asset content inline.
      *
-     * @var string
      */
-    protected $filePath = '';
-    /**
-     * @var string
-     */
-    protected $handle = '';
+    protected string $filePath = '';
+    protected string $handle = '';
     /**
      * Dependencies to other Asset handles.
      *
      * @var string[]
      */
-    protected $dependencies = [];
+    protected array $dependencies = [];
     /**
      * Location where the Asset will be enqueued.
      *
-     * @var int
      */
-    protected $location = self::FRONTEND;
+    protected int $location = self::FRONTEND;
     /**
      * Version can be auto-discovered if null.
      *
      * @see BaseAsset::enableAutodiscoverVersion().
      *
-     * @var null|string
      */
-    protected $version = null;
+    protected ?string $version = null;
     /**
      * @var bool|callable(): bool
      */
     protected $enqueue = \true;
     /**
-     * @var callable[]|AssetOutputFilter[]|class-string<AssetOutputFilter>[]
-     */
-    protected $filters = [];
-    /**
      * @var class-string<AssetHandler>|null
      */
     protected $handler = null;
-    /**
-     * Data which will be added via ...
-     *      - WP_Script::add_data()
-     *      - WP_Style::add_data()
-     *
-     * @var array<string, mixed>
-     */
-    protected $data = [];
-    /**
-     * Additional attributes to "link"- or "script"-tag.
-     *
-     * @var array<string, mixed>
-     */
-    protected $attributes = [];
     /**
      * @param string $handle
      * @param string $url
@@ -201,35 +163,6 @@ abstract class BaseAsset implements Asset
         return $this;
     }
     /**
-     * @return callable[]|AssetOutputFilter[]|class-string<AssetOutputFilter>[]
-     */
-    public function filters(): array
-    {
-        return $this->filters;
-    }
-    /**
-     * @param callable|class-string<AssetOutputFilter> ...$filters
-     *
-     * @return static
-     *
-     * phpcs:disable Inpsyde.CodeQuality.ArgumentTypeDeclaration
-     */
-    public function withFilters(...$filters): Asset
-    {
-        $this->filters = array_merge($this->filters, $filters);
-        return $this;
-    }
-    /**
-     * Shortcut to use the InlineFilter.
-     *
-     * @return static
-     */
-    public function useInlineFilter(): Asset
-    {
-        $this->withFilters(InlineAssetOutputFilter::class);
-        return $this;
-    }
-    /**
      * @return bool
      */
     public function enqueue(): bool
@@ -243,12 +176,12 @@ abstract class BaseAsset implements Asset
      *
      * @return static
      *
-     * phpcs:disable Inpsyde.CodeQuality.ArgumentTypeDeclaration
+     * phpcs:disable Syde.Functions.ArgumentTypeDeclaration.NoArgumentType
      * @psalm-suppress MoreSpecificImplementedParamType
      */
     public function canEnqueue($enqueue): Asset
     {
-        // phpcs:enable Inpsyde.CodeQuality.ArgumentTypeDeclaration
+        // phpcs:enable Syde.Functions.ArgumentTypeDeclaration.NoArgumentType
         $this->enqueue = $enqueue;
         return $this;
     }
@@ -276,56 +209,4 @@ abstract class BaseAsset implements Asset
      * @return class-string<AssetHandler> className of the default handler
      */
     abstract protected function defaultHandler(): string;
-    /**
-     * @return array<string, mixed>
-     */
-    public function data(): array
-    {
-        return $this->data;
-    }
-    /**
-     * Allows to set additional data via WP_Script::add_data() or WP_Style::add_data().
-     *
-     * @param array<string, mixed> $data
-     *
-     * @return static
-     */
-    public function withData(array $data): Asset
-    {
-        $this->data = array_merge($this->data, $data);
-        return $this;
-    }
-    /**
-     * Shortcut for Asset::withData(['conditional' => $condition]);
-     *
-     * @param string $condition
-     *
-     * @return static
-     */
-    public function withCondition(string $condition): Asset
-    {
-        $this->withData(['conditional' => $condition]);
-        return $this;
-    }
-    /**
-     * @return array<string, mixed>
-     */
-    public function attributes(): array
-    {
-        return $this->attributes;
-    }
-    /**
-     * Allows you to set additional attributes to your "link"- or "script"-tag.
-     * Existing attributes like "src" or "id" will not be overwrite.
-     *
-     * @param array<string, mixed> $attributes
-     *
-     * @return static
-     */
-    public function withAttributes(array $attributes): Asset
-    {
-        $this->attributes = array_merge($this->attributes, $attributes);
-        $this->withFilters(AttributesOutputFilter::class);
-        return $this;
-    }
 }

@@ -47,7 +47,7 @@ class EmbeddedPaymentModule implements ExecutableModule, ServiceModule, Extendin
          * out of $this->setupModuleActions() method call.
          */
         $this->registerSendingListDataToFrontend($container);
-        $this->registerPaymentDeclinedListener($container);
+        $this->registerPaymentUnsuccessfulListener($container);
         return \true;
     }
     /**
@@ -261,15 +261,15 @@ class EmbeddedPaymentModule implements ExecutableModule, ServiceModule, Extendin
         }
         wp_send_json_error(['result' => 'failure'], 500);
     }
-    protected function registerPaymentDeclinedListener(ContainerInterface $container): void
+    protected function registerPaymentUnsuccessfulListener(ContainerInterface $container): void
     {
-        add_action('wc_ajax_payoneer-checkout-payment-declined', function () use ($container) {
-            $nonceAction = (string) $container->get('embedded_payment.nonce.action.on_payment_declined');
+        add_action('wc_ajax_payoneer-checkout-payment-unsuccessful', function () use ($container) {
+            $nonceAction = (string) $container->get('embedded_payment.nonce.action.on_payment_unsuccessful');
             check_ajax_referer($nonceAction);
             try {
-                $orderId = $this->getOrderIdForPaymentDeclinedRequest($container);
+                $orderId = $this->getOrderIdForPaymentUnsuccessfulRequest($container);
             } catch (\Throwable $exception) {
-                wp_send_json_error('Failed to change order status in payment declined request.');
+                wp_send_json_error('Failed to change order status in payment unsuccessful request.');
             }
             $order = wc_get_order($orderId);
             if (!$order instanceof WC_Order) {
@@ -279,8 +279,19 @@ class EmbeddedPaymentModule implements ExecutableModule, ServiceModule, Extendin
             if (!$this->isSupportedPaymentMethod($order, $container)) {
                 wp_send_json_error('Unexpected payment method');
             }
-            $order->update_status('failed', 'Setting order failed after payment declined.' . \PHP_EOL);
+            $paymentResult = (string) filter_input(\INPUT_POST, 'paymentResult', \FILTER_CALLBACK, ['options' => 'sanitize_key']);
+            /**
+             * This may be not needed as webhook notifying about failed payment already arrived
+             * in most cases. But it may be delayed, and we need to have an order in failed
+             * state for the next try immediately.
+             */
+            $order->update_status('failed', sprintf('Setting order failed after payment %1$s.%2$s', $paymentResult, \PHP_EOL));
             $order->save();
+            $errorTitle = (string) filter_input(\INPUT_POST, 'errorTitleToDisplay', \FILTER_CALLBACK, ['options' => 'sanitize_text_field']);
+            $errorText = (string) filter_input(\INPUT_POST, 'errorTextToDisplay', \FILTER_CALLBACK, ['options' => 'sanitize_text_field']);
+            if ($errorTitle || $errorText) {
+                wc_add_notice(sprintf('<b>%1$s</b></br>%2$s', $errorTitle, $errorText), 'error');
+            }
             wp_send_json_success(['message' => 'Order status was set to failed.', 'nonce' => wp_create_nonce($nonceAction)]);
         });
     }
@@ -288,7 +299,7 @@ class EmbeddedPaymentModule implements ExecutableModule, ServiceModule, Extendin
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    protected function getOrderIdForPaymentDeclinedRequest(ContainerInterface $container): int
+    protected function getOrderIdForPaymentUnsuccessfulRequest(ContainerInterface $container): int
     {
         $orderKey = (string) filter_input(\INPUT_POST, 'orderKey', \FILTER_CALLBACK, ['options' => fn($rawInput) => sanitize_text_field((string) wp_unslash($rawInput))]);
         /**

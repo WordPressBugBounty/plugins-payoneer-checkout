@@ -56,15 +56,35 @@ class PaymentMethodsModule implements ServiceModule, ExtendingModule, Executable
             $payoneerGateways = (array) $container->get('payment_gateways');
             $this->allowCancelingOnHoldOrders($payoneerGateways);
         });
-        //        $this->setPaymentGatewaysEnabledStatus($container);
         /**
          * This hook fires directly before the RefundProcessor::refundOrderPayment() handler is
          * invoked and provides a reference to the full WC_Order_Refund object.
+         *
+         * This is a rather unpleasant requirement to implement async refunds.
+         * @see https://github.com/woocommerce/woocommerce/issues/52338
          */
         add_action('woocommerce_create_refund', static function ($refund, $args) use ($container) {
             if (!$refund instanceof WC_Order_Refund || !is_array($args)) {
                 return;
             }
+            /**
+             * The 'woocommerce_create_refund' is a global hook that does not pre-filter
+             * by payment gateway/method. Hence, it is OUR responsibility to do so.
+             * We perform this filtering here in the bootstrapping rather than
+             * the actual refund business logic since those areas expect
+             * to be wired up by WooCommerce directly.
+             */
+            $wcOrder = wc_get_order($refund->get_parent_id());
+            assert($wcOrder instanceof WC_Order);
+            $payoneerMethodIds = $container->get('payment_gateways');
+            assert(is_array($payoneerMethodIds));
+            if (!in_array($wcOrder->get_payment_method(), $payoneerMethodIds, \true)) {
+                return;
+            }
+            /**
+             * Now we have determined that the refund was paid for with one of our methods.
+             * So it is safe to pass it on to our RefundProcessor
+             */
             $processor = $container->get('payment_methods.common.refund_processor');
             assert($processor instanceof RefundProcessor);
             $processor->attemptEarlyRefund($refund, $args);

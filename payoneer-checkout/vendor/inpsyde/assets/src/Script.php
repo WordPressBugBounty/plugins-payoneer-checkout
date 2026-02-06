@@ -1,40 +1,27 @@
 <?php
 
-/*
- * This file is part of the Assets package.
- *
- * (c) Inpsyde GmbH
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\Assets;
 
-use Syde\Vendor\Inpsyde\Assets\Handler\AssetHandler;
 use Syde\Vendor\Inpsyde\Assets\Handler\ScriptHandler;
-class Script extends BaseAsset implements Asset
+class Script extends BaseAsset implements Asset, DataAwareAsset, FilterAwareAsset
 {
+    use DependencyExtractionTrait;
+    use DataAwareTrait;
+    use FilterAwareTrait;
     /**
      * @var array<string, mixed>
      */
-    protected $localize = [];
+    protected array $localize = [];
     /**
      * @var array{after:string[], before:string[]}
      */
-    protected $inlineScripts = ['after' => [], 'before' => []];
-    /**
-     * @var bool
-     */
-    protected $inFooter = \true;
+    protected array $inlineScripts = ['after' => [], 'before' => []];
+    protected bool $inFooter = \true;
     /**
      * @var array{domain:string, path:string|null}
      */
-    protected $translation = ['domain' => '', 'path' => null];
-    /**
-     * @var bool
-     */
-    protected $resolvedDependencyExtractionPlugin = \false;
+    protected array $translation = ['domain' => '', 'path' => null];
     /**
      * @return array<string, mixed>
      */
@@ -48,11 +35,11 @@ class Script extends BaseAsset implements Asset
     }
     /**
      * @param string $objectName
-     * @param string|int|array|callable $data
+     * @param string|int|array<mixed>|callable $data
      *
      * @return static
      *
-     * phpcs:disable Inpsyde.CodeQuality.ArgumentTypeDeclaration
+     * phpcs:disable Syde.Functions.ArgumentTypeDeclaration.NoArgumentType
      */
     public function withLocalize(string $objectName, $data): Script
     {
@@ -123,7 +110,7 @@ class Script extends BaseAsset implements Asset
      *
      * @return static
      */
-    public function withTranslation(string $domain = 'default', string $path = null): Script
+    public function withTranslation(string $domain = 'default', ?string $path = null): Script
     {
         $this->translation = ['domain' => $domain, 'path' => $path];
         return $this;
@@ -183,75 +170,5 @@ class Script extends BaseAsset implements Asset
     {
         $this->resolveDependencyExtractionPlugin();
         return parent::dependencies();
-    }
-    /**
-     * @return bool
-     *
-     * phpcs:disable WordPress.PHP.NoSilencedErrors.Discouraged
-     * phpcs:disable VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable
-     * @psalm-suppress MixedArrayAccess
-     * @psalm-suppress PossiblyFalseArgument
-     * @psalm-suppress UnresolvableInclude
-     */
-    protected function resolveDependencyExtractionPlugin(): bool
-    {
-        if ($this->resolvedDependencyExtractionPlugin) {
-            return \false;
-        }
-        $this->resolvedDependencyExtractionPlugin = \true;
-        $depsFile = $this->findDepdendencyFile();
-        if (!$depsFile) {
-            return \false;
-        }
-        $depsFilePath = $depsFile->getPathname();
-        $data = $depsFile->getExtension() === 'json' ? @json_decode(@file_get_contents($depsFilePath), \true) : @require $depsFilePath;
-        /** @var string[] $dependencies */
-        $dependencies = $data['dependencies'] ?? [];
-        /** @var string|null $version */
-        $version = $data['version'] ?? null;
-        $this->withDependencies(...$dependencies);
-        if (!$this->version && $version) {
-            $this->withVersion($version);
-        }
-        return \true;
-    }
-    /**
-     * Searching for in directory of the Script:
-     *
-     *      - {fileName}.asset.json
-     *      - {fileName}.{hash}.asset.json
-     *      - {fileName}.asset.php
-     *      - {fileName}.{hash}.asset.php
-     *
-     * @return \DirectoryIterator|null
-     */
-    protected function findDepdendencyFile(): ?\DirectoryIterator
-    {
-        try {
-            $filePath = $this->filePath();
-            if ($filePath === '') {
-                return null;
-            }
-            $path = dirname($filePath) . '/';
-            $fileName = str_replace([$path, '.js'], '', $filePath);
-            // It might be possible that the script file contains a version hash as well.
-            // So we need to split it apart and just use the first part of the file.
-            $fileNamePieces = explode('.', $fileName);
-            $fileName = $fileNamePieces[0];
-            $regex = '/' . $fileName . '(?:\.[a-zA-Z0-9]+)?\.asset\.(json|php)/';
-            $depsFile = null;
-            foreach (new \DirectoryIterator($path) as $fileInfo) {
-                if ($fileInfo->isDot() || $fileInfo->isDir() || !in_array($fileInfo->getExtension(), ['json', 'php'], \true)) {
-                    continue;
-                }
-                if (preg_match($regex, $fileInfo->getFilename())) {
-                    $depsFile = $fileInfo;
-                    break;
-                }
-            }
-            return $depsFile;
-        } catch (\Throwable $exception) {
-            return null;
-        }
     }
 }

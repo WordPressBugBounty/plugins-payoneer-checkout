@@ -1,17 +1,9 @@
 <?php
 
-/*
- * This file is part of the Assets package.
- *
- * (c) Inpsyde GmbH
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\Assets;
 
 use Syde\Vendor\Inpsyde\Assets\Handler\AssetHandler;
-use Syde\Vendor\Inpsyde\Assets\OutputFilter\AssetOutputFilter;
 interface Asset
 {
     // Location types
@@ -96,7 +88,7 @@ interface Asset
      *
      * @return static
      *
-     * phpcs:disable Inpsyde.CodeQuality.ArgumentTypeDeclaration.NoArgumentType
+     *  phpcs:disable Syde.Functions.ArgumentTypeDeclaration.NoArgumentType
      */
     public function canEnqueue($enqueue): Asset;
     /**
@@ -117,18 +109,6 @@ interface Asset
      */
     public function forLocation(int $location): Asset;
     /**
-     * A list of assigned output filters to change the rendered tag.
-     *
-     * @return callable[]|AssetOutputFilter[]|class-string<AssetOutputFilter>[]
-     */
-    public function filters(): array;
-    /**
-     * @param callable|class-string<AssetOutputFilter> ...$filters
-     *
-     * @return static
-     */
-    public function withFilters(...$filters): Asset;
-    /**
      * Name of the handler class to register and enqueue the asset.
      *
      * @return class-string<AssetHandler>
@@ -140,28 +120,4 @@ interface Asset
      * @return static
      */
     public function useHandler(string $handler): Asset;
-    /**
-     * @return array
-     */
-    public function data(): array;
-    /**
-     * Add a conditional tag for your Asset.
-     *
-     * @param string $condition
-     *
-     * @return static
-     *
-     * @see https://developer.wordpress.org/reference/functions/wp_script_add_data/#comment-1007
-     */
-    public function withCondition(string $condition): Asset;
-    /**
-     * @return array<string, mixed>
-     */
-    public function attributes(): array;
-    /**
-     * @param array<string, mixed> $attributes
-     *
-     * @return Asset
-     */
-    public function withAttributes(array $attributes): Asset;
 }

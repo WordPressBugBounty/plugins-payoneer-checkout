@@ -13,17 +13,14 @@ use const WC_VERSION;
  */
 class WpEnvironmentFactory implements WpEnvironmentFactoryInterface
 {
+    protected StringVersionFactoryInterface $versionFactory;
     /**
-     * @var StringVersionFactoryInterface
+     * @psalm-var non-empty-string
      */
-    protected $versionFactory;
-    /**
-     * @var string
-     */
-    protected $eventNameEnvironmentValidationFailed;
+    protected string $eventNameEnvironmentValidationFailed;
     /**
      * @param StringVersionFactoryInterface $versionFactory
-     * @param string $eventNameEnvironmentValidationFailed
+     * @psalm-param non-empty-string $eventNameEnvironmentValidationFailed
      */
     public function __construct(StringVersionFactoryInterface $versionFactory, string $eventNameEnvironmentValidationFailed)
     {

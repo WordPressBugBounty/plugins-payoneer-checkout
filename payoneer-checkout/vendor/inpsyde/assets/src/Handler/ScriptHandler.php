@@ -1,30 +1,19 @@
 <?php
 
-/*
- * This file is part of the Assets package.
- *
- * (c) Inpsyde GmbH
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\Assets\Handler;
 
+use Syde\Vendor\Inpsyde\Assets\Asset;
 use Syde\Vendor\Inpsyde\Assets\OutputFilter\AsyncScriptOutputFilter;
 use Syde\Vendor\Inpsyde\Assets\OutputFilter\AttributesOutputFilter;
 use Syde\Vendor\Inpsyde\Assets\OutputFilter\DeferScriptOutputFilter;
 use Syde\Vendor\Inpsyde\Assets\OutputFilter\InlineAssetOutputFilter;
-use Syde\Vendor\Inpsyde\Assets\Asset;
 use Syde\Vendor\Inpsyde\Assets\Script;
 use WP_Scripts;
 class ScriptHandler implements AssetHandler, OutputFilterAwareAssetHandler
 {
     use OutputFilterAwareAssetHandlerTrait;
-    /**
-     * @var \WP_Scripts
-     */
-    protected $wpScripts;
+    protected \WP_Scripts $wpScripts;
     /**
      * ScriptHandler constructor.
      *

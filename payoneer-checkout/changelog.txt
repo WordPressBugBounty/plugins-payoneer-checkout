@@ -2,6 +2,23 @@
 
 = [next-version] - yyyy-mm-dd =
 
+= [3.5.4] - 2025-10-30 =
+* Fixed:
+    * Issue with refunds for orders paid through other payment providers
+
+= [3.5.3] - 2025-10-27 =
+* Fixed
+    * Error messages visibility to buyers in case of payment failures . Error messages are moved to standard WooCommerce location
+    * In case of 3DS failures, failure messages are now properly shown to buyer and retry process has been corrected
+    * In case the Klarna payment method is selected but not eligible to the buyer, fixed an issue where the checkout process was blocked for further attempts
+    * Added a List Validation URL fix on the order payment page, one of the causes of the order staying “On Hold” with the ‘Order not found by transaction ID’ error
+
+= [3.5.2] - 2025-10-13 =
+* Fixed:
+    * Transaction ID link on order page no longer leading to 404 page
+    * Stop LIST creation attempts on ABORT response
+    * Order not found by transaction issue leading to orders being stuck On Hold
+
 = [3.5.1] - 2025-09-25 =
 * Fixed
     * Fatal error on plugin activation

@@ -1,35 +1,27 @@
 <?php
 
-/*
- * This file is part of the Assets package.
- *
- * (c) Inpsyde GmbH
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\Assets;
 
-use Syde\Vendor\Inpsyde\Assets\Handler\AssetHandler;
 use Syde\Vendor\Inpsyde\Assets\Handler\StyleHandler;
 use Syde\Vendor\Inpsyde\Assets\OutputFilter\AsyncStyleOutputFilter;
-class Style extends BaseAsset implements Asset
+class Style extends BaseAsset implements Asset, DataAwareAsset, FilterAwareAsset
 {
+    use DataAwareTrait;
+    use FilterAwareTrait;
     /**
      * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link#attr-media
      *
-     * @var string
      */
-    protected $media = 'all';
+    protected string $media = 'all';
     /**
      * @var string[]|null
      */
-    protected $inlineStyles = null;
+    protected ?array $inlineStyles = null;
     /**
      * @var array<string, array<string, string>>
      */
-    protected $cssVars = [];
+    protected array $cssVars = [];
     /**
      * @return string
      */

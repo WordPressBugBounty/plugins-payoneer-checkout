@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession;
 
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Checkout\CheckoutExceptionInterface;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\Factory\FactoryExceptionInterface;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\Factory\ListSession\OrderBasedListSessionFactory;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\Factory\ListSession\WcBasedListSessionFactoryInterface;
@@ -33,7 +34,7 @@ class ApiListSessionProvider implements ListSessionProvider
     /**
      * @param WcBasedListSessionFactoryInterface $checkoutFactory
      * @param OrderBasedListSessionFactory $listFactory
-     * @param string $integrationType $integrationType
+     * @param string $integrationType
      * @param callable $canCreateList
      * @param string|null $hostedVersion
      *
@@ -48,6 +49,11 @@ class ApiListSessionProvider implements ListSessionProvider
         $this->canCreateList = $canCreateList;
     }
     /**
+     * @param ContextInterface $context
+     *
+     * @return ListInterface
+     *
+     * @throws CheckoutExceptionInterface
      * @throws FactoryExceptionInterface
      */
     public function provide(ContextInterface $context): ListInterface
@@ -56,25 +62,51 @@ class ApiListSessionProvider implements ListSessionProvider
             throw new \RuntimeException('Cannot create List session.');
         }
         $order = $context->getOrder();
-        $cart = $context->getCart();
-        $customer = $context->getCustomer();
         if ($order === null) {
-            if ($cart === null) {
-                throw new \RuntimeException(sprintf('Cart not found for customer session in %s', __CLASS__));
-            }
-            if ($customer === null) {
-                throw new \RuntimeException(sprintf('WC Customer not found in %s', __CLASS__));
-            }
-            $totals = $cart->get_total('edit');
-            if (!$totals) {
-                throw new \RuntimeException(sprintf('Invalid totals amount in %s', __CLASS__));
-            }
-            $list = $this->checkoutFactory->createList($customer, $cart, $this->integrationType, $this->hostedVersion);
+            $list = $this->createListFromWcSession($context);
             $context->offsetSet('pristine', \true);
             return $list;
         }
-        $list = $this->listFactory->createList($order, $this->integrationType, $this->hostedVersion);
+        $list = $this->createListFromOrder($order);
         $context->offsetSet('pristine', \true);
         return $list;
+    }
+    /**
+     * Create a LIST session using WC_Customer and Cart data.
+     *
+     * @param ContextInterface $context
+     *
+     * @return ListInterface
+     *
+     * @throws CheckoutExceptionInterface
+     * @throws FactoryExceptionInterface
+     */
+    protected function createListFromWcSession(ContextInterface $context): ListInterface
+    {
+        $cart = $context->getCart();
+        $customer = $context->getCustomer();
+        if ($cart === null) {
+            throw new \RuntimeException(sprintf('Cart not found for customer session in %s', __CLASS__));
+        }
+        if ($customer === null) {
+            throw new \RuntimeException(sprintf('WC Customer not found in %s', __CLASS__));
+        }
+        $totals = $cart->get_total('edit');
+        if (!$totals) {
+            throw new \RuntimeException(sprintf('Invalid totals amount in %s', __CLASS__));
+        }
+        return $this->checkoutFactory->createList($customer, $cart, $this->integrationType, $this->hostedVersion);
+    }
+    /**
+     * Create a LIST session using WC_Order data
+     *
+     * @param \WC_Order $order
+     *
+     * @return ListInterface
+     * @throws FactoryExceptionInterface
+     */
+    protected function createListFromOrder(\WC_Order $order): ListInterface
+    {
+        return $this->listFactory->createList($order, $this->integrationType, $this->hostedVersion);
     }
 }

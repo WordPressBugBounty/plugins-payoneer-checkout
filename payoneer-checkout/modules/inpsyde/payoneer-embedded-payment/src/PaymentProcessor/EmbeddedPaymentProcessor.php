@@ -5,6 +5,7 @@ namespace Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\PaymentProc
 use Exception;
 use Syde\Vendor\Inpsyde\PaymentGateway\PaymentGateway;
 use Syde\Vendor\Inpsyde\PaymentGateway\PaymentProcessorInterface;
+use Syde\Vendor\Inpsyde\PaymentGateway\PaymentRequestValidatorInterface;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\PaymentProcessor\PayoneerCommonPaymentProcessor;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\Exception\CommandExceptionInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\Exception\InteractionExceptionInterface;
@@ -14,19 +15,31 @@ use WC_Order;
  */
 class EmbeddedPaymentProcessor implements PaymentProcessorInterface
 {
+    protected PaymentRequestValidatorInterface $paymentRequestValidator;
     private PayoneerCommonPaymentProcessor $commonProcessor;
     private string $hostedModeOverrideFlag;
     private bool $isRestRequest;
-    public function __construct(PayoneerCommonPaymentProcessor $commonProcessor, string $hostedModeOverrideFlag, bool $isRestRequest)
+    public function __construct(PayoneerCommonPaymentProcessor $commonProcessor, string $hostedModeOverrideFlag, bool $isRestRequest, PaymentRequestValidatorInterface $paymentRequestValidator)
     {
         $this->commonProcessor = $commonProcessor;
         $this->hostedModeOverrideFlag = $hostedModeOverrideFlag;
         $this->isRestRequest = $isRestRequest;
+        $this->paymentRequestValidator = $paymentRequestValidator;
     }
     public function processPayment(WC_Order $order, PaymentGateway $gateway): array
     {
         try {
             $result = $this->commonProcessor->processPayment($order, $gateway);
+            /**
+             * Hopefully, this is a temporary solution.
+             *
+             * Normally, PaymentRequestValidator is used earlier, in the PaymentGateway class,
+             * before this method is called. But the problem is with current LIST handling we cannot
+             * be sure that the LIST we are validating there is the same we are going to use here.
+             * In both cases, we call $provider->provide(), but there is no guarantee the same LIST
+             * will be returned. So the actual validation happens here so far.
+             */
+            $this->paymentRequestValidator->assertIsValid($order, $gateway);
         } catch (InteractionExceptionInterface $exception) {
             return $this->commonProcessor->handleInteractionException($order, $exception);
         } catch (CommandExceptionInterface $exception) {

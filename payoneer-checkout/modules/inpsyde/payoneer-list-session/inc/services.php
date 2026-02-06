@@ -20,6 +20,7 @@ use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\Factory\Product\WcBas
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\Factory\Product\WcCartBasedProductListFactory;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ApiListSessionProvider;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionManager;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\Middleware\AbortHandlingMiddleware;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\Middleware\ListCache;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\Middleware\UpdatingMiddleware;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\Middleware\FetchingMiddleware;
@@ -66,7 +67,8 @@ return static function (): array {
         'list_session.list_cache' => new Constructor(ListCache::class),
         'list_session.middlewares.fetching' => new Constructor(FetchingMiddleware::class, ['payoneer_sdk.commands.fetch', 'list_session.list_cache', 'list_session.selected_payment_flow']),
         'list_session.middlewares.wc-session-update' => new Constructor(UpdatingMiddleware::class, ['list_session.list_session_factory', 'checkout.checkout_hash_provider', 'checkout.session_hash_key', 'core.order_based_update_command_factory', 'wp.is_rest_api_request', 'list_session.list_cache']),
-        'list_session.middlewares' => new ServiceList(['list_session.middlewares.wc-session-update', 'list_session.middlewares.fetching', 'list_session.creator']),
+        'list_session.middlewares.abort-handling' => new Constructor(AbortHandlingMiddleware::class, ['checkout.checkout_hash_provider']),
+        'list_session.middlewares' => new ServiceList(['list_session.middlewares.wc-session-update', 'list_session.middlewares.fetching', 'list_session.middlewares.abort-handling', 'list_session.creator']),
         'list_session.manager' => new Constructor(ListSessionManager::class, ['list_session.middlewares']),
         /**
          * Callback returning can_try_create_list value.

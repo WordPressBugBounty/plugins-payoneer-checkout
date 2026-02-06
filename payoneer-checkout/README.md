@@ -5,7 +5,7 @@ Payoneer payment gateway for WooCommerce
 ## Table Of Contents
 
 * [Installation](#installation)
-* [Crafted by Inpsyde](#crafted-by-inpsyde)
+* [Crafted by Syde](#crafted-by-syde)
 * [License](#license)
 * [Contributing](#contributing)
 
@@ -14,13 +14,13 @@ Payoneer payment gateway for WooCommerce
 The best way to install this plugin is download the latest build in the Releases section as zip archive.
 Then, install it from WordPress admin.
 
-## Crafted by Inpsyde
+## Crafted by Syde
 
-The team at [Inpsyde](https://inpsyde.com) is engineering the Web since 2006.
+The team at [Syde](https://syde.com) is engineering the Web since 2006.
 
 ## License
 
-Copyright (c) Inpsyde GmbH
+Copyright (c) Syde GmbH
 
 This software is released under the ["Mozilla Public License 2.0"](license.txt) license.
 

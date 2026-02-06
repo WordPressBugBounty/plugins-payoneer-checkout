@@ -1,29 +1,21 @@
 <?php
 
-/*
- * This file is part of the Assets package.
- *
- * (c) Inpsyde GmbH
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\Assets\OutputFilter;
 
-use Syde\Vendor\Inpsyde\Assets\Asset;
+use Syde\Vendor\Inpsyde\Assets\FilterAwareAsset;
 use Syde\Vendor\Inpsyde\Assets\Script;
 use Syde\Vendor\Inpsyde\Assets\Style;
 class InlineAssetOutputFilter implements AssetOutputFilter
 {
     /**
      * @param string $html
-     * @param Asset $asset
+     * @param FilterAwareAsset $asset
      *
      * @return string
      * @psalm-suppress PossiblyNullArgument
      */
-    public function __invoke(string $html, Asset $asset): string
+    public function __invoke(string $html, FilterAwareAsset $asset): string
     {
         $filePath = $asset->filePath();
         if ($filePath === '') {

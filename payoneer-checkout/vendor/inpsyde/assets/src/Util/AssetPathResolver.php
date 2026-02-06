@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Assets package.
- *
- * (c) Inpsyde GmbH
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\Assets\Util;
 
@@ -33,7 +25,7 @@ class AssetPathResolver
     {
         // Now let's see if it's inside vendor.
         // This is problematic, this is why vendor assets should be "published".
-        $fullVendorPath = wp_normalize_path(realpath(__DIR__ . '/../../../'));
+        $fullVendorPath = wp_normalize_path((string) realpath(__DIR__ . '/../../../'));
         $abspath = wp_normalize_path(\ABSPATH);
         $abspathParent = dirname($abspath);
         $relativeVendorPath = null;

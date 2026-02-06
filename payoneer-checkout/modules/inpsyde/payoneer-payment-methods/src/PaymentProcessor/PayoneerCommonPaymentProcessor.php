@@ -73,6 +73,7 @@ class PayoneerCommonPaymentProcessor implements PaymentProcessorInterface
          * request forgery during webhook processing
          */
         $order->update_meta_data($this->tokenKey, $this->tokenGenerator->generateToken());
+        $order->save();
         $list = $this->sessionProvider->provide(new PaymentContext($order));
         $this->updateOrderWithSessionData($order, $list);
         $updateCommand = $this->updateCommandFactory->createUpdateCommand($order, $list);

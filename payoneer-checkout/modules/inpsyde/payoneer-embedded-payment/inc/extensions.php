@@ -25,14 +25,13 @@ return static function (): array {
             return $paymentOptionsDescription;
         },
         'inpsyde_payoneer_api.payment_request_validator' => static function (PaymentRequestValidatorInterface $previous, ContainerInterface $container): PaymentRequestValidatorInterface {
-            $isEnabled = (bool) $container->get('embedded_payment.is_enabled');
-            $isCheckoutPay = (bool) $container->get('wc.is_checkout_pay_page');
-            if (!$isEnabled || $isCheckoutPay) {
+            $isEmbedded = (bool) $container->get('embedded_payment.is_enabled');
+            if (!$isEmbedded) {
                 return $previous;
             }
             /** @var ListSessionManager $listSessionManager */
             $listSessionManager = $container->get('list_session.manager');
-            return new ListLongIdPaymentRequestValidator($listSessionManager, $previous);
+            return new ListLongIdPaymentRequestValidator($listSessionManager);
         },
         /**
          * Make consumers aware that the order-pay page now also features an AJAX call

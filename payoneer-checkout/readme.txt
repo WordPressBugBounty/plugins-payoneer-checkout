@@ -1,10 +1,10 @@
 === Payoneer Checkout ===
 Contributors: payoneercheckout, inpsyde
 Tags: payment, woocommerce, checkout
-Requires at least: 5.3
-Tested up to: 6.8.2
+Requires at least: 6.5
+Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 3.5.1
+Stable tag: 3.5.5
 License: MPL-2.0
 License URI: https://www.mozilla.org/en-US/MPL/2.0/
 
@@ -58,6 +58,36 @@ Our global banking and payment networks stretch around the world so we can suppo
 == Screenshots ==
 
 == Changelog ==
+
+= [3.5.5] - 2026-01-28 =
+* Fixed:
+  * Endless spinner issue after changing country during checkout. Country selection now properly triggers checkout updates without indefinite loading states
+  * Embedded WooCommerce checkout form loading failure caused by conflict with FunnelKit Funnel Builder Pro plugin
+
+* Changed:
+  * Minimum required WordPress and WooCommerce versions have been updated . Please ensure your site meets the new requirements before upgrading
+  * Updated WebSDK to version 1.24, which properly handles declined test card payments in production mode, preventing endless spinner and cart clearing issues
+  * Classic checkout form is now blocked when a page reload is initiated, preventing submission during page transitions
+  * Added buyer-facing message during payment processing to discourage manual page reloads, reducing payment failures and duplicate order attempts
+  * Smaller plugin zip file, as legacy files were removed from the package
+
+= [3.5.4] - 2025-10-30 =
+* Fixed:
+    * Issue with refunds for orders paid through other payment providers
+
+= [3.5.3] - 2025-10-27 =
+* Fixed
+    * Error messages visibility to buyers in case of payment failures . Error messages are moved to standard WooCommerce location
+    * In case of 3DS failures, failure messages are now properly shown to buyer and retry process has been corrected
+    * In case the Klarna payment method is selected but not eligible to the buyer, fixed an issue where the checkout process was blocked for further attempts
+    * Added a List Validation URL fix on the order payment page, one of the causes of the order staying “On Hold” with the ‘Order not found by transaction ID’ error
+
+= [3.5.2] - 2025-10-13 =
+* Fixed:
+    * Transaction ID link on order page no longer leading to 404 page
+    * Stop LIST creation attempts on ABORT response
+    * Order not found by transaction issue leading to orders being stuck On Hold
+
 = [3.5.1] - 2025-09-25 =
 * Fixed
     * Fatal error on plugin activation

@@ -12,6 +12,7 @@ use Syde\Vendor\Inpsyde\PaymentGateway\Method\DefaultPaymentMethodDefinitionTrai
 use Syde\Vendor\Inpsyde\PaymentGateway\Method\PaymentMethodDefinition;
 use Syde\Vendor\Inpsyde\PaymentGateway\PaymentFieldsRendererInterface;
 use Syde\Vendor\Inpsyde\PaymentGateway\PaymentProcessorInterface;
+use Syde\Vendor\Inpsyde\PaymentGateway\PaymentRequestValidatorInterface;
 use Syde\Vendor\Inpsyde\PaymentGateway\RefundProcessorInterface;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Checkout\PaymentFieldsRenderer\CompoundPaymentFieldsRenderer;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\PaymentFieldsRendererFactory;
@@ -104,11 +105,11 @@ abstract class AbstractPayoneerPaymentMethodDefinition implements PaymentMethodD
     }
     public function paymentProcessor(ContainerInterface $container): PaymentProcessorInterface
     {
-        $paymentProcessor = (new Factory(['payment_methods.common_payment_processor', 'checkout.payment_flow_override_flag', 'wp.is_rest_api_request', 'checkout.payment_flow_override_flag.is_set', 'list_session.manager'], static function (PayoneerCommonPaymentProcessor $common, string $hostedModeOverrideFlag, bool $isRestRequest, bool $hostedModeOverrideFlagIsSet, ListSessionProvider $listSessionProvider): PaymentProcessorInterface {
+        $paymentProcessor = (new Factory(['payment_methods.common_payment_processor', 'checkout.payment_flow_override_flag', 'wp.is_rest_api_request', 'checkout.payment_flow_override_flag.is_set', 'list_session.manager', 'inpsyde_payoneer_api.payment_request_validator'], static function (PayoneerCommonPaymentProcessor $common, string $hostedModeOverrideFlag, bool $isRestRequest, bool $hostedModeOverrideFlagIsSet, ListSessionProvider $listSessionProvider, PaymentRequestValidatorInterface $paymentRequestValidator): PaymentProcessorInterface {
             if ($hostedModeOverrideFlagIsSet) {
                 return new HostedPaymentProcessor($common, $listSessionProvider);
             }
-            return new EmbeddedPaymentProcessor($common, $hostedModeOverrideFlag, $isRestRequest);
+            return new EmbeddedPaymentProcessor($common, $hostedModeOverrideFlag, $isRestRequest, $paymentRequestValidator);
         }))($container);
         /**
          * Just to make psalm happy.

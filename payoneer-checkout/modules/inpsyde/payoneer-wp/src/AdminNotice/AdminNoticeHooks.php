@@ -6,10 +6,16 @@ namespace Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Wp\AdminNotice;
 class AdminNoticeHooks
 {
     private const ACTION_DISMISS = 'payoneer-checkout.admin-notice.dismiss';
+    /**
+     * @psalm-return non-empty-string
+     */
     private static function dismissAction(string $dismissType): string
     {
         return self::ACTION_DISMISS . ".{$dismissType}";
     }
+    /**
+     * @psalm-return non-empty-string
+     */
     private static function logAction(): string
     {
         return self::ACTION_DISMISS;
