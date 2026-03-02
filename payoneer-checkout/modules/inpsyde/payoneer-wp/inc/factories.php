@@ -18,7 +18,10 @@ return static fn() => ['wc.is_checkout' => new Factory(['wc'], static function (
      */
     //phpcs:disable WordPress.Security.NonceVerification.Missing
     return is_checkout() || isset($_POST['action']) && $_POST['action'] === 'payoneer_order_pay' || \method_exists(\WC_Blocks_Utils::class, 'has_block_in_page') && $currentPageId && \WC_Blocks_Utils::has_block_in_page($currentPageId, 'woocommerce/checkout');
-}), 'wp.is_rest_api_request' => new Factory(['wc'], static function (\WooCommerce $wooCommerce) {
+}), 'wc.is_block_cart' => static function (): bool {
+    $currentPageId = \get_the_ID();
+    return \method_exists(\WC_Blocks_Utils::class, 'has_block_in_page') && $currentPageId && \WC_Blocks_Utils::has_block_in_page($currentPageId, 'woocommerce/cart');
+}, 'wp.is_rest_api_request' => new Factory(['wc'], static function (\WooCommerce $wooCommerce) {
     global $wp_rewrite;
     \assert($wp_rewrite instanceof \WP_Rewrite);
     if ($wp_rewrite->using_permalinks()) {

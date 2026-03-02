@@ -4,7 +4,11 @@ declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\AjaxOrderPay;
 
 use Exception;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\PaymentProcessor\PayoneerCommonPaymentProcessor;
 use WC_Order;
+/**
+ * @psalm-import-type PaymentProcessingResult from PayoneerCommonPaymentProcessor
+ */
 class AjaxPayAction
 {
     /**
@@ -27,17 +31,19 @@ class AjaxPayAction
      * @param \WC_Customer $customer
      * @param array $data form POST data
      *
-     * @return bool
+     * @psalm-return PaymentProcessingResult
      */
-    public function __invoke(\WC_Order $order, \WC_Customer $customer, array $data): bool
+    public function __invoke(\WC_Order $order, \WC_Customer $customer, array $data): array
     {
         do_action('woocommerce_before_pay_action', $order);
         $customer->set_props(['billing_country' => $order->get_billing_country() ? $order->get_billing_country() : null, 'billing_state' => $order->get_billing_state() ? $order->get_billing_state() : null, 'billing_postcode' => $order->get_billing_postcode() ? $order->get_billing_postcode() : null, 'billing_city' => $order->get_billing_city() ? $order->get_billing_city() : null]);
         $customer->save();
         if (!empty($data['terms-field']) && empty($data['terms'])) {
             wc_add_notice(__('Please read and accept the terms and conditions to proceed with your order.', 'woocommerce'), 'error');
-            return \false;
+            return ['result' => 'failure'];
         }
+        $result = ['result' => 'failure'];
+        //it is safer to have failure as default
         // Update payment method.
         if ($order->needs_payment()) {
             try {
@@ -48,23 +54,25 @@ class AjaxPayAction
                 $this->updateOrderPaymentMethodData($order, $paymentGateway);
                 if (0 === wc_notice_count('error')) {
                     $orderId = $order->get_id();
+                    /**
+                     * @psalm-var PaymentProcessingResult $result
+                     */
                     $result = $paymentGateway->process_payment($orderId);
-                    // Redirect to success/confirmation/payment page.
-                    if (isset($result['result']) && 'success' === $result['result']) {
-                        return \true;
+                    if (!isset($result['result'])) {
+                        throw new \LogicException('Payment result missing required "result" element');
                     }
                 }
             } catch (\Exception $exception) {
                 wc_add_notice($exception->getMessage(), 'error');
-                return \false;
+                $result = ['result' => 'failure'];
             }
         } else {
             // No payment was required for order.
             $order->payment_complete();
-            return \true;
+            $result = ['result' => 'success'];
         }
         do_action('woocommerce_after_pay_action', $order);
-        return \false;
+        return $result;
     }
     /**
      * @param WC_Order $order

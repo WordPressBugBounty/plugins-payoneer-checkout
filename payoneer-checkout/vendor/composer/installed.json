@@ -987,8 +987,8 @@
         },
         {
             "name": "inpsyde\/payoneer-admin-banner",
-            "version": "dev-dev\/PN-2485-adopt-build-and-distribute-workflow",
-            "version_normalized": "dev-dev\/PN-2485-adopt-build-and-distribute-workflow",
+            "version": "dev-dev\/develop",
+            "version_normalized": "dev-dev\/develop",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/admin-banner",
@@ -1039,8 +1039,8 @@
         },
         {
             "name": "inpsyde\/payoneer-analytics",
-            "version": "dev-dev\/PN-2485-adopt-build-and-distribute-workflow",
-            "version_normalized": "dev-dev\/PN-2485-adopt-build-and-distribute-workflow",
+            "version": "dev-dev\/develop",
+            "version_normalized": "dev-dev\/develop",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/analytics",
@@ -1088,8 +1088,8 @@
         },
         {
             "name": "inpsyde\/payoneer-api",
-            "version": "dev-dev\/PN-2485-adopt-build-and-distribute-workflow",
-            "version_normalized": "dev-dev\/PN-2485-adopt-build-and-distribute-workflow",
+            "version": "dev-dev\/develop",
+            "version_normalized": "dev-dev\/develop",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/api",
@@ -1137,8 +1137,8 @@
         },
         {
             "name": "inpsyde\/payoneer-embedded-payment",
-            "version": "dev-dev\/PN-2485-adopt-build-and-distribute-workflow",
-            "version_normalized": "dev-dev\/PN-2485-adopt-build-and-distribute-workflow",
+            "version": "dev-dev\/develop",
+            "version_normalized": "dev-dev\/develop",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/embedded-payment",
@@ -1191,8 +1191,8 @@
         },
         {
             "name": "inpsyde\/payoneer-hosted-payment",
-            "version": "dev-dev\/PN-2485-adopt-build-and-distribute-workflow",
-            "version_normalized": "dev-dev\/PN-2485-adopt-build-and-distribute-workflow",
+            "version": "dev-dev\/develop",
+            "version_normalized": "dev-dev\/develop",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/hosted-payment",
@@ -1244,8 +1244,8 @@
         },
         {
             "name": "inpsyde\/payoneer-list-session",
-            "version": "dev-dev\/PN-2485-adopt-build-and-distribute-workflow",
-            "version_normalized": "dev-dev\/PN-2485-adopt-build-and-distribute-workflow",
+            "version": "dev-dev\/develop",
+            "version_normalized": "dev-dev\/develop",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/list-session",
@@ -1286,8 +1286,8 @@
         },
         {
             "name": "inpsyde\/payoneer-migrator",
-            "version": "dev-dev\/PN-2485-adopt-build-and-distribute-workflow",
-            "version_normalized": "dev-dev\/PN-2485-adopt-build-and-distribute-workflow",
+            "version": "dev-dev\/develop",
+            "version_normalized": "dev-dev\/develop",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/migration",
@@ -1334,8 +1334,8 @@
         },
         {
             "name": "inpsyde\/payoneer-page-detector",
-            "version": "dev-dev\/PN-2485-adopt-build-and-distribute-workflow",
-            "version_normalized": "dev-dev\/PN-2485-adopt-build-and-distribute-workflow",
+            "version": "dev-dev\/develop",
+            "version_normalized": "dev-dev\/develop",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/page-detector",
@@ -1382,8 +1382,8 @@
         },
         {
             "name": "inpsyde\/payoneer-payment-gateway-checkout",
-            "version": "dev-dev\/PN-2485-adopt-build-and-distribute-workflow",
-            "version_normalized": "dev-dev\/PN-2485-adopt-build-and-distribute-workflow",
+            "version": "dev-dev\/develop",
+            "version_normalized": "dev-dev\/develop",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/checkout",
@@ -1433,8 +1433,8 @@
         },
         {
             "name": "inpsyde\/payoneer-payment-methods",
-            "version": "dev-dev\/PN-2485-adopt-build-and-distribute-workflow",
-            "version_normalized": "dev-dev\/PN-2485-adopt-build-and-distribute-workflow",
+            "version": "dev-dev\/develop",
+            "version_normalized": "dev-dev\/develop",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/payment-methods",
@@ -1565,8 +1565,8 @@
         },
         {
             "name": "inpsyde\/payoneer-settings",
-            "version": "dev-dev\/PN-2485-adopt-build-and-distribute-workflow",
-            "version_normalized": "dev-dev\/PN-2485-adopt-build-and-distribute-workflow",
+            "version": "dev-dev\/develop",
+            "version_normalized": "dev-dev\/develop",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/settings",
@@ -1614,8 +1614,8 @@
         },
         {
             "name": "inpsyde\/payoneer-status-report",
-            "version": "dev-dev\/PN-2485-adopt-build-and-distribute-workflow",
-            "version_normalized": "dev-dev\/PN-2485-adopt-build-and-distribute-workflow",
+            "version": "dev-dev\/develop",
+            "version_normalized": "dev-dev\/develop",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/status-report",
@@ -1661,8 +1661,8 @@
         },
         {
             "name": "inpsyde\/payoneer-third-party-compat",
-            "version": "dev-dev\/PN-2485-adopt-build-and-distribute-workflow",
-            "version_normalized": "dev-dev\/PN-2485-adopt-build-and-distribute-workflow",
+            "version": "dev-dev\/develop",
+            "version_normalized": "dev-dev\/develop",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/third-party-compat",
@@ -1701,8 +1701,8 @@
         },
         {
             "name": "inpsyde\/payoneer-webhooks",
-            "version": "dev-dev\/PN-2485-adopt-build-and-distribute-workflow",
-            "version_normalized": "dev-dev\/PN-2485-adopt-build-and-distribute-workflow",
+            "version": "dev-dev\/develop",
+            "version_normalized": "dev-dev\/develop",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/webhooks",
@@ -1754,8 +1754,8 @@
         },
         {
             "name": "inpsyde\/payoneer-websdk",
-            "version": "dev-dev\/PN-2485-adopt-build-and-distribute-workflow",
-            "version_normalized": "dev-dev\/PN-2485-adopt-build-and-distribute-workflow",
+            "version": "dev-dev\/develop",
+            "version_normalized": "dev-dev\/develop",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/websdk",
@@ -1804,8 +1804,8 @@
         },
         {
             "name": "inpsyde\/payoneer-wp",
-            "version": "dev-dev\/PN-2485-adopt-build-and-distribute-workflow",
-            "version_normalized": "dev-dev\/PN-2485-adopt-build-and-distribute-workflow",
+            "version": "dev-dev\/develop",
+            "version_normalized": "dev-dev\/develop",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/wp",

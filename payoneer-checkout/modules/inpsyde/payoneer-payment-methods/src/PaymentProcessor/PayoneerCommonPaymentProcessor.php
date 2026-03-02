@@ -22,11 +22,7 @@ use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Customer\CustomerInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\ListSession\ListInterface;
 use WC_Order;
 /**
- * @psalm-type PaymentResultInfo = 'success'|'failure'
- * @psalm-type PaymentResult = array{
- *     result: PaymentResultInfo,
- *     redirect?: string
- * }
+ * @psalm-type PaymentProcessingResult = array{result: 'success'|'failure', longId?: string, messages?: string, redirect?: string}
  */
 class PayoneerCommonPaymentProcessor implements PaymentProcessorInterface
 {
@@ -58,7 +54,7 @@ class PayoneerCommonPaymentProcessor implements PaymentProcessorInterface
      * @param WC_Order $order
      * @param PaymentGateway $gateway
      *
-     * @return array
+     * @psalm-return PaymentProcessingResult
      *
      * @throws ApiExceptionInterface
      * @throws CheckoutExceptionInterface
@@ -77,12 +73,13 @@ class PayoneerCommonPaymentProcessor implements PaymentProcessorInterface
         $list = $this->sessionProvider->provide(new PaymentContext($order));
         $this->updateOrderWithSessionData($order, $list);
         $updateCommand = $this->updateCommandFactory->createUpdateCommand($order, $list);
-        do_action('payoneer-checkout.before_update_list', ['longId' => $list->getIdentification()->getLongId(), 'list' => $list]);
+        $longId = $list->getIdentification()->getLongId();
+        do_action('payoneer-checkout.before_update_list', ['longId' => $longId, 'list' => $list]);
         // We have a requirement to log when the List country is not set or different from
         // a billing country.
         $this->validateUpdateCommandCountry($updateCommand);
         $list = $this->updateListSession($updateCommand);
-        do_action('payoneer-checkout.list_session_updated', ['longId' => $list->getIdentification()->getLongId(), 'list' => $list]);
+        do_action('payoneer-checkout.list_session_updated', ['longId' => $longId, 'list' => $list]);
         /**
          * This is a workaround for PN-951. If transaction was started, but not finished
          * (for example, when the page with 3DS popup was reloaded), we want to have checkout
@@ -96,6 +93,7 @@ class PayoneerCommonPaymentProcessor implements PaymentProcessorInterface
         return [
             'result' => 'success',
             'redirect' => '',
+            'longId' => $longId,
             /**
              * The custom attribute is recognized by our JS code as a signal that the payment is
              * not completed yet, and the "Pay" button shouldn't be unblocked.
@@ -164,7 +162,7 @@ class PayoneerCommonPaymentProcessor implements PaymentProcessorInterface
      *
      * @return array
      *
-     * @psalm-return PaymentResult
+     * @psalm-return PaymentProcessingResult
      */
     public function handleFailedPaymentProcessing(WC_Order $order, $error = null): array
     {
@@ -222,7 +220,7 @@ class PayoneerCommonPaymentProcessor implements PaymentProcessorInterface
      * @param InteractionExceptionInterface $exception
      *
      * @return array
-     * @psalm-return PaymentResult
+     * @psalm-return PaymentProcessingResult
      */
     public function handleInteractionException(WC_Order $order, InteractionExceptionInterface $exception): array
     {

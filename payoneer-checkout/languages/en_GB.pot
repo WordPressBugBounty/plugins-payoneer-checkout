@@ -44,27 +44,27 @@ msgid "Payoneer Checkout failed to initialize"
 msgstr ""
 
 #. translators: Used when encountering the ABORT interaction code
-#: inc/extensions.php:317
+#: inc/extensions.php:323
 msgid "The payment has been aborted"
 msgstr ""
 
 #. translators: Used when encountering the TRY_OTHER_NETWORK interaction code
-#: inc/extensions.php:319
+#: inc/extensions.php:325
 msgid "Please try another network"
 msgstr ""
 
 #. translators: Used when encountering the TRY_OTHER_ACCOUNT interaction code
-#: inc/extensions.php:321
+#: inc/extensions.php:327
 msgid "Please try another account"
 msgstr ""
 
 #. translators: Used when encountering the RETRY interaction code
-#: inc/extensions.php:323
+#: inc/extensions.php:329
 msgid "Please attempt the payment again"
 msgstr ""
 
 #. translators: Used when encountering the VERIFY interaction code
-#: inc/extensions.php:325
+#: inc/extensions.php:331
 msgid "Payment requires verification"
 msgstr ""
 
@@ -174,16 +174,16 @@ msgid "It seems your payment has expired. Please try again"
 msgstr ""
 
 #. translators: An unexpected error during the final List UPDATE before the CHARGE
-#: modules.local/embedded-payment/src/PaymentProcessor/EmbeddedPaymentProcessor.php:56
-#: modules.local/hosted-payment/src/PaymentProcessor/HostedPaymentProcessor.php:57
-#: modules/inpsyde/payoneer-embedded-payment/src/PaymentProcessor/EmbeddedPaymentProcessor.php:56
-#: modules/inpsyde/payoneer-hosted-payment/src/PaymentProcessor/HostedPaymentProcessor.php:57
+#: modules.local/embedded-payment/src/PaymentProcessor/EmbeddedPaymentProcessor.php:59
+#: modules.local/hosted-payment/src/PaymentProcessor/HostedPaymentProcessor.php:54
+#: modules/inpsyde/payoneer-embedded-payment/src/PaymentProcessor/EmbeddedPaymentProcessor.php:59
+#: modules/inpsyde/payoneer-hosted-payment/src/PaymentProcessor/HostedPaymentProcessor.php:54
 msgid "Payment failed. Please attempt the payment again or contact the shop admin. This issue has been logged."
 msgstr ""
 
 #. translators: Order note added when processing an order in embedded flow
-#: modules.local/embedded-payment/src/PaymentProcessor/EmbeddedPaymentProcessor.php:86
-#: modules/inpsyde/payoneer-embedded-payment/src/PaymentProcessor/EmbeddedPaymentProcessor.php:86
+#: modules.local/embedded-payment/src/PaymentProcessor/EmbeddedPaymentProcessor.php:89
+#: modules/inpsyde/payoneer-embedded-payment/src/PaymentProcessor/EmbeddedPaymentProcessor.php:89
 msgid "Backend processing finished, frontend processing is about to start."
 msgstr ""
 
@@ -199,8 +199,8 @@ msgid "Hosted: customers are redirected to a payment page hosted by Payoneer."
 msgstr ""
 
 #. translators: Order note added when processing an order in hosted flow
-#: modules.local/hosted-payment/src/PaymentProcessor/HostedPaymentProcessor.php:92
-#: modules/inpsyde/payoneer-hosted-payment/src/PaymentProcessor/HostedPaymentProcessor.php:92
+#: modules.local/hosted-payment/src/PaymentProcessor/HostedPaymentProcessor.php:89
+#: modules/inpsyde/payoneer-hosted-payment/src/PaymentProcessor/HostedPaymentProcessor.php:89
 msgid "The customer is being redirected to the hosted payment page."
 msgstr ""
 
@@ -371,20 +371,20 @@ msgid "Payment will be done on a dedicated payment page"
 msgstr ""
 
 #. translators: Transaction ID supplied by WooCommerce plugin
-#: modules.local/payment-methods/src/PaymentProcessor/PayoneerCommonPaymentProcessor.php:176
-#: modules/inpsyde/payoneer-payment-methods/src/PaymentProcessor/PayoneerCommonPaymentProcessor.php:176
+#: modules.local/payment-methods/src/PaymentProcessor/PayoneerCommonPaymentProcessor.php:174
+#: modules/inpsyde/payoneer-payment-methods/src/PaymentProcessor/PayoneerCommonPaymentProcessor.php:174
 #, php-format
 msgid "Initiating payment with transaction ID \"%1$s\""
 msgstr ""
 
-#: modules.local/payment-methods/src/PaymentProcessor/PayoneerCommonPaymentProcessor.php:218
-#: modules/inpsyde/payoneer-payment-methods/src/PaymentProcessor/PayoneerCommonPaymentProcessor.php:218
+#: modules.local/payment-methods/src/PaymentProcessor/PayoneerCommonPaymentProcessor.php:216
+#: modules/inpsyde/payoneer-payment-methods/src/PaymentProcessor/PayoneerCommonPaymentProcessor.php:216
 msgid "The payment was not processed. Please try again."
 msgstr ""
 
 #. translators: Used after checking for misconfigured merchant credentials, e.g. when we encounter 401/INVALID_CONFIGURATION
-#: modules.local/payment-methods/src/PaymentProcessor/PayoneerCommonPaymentProcessor.php:264
-#: modules/inpsyde/payoneer-payment-methods/src/PaymentProcessor/PayoneerCommonPaymentProcessor.php:264
+#: modules.local/payment-methods/src/PaymentProcessor/PayoneerCommonPaymentProcessor.php:262
+#: modules/inpsyde/payoneer-payment-methods/src/PaymentProcessor/PayoneerCommonPaymentProcessor.php:262
 msgid "Failed to initialize payment session. Payoneer Checkout is not configured properly."
 msgstr ""
 

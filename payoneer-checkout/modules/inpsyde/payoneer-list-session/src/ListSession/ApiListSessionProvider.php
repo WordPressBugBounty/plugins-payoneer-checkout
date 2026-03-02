@@ -27,6 +27,8 @@ class ApiListSessionProvider implements ListSessionProvider
      * @var callable
      */
     private $canCreateList;
+    protected bool $isCheckout;
+    protected bool $isBlockCart;
     /**
      * @var string|null
      */
@@ -40,13 +42,15 @@ class ApiListSessionProvider implements ListSessionProvider
      *
      * @psalm-param PayoneerIntegrationTypes::* $integrationType
      */
-    public function __construct(WcBasedListSessionFactoryInterface $checkoutFactory, OrderBasedListSessionFactory $listFactory, string $integrationType, callable $canCreateList, string $hostedVersion = null)
+    public function __construct(WcBasedListSessionFactoryInterface $checkoutFactory, OrderBasedListSessionFactory $listFactory, string $integrationType, callable $canCreateList, bool $isCheckout, bool $isBlockCart, string $hostedVersion = null)
     {
         $this->checkoutFactory = $checkoutFactory;
         $this->listFactory = $listFactory;
         $this->integrationType = $integrationType;
         $this->hostedVersion = $hostedVersion;
         $this->canCreateList = $canCreateList;
+        $this->isCheckout = $isCheckout;
+        $this->isBlockCart = $isBlockCart;
     }
     /**
      * @param ContextInterface $context
@@ -58,6 +62,13 @@ class ApiListSessionProvider implements ListSessionProvider
      */
     public function provide(ContextInterface $context): ListInterface
     {
+        /**
+         * We allow creating a List on a block cart page because we need to display icons there
+         * depending on the available networks in List. Classic cart doesn't have this feature.
+         */
+        if (!$this->isCheckout && !$this->isBlockCart) {
+            throw new \RuntimeException('Creating LIST outside of checkout and block cart is not allowed.');
+        }
         if (!($this->canCreateList)()) {
             throw new \RuntimeException('Cannot create List session.');
         }

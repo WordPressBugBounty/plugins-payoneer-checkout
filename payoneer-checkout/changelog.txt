@@ -2,6 +2,18 @@
 
 = [next-version] - yyyy-mm-dd =
 
+= [3.5.5] - 2026-01-28 =
+* Fixed:
+  * Endless spinner issue after changing country during checkout. Country selection now properly triggers checkout updates without indefinite loading states
+  * Embedded WooCommerce checkout form loading failure caused by conflict with FunnelKit Funnel Builder Pro plugin
+
+* Changed:
+  * Minimum required WordPress and WooCommerce versions have been updated . Please ensure your site meets the new requirements before upgrading
+  * Updated WebSDK to version 1.24, which properly handles declined test card payments in production mode, preventing endless spinner and cart clearing issues
+  * Classic checkout form is now blocked when a page reload is initiated, preventing submission during page transitions
+  * Added buyer-facing message during payment processing to discourage manual page reloads, reducing payment failures and duplicate order attempts
+  * Smaller plugin zip file, as legacy files were removed from the package
+
 = [3.5.4] - 2025-10-30 =
 * Fixed:
     * Issue with refunds for orders paid through other payment providers

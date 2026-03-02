@@ -11,7 +11,7 @@ use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\Exception\CommandExceptionInterf
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\Exception\InteractionExceptionInterface;
 use WC_Order;
 /**
- * @psalm-import-type PaymentResult from PayoneerCommonPaymentProcessor
+ * @psalm-import-type PaymentProcessingResult from PayoneerCommonPaymentProcessor
  */
 class EmbeddedPaymentProcessor implements PaymentProcessorInterface
 {
@@ -26,6 +26,9 @@ class EmbeddedPaymentProcessor implements PaymentProcessorInterface
         $this->isRestRequest = $isRestRequest;
         $this->paymentRequestValidator = $paymentRequestValidator;
     }
+    /**
+     * @psalm-return PaymentProcessingResult
+     */
     public function processPayment(WC_Order $order, PaymentGateway $gateway): array
     {
         try {

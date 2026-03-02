@@ -63,7 +63,7 @@ return static function (): array {
         'list_session.hosted_version' => static function (): string {
             return 'v5';
         },
-        'list_session.creator' => new Constructor(ApiListSessionProvider::class, ['list_session.list_session_factory', 'list_session.order_based_list_session_factory', 'list_session.integration_type', 'list_session.can_try_create_list.callable', 'list_session.hosted_version']),
+        'list_session.creator' => new Constructor(ApiListSessionProvider::class, ['list_session.list_session_factory', 'list_session.order_based_list_session_factory', 'list_session.integration_type', 'list_session.can_try_create_list.callable', 'wc.is_checkout', 'wc.is_block_cart', 'list_session.hosted_version']),
         'list_session.list_cache' => new Constructor(ListCache::class),
         'list_session.middlewares.fetching' => new Constructor(FetchingMiddleware::class, ['payoneer_sdk.commands.fetch', 'list_session.list_cache', 'list_session.selected_payment_flow']),
         'list_session.middlewares.wc-session-update' => new Constructor(UpdatingMiddleware::class, ['list_session.list_session_factory', 'checkout.checkout_hash_provider', 'checkout.session_hash_key', 'core.order_based_update_command_factory', 'wp.is_rest_api_request', 'list_session.list_cache']),

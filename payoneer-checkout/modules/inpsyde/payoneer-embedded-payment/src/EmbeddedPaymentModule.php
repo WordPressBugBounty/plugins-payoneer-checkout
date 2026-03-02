@@ -256,10 +256,11 @@ class EmbeddedPaymentModule implements ExecutableModule, ServiceModule, Extendin
      */
     protected function onAjaxOrderPay(OrderPayload $payload, AjaxPayAction $payAction)
     {
-        if ($payAction($payload->getOrder(), $payload->getCustomer(), $payload->getFormData())) {
-            wp_send_json_success(['result' => 'success'], 200);
+        $result = $payAction($payload->getOrder(), $payload->getCustomer(), $payload->getFormData());
+        if (isset($result['result']) && $result['result'] === 'success') {
+            wp_send_json_success($result, 200);
         }
-        wp_send_json_error(['result' => 'failure'], 500);
+        wp_send_json_error($result, 500);
     }
     protected function registerPaymentUnsuccessfulListener(ContainerInterface $container): void
     {
@@ -280,6 +281,9 @@ class EmbeddedPaymentModule implements ExecutableModule, ServiceModule, Extendin
                 wp_send_json_error('Unexpected payment method');
             }
             $paymentResult = (string) filter_input(\INPUT_POST, 'paymentResult', \FILTER_CALLBACK, ['options' => 'sanitize_key']);
+            if ($paymentResult === 'list-mismatch') {
+                do_action('payoneer-checkout.embedded-payment.list-mismatch');
+            }
             /**
              * This may be not needed as webhook notifying about failed payment already arrived
              * in most cases. But it may be delayed, and we need to have an order in failed

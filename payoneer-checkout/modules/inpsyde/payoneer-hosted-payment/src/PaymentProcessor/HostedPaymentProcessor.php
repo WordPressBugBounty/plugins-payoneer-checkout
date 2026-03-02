@@ -13,9 +13,6 @@ use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\Exception\CommandExceptionInterf
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\Exception\InteractionExceptionInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\ListSession\ListInterface;
 use WC_Order;
-/**
- * @psalm-import-type PaymentResult from PayoneerCommonPaymentProcessor
- */
 class HostedPaymentProcessor implements PaymentProcessorInterface
 {
     private PayoneerCommonPaymentProcessor $commonProcessor;

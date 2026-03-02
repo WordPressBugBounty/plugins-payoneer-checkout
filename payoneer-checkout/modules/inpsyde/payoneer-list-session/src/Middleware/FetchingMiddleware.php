@@ -100,6 +100,7 @@ class FetchingMiddleware implements ListSessionProviderMiddleware
         $order = $context->getOrder();
         if ($order !== null) {
             $order->update_meta_data(self::LONG_ID_KEY, $longId);
+            $order->save();
         }
         $session = $context->getSession();
         if ($session !== null) {
@@ -118,6 +119,7 @@ class FetchingMiddleware implements ListSessionProviderMiddleware
         $order = $context->getOrder();
         if ($order !== null) {
             $order->delete_meta_data(self::LONG_ID_KEY);
+            $order->save();
         }
         $session = $context->getSession();
         if ($session !== null) {
