@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Callback;
 
-use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Header\HeaderInterface;
 /**
  * Service able to convert CallbackInterface instance into array.
  */

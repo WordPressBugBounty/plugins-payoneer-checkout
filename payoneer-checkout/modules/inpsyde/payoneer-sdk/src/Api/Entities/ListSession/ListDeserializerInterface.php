@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\ListSession;
 
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\ApiExceptionInterface;
-use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Product\ProductType;
 /**
  * Service able to convert array to List instance.
  */

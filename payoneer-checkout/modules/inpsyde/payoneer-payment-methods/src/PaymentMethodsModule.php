@@ -157,9 +157,10 @@ class PaymentMethodsModule implements ServiceModule, ExtendingModule, Executable
         }];
     }
     /**
-     *  By default, only 'pending' and 'failed' order statuses can be cancelled.
-     *  When returning from an aborted payment (with redirect->challenge->redirect)
-     *  we do want to be able to cancel our 'on-hold' order though
+     * By default, only 'pending' and 'failed' order statuses can be cancelled.
+     * Since orders now use 'pending' during async payment processing, this is
+     * inherently supported. This method is retained for backwards compatibility
+     * in case any orders are still in 'on-hold' from before this change.
      *
      * @param string[] $payoneerPaymentGateways
      */
@@ -169,7 +170,9 @@ class PaymentMethodsModule implements ServiceModule, ExtendingModule, Executable
             if (!in_array($order->get_payment_method(), $payoneerPaymentGateways, \true)) {
                 return $validStatuses;
             }
-            $validStatuses[] = 'on-hold';
+            if (!in_array('on-hold', $validStatuses, \true)) {
+                $validStatuses[] = 'on-hold';
+            }
             return $validStatuses;
         }, 10, 2);
     }

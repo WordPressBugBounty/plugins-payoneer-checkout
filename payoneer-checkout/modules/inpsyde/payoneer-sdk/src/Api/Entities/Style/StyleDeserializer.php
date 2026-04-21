@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Style;
 
-use InvalidArgumentException;
 class StyleDeserializer implements StyleDeserializerInterface
 {
     /**

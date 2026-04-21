@@ -539,6 +539,8 @@ return array(
     'Syde\\Vendor\\Inpsyde\\PayoneerSdk\\Api\\Command\\Exception\\CommandExecutionExceptionInterface' => $baseDir . '/modules/inpsyde/payoneer-sdk/src/Api/Command/Exception/CommandExecutionExceptionInterface.php',
     'Syde\\Vendor\\Inpsyde\\PayoneerSdk\\Api\\Command\\Exception\\InteractionException' => $baseDir . '/modules/inpsyde/payoneer-sdk/src/Api/Command/Exception/InteractionException.php',
     'Syde\\Vendor\\Inpsyde\\PayoneerSdk\\Api\\Command\\Exception\\InteractionExceptionInterface' => $baseDir . '/modules/inpsyde/payoneer-sdk/src/Api/Command/Exception/InteractionExceptionInterface.php',
+    'Syde\\Vendor\\Inpsyde\\PayoneerSdk\\Api\\Command\\FetchChargeCommand' => $baseDir . '/modules/inpsyde/payoneer-sdk/src/Api/Command/FetchChargeCommand.php',
+    'Syde\\Vendor\\Inpsyde\\PayoneerSdk\\Api\\Command\\FetchChargeCommandInterface' => $baseDir . '/modules/inpsyde/payoneer-sdk/src/Api/Command/FetchChargeCommandInterface.php',
     'Syde\\Vendor\\Inpsyde\\PayoneerSdk\\Api\\Command\\FetchListCommand' => $baseDir . '/modules/inpsyde/payoneer-sdk/src/Api/Command/FetchListCommand.php',
     'Syde\\Vendor\\Inpsyde\\PayoneerSdk\\Api\\Command\\ListAwareCommandInterface' => $baseDir . '/modules/inpsyde/payoneer-sdk/src/Api/Command/ListAwareCommandInterface.php',
     'Syde\\Vendor\\Inpsyde\\PayoneerSdk\\Api\\Command\\ListCommandInterface' => $baseDir . '/modules/inpsyde/payoneer-sdk/src/Api/Command/ListCommandInterface.php',

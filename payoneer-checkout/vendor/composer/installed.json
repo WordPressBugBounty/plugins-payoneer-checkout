@@ -13,13 +13,7 @@
                 "type": "zip",
                 "url": "https:\/\/api.github.com\/repos\/composer\/installers\/zipball\/12fb2dfe5e16183de69e784a7b84046c43d97e8e",
                 "reference": "12fb2dfe5e16183de69e784a7b84046c43d97e8e",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https:\/\/repo.packagist.com\/inpsyde\/dists\/%package%\/%version%\/r%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "shasum": ""
             },
             "require": {
                 "composer-plugin-api": "^1.0 || ^2.0",
@@ -168,13 +162,7 @@
                 "type": "zip",
                 "url": "https:\/\/api.github.com\/repos\/container-interop\/service-provider\/zipball\/e04441ca21ef03e10dce70b0af29269281eec6dc",
                 "reference": "e04441ca21ef03e10dce70b0af29269281eec6dc",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https:\/\/repo.packagist.com\/inpsyde\/dists\/%package%\/%version%\/r%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "shasum": ""
             },
             "require": {
                 "psr\/container": "^1.0 || ^2.0"
@@ -212,13 +200,7 @@
                 "type": "zip",
                 "url": "https:\/\/api.github.com\/repos\/Dhii\/collections-interface\/zipball\/74464a969b340d16889eacd9eadc9817f7e7f47a",
                 "reference": "74464a969b340d16889eacd9eadc9817f7e7f47a",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https:\/\/repo.packagist.com\/inpsyde\/dists\/%package%\/%version%\/r%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "shasum": ""
             },
             "require": {
                 "php": "^7.1 | ^8.0",
@@ -276,13 +258,7 @@
                 "type": "zip",
                 "url": "https:\/\/api.github.com\/repos\/Dhii\/containers\/zipball\/1568cb2def9dee213c5846c4618f9d6b2cebbdef",
                 "reference": "1568cb2def9dee213c5846c4618f9d6b2cebbdef",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https:\/\/repo.packagist.com\/inpsyde\/dists\/%package%\/%version%\/r%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "shasum": ""
             },
             "require": {
                 "container-interop\/service-provider": "^0.4",
@@ -345,13 +321,7 @@
                 "type": "zip",
                 "url": "https:\/\/api.github.com\/repos\/Dhii\/package-interface\/zipball\/bcc73f4285eead9b482dbb89662b723abf49298b",
                 "reference": "bcc73f4285eead9b482dbb89662b723abf49298b",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https:\/\/repo.packagist.com\/inpsyde\/dists\/%package%\/%version%\/r%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "shasum": ""
             },
             "require": {
                 "dhii\/validation-interface": "^0.3-alpha1",
@@ -401,13 +371,7 @@
                 "type": "zip",
                 "url": "https:\/\/api.github.com\/repos\/Dhii\/services\/zipball\/1a17b6b2cb2fdef0c0b541c8992188d9740746ce",
                 "reference": "1a17b6b2cb2fdef0c0b541c8992188d9740746ce",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https:\/\/repo.packagist.com\/inpsyde\/dists\/%package%\/%version%\/r%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "shasum": ""
             },
             "require": {
                 "php": "^7.1 | ^8.0",
@@ -457,13 +421,7 @@
                 "type": "zip",
                 "url": "https:\/\/api.github.com\/repos\/Dhii\/validation-interface\/zipball\/0e73c7bf3d2421ceb79331c60a9bc1b1d5eb65a6",
                 "reference": "0e73c7bf3d2421ceb79331c60a9bc1b1d5eb65a6",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https:\/\/repo.packagist.com\/inpsyde\/dists\/%package%\/%version%\/r%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "shasum": ""
             },
             "require": {
                 "php": "^7.1 | ^8.0"
@@ -518,13 +476,7 @@
                 "type": "zip",
                 "url": "https:\/\/api.github.com\/repos\/Dhii\/validator\/zipball\/e10fba08398e33e123ada3d5fe0d147a72525cc2",
                 "reference": "e10fba08398e33e123ada3d5fe0d147a72525cc2",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https:\/\/repo.packagist.com\/inpsyde\/dists\/%package%\/%version%\/r%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "shasum": ""
             },
             "require": {
                 "dhii\/validation-interface": "^0.3.0-alpha3",
@@ -579,13 +531,7 @@
                 "type": "zip",
                 "url": "https:\/\/api.github.com\/repos\/Dhii\/versions\/zipball\/120b22b248d0b46e41bac93bf3394516c9d55730",
                 "reference": "120b22b248d0b46e41bac93bf3394516c9d55730",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https:\/\/repo.packagist.com\/inpsyde\/dists\/%package%\/%version%\/r%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "shasum": ""
             },
             "require": {
                 "dhii\/package-interface": "^0.1.0-alpha3",
@@ -635,13 +581,7 @@
                 "type": "zip",
                 "url": "https:\/\/api.github.com\/repos\/inpsyde\/assets\/zipball\/9bf2a427270a3c803544f807f4b32fe10d8c834b",
                 "reference": "9bf2a427270a3c803544f807f4b32fe10d8c834b",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https:\/\/repo.packagist.com\/inpsyde\/dists\/%package%\/%version%\/r%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "shasum": ""
             },
             "require": {
                 "ext-dom": "*",
@@ -705,24 +645,12 @@
         },
         {
             "name": "inpsyde\/logger",
-            "version": "v1.4.0",
-            "version_normalized": "1.4.0.0",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:inpsyde\/logger.git",
-                "reference": "ea22ad6862a771239e02d2a33b4fafb095dc4e30"
-            },
+            "version": "dev-main",
+            "version_normalized": "dev-main",
             "dist": {
-                "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/inpsyde\/logger\/zipball\/ea22ad6862a771239e02d2a33b4fafb095dc4e30",
-                "reference": "ea22ad6862a771239e02d2a33b4fafb095dc4e30",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https:\/\/repo.packagist.com\/inpsyde\/dists\/%package%\/%version%\/r%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "type": "path",
+                "url": ".\/modules.local\/logger",
+                "reference": "995f9509461dc162fa5fef857507b6e7f90cee5b"
             },
             "require": {
                 "inpsyde\/modularity": "^1.3.0",
@@ -732,17 +660,13 @@
             },
             "require-dev": {
                 "brain\/monkey": "^2",
-                "inpsyde\/php-coding-standards": "^1.0-beta.9",
+                "inpsyde\/php-coding-standards": "*",
                 "php-stubs\/woocommerce-stubs": "^5.0",
                 "php-stubs\/wordpress-stubs": ">=5.0",
                 "phpunit\/phpunit": "^8.0",
                 "vimeo\/psalm": "^4.6"
             },
-            "time": "2024-03-15T11:59:49+00:00",
             "type": "inpsyde-module",
-            "extra": {
-                "installer-disable": true
-            },
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
@@ -754,32 +678,20 @@
                     "Syde\\Vendor\\Inpsyde\\Logger\\Tests\\": "tests\/php"
                 }
             },
-            "notification-url": "https:\/\/repo.packagist.com\/inpsyde\/downloads\/",
             "license": [
                 "GPL-2.0-or-later"
             ],
             "authors": [
                 {
-                    "name": "Inpsyde GmbH",
-                    "homepage": "https:\/\/inpsyde.com\/",
-                    "email": "hello@inpsyde.com",
+                    "name": "Syde GmbH",
+                    "homepage": "https:\/\/syde.com\/",
+                    "email": "hello@syde.com",
                     "role": "Company"
-                },
-                {
-                    "name": "Aleksas Pantechovskis",
-                    "email": "alex.pantec@gmail.com",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Kirill Braslavskyi",
-                    "email": "strangerkir@gmail.com",
-                    "role": "developer"
                 }
             ],
             "description": "Logger module for inpsyde\/modularity based on WooCommerce logger",
-            "support": {
-                "source": "https:\/\/github.com\/inpsyde\/logger\/tree\/v1.4.0",
-                "issues": "https:\/\/github.com\/inpsyde\/logger\/issues"
+            "transport-options": {
+                "relative": true
             },
             "install-path": "..\/..\/modules\/inpsyde\/logger"
         },
@@ -796,13 +708,7 @@
                 "type": "zip",
                 "url": "https:\/\/api.github.com\/repos\/inpsyde\/modularity\/zipball\/e1ca1c81b7b663355906b586525d21ac5d46bc65",
                 "reference": "e1ca1c81b7b663355906b586525d21ac5d46bc65",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https:\/\/repo.packagist.com\/inpsyde\/dists\/%package%\/%version%\/r%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "shasum": ""
             },
             "require": {
                 "ext-json": "*",
@@ -855,24 +761,12 @@
         },
         {
             "name": "inpsyde\/payment-gateway",
-            "version": "2.8.0",
-            "version_normalized": "2.8.0.0",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:inpsyde\/payment-gateway.git",
-                "reference": "a1558c085ad026bf95220a1ef2abe83070993fdb"
-            },
+            "version": "dev-main",
+            "version_normalized": "dev-main",
             "dist": {
-                "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/inpsyde\/payment-gateway\/zipball\/a1558c085ad026bf95220a1ef2abe83070993fdb",
-                "reference": "a1558c085ad026bf95220a1ef2abe83070993fdb",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https:\/\/repo.packagist.com\/inpsyde\/dists\/%package%\/%version%\/r%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "type": "path",
+                "url": ".\/modules.local\/payment-gateway",
+                "reference": "beb0e7a40c0daf413ae84da26fa477cbcad51a47"
             },
             "require": {
                 "inpsyde\/modularity": "@stable",
@@ -883,7 +777,7 @@
                 "brainmaestro\/composer-git-hooks": "^2.8",
                 "inpsyde\/composer-assets-compiler": "^2.5",
                 "inpsyde\/ddev-tools": "dev-main",
-                "inpsyde\/php-coding-standards": "^2.0",
+                "inpsyde\/php-coding-standards": "*",
                 "inpsyde\/wp-translation-downloader": "^2.4",
                 "mockery\/mockery": "^1.3",
                 "php-stubs\/woocommerce-stubs": "^5.0@stable",
@@ -891,7 +785,6 @@
                 "phpunit\/phpunit": "^8.0 | ^9.0",
                 "vimeo\/psalm": "^4.3"
             },
-            "time": "2025-07-02T13:34:25+00:00",
             "type": "inpsyde-module",
             "extra": {
                 "hooks": {
@@ -908,7 +801,7 @@
                     ],
                     "api": {
                         "names": {
-                            "inpsyde\/*": "https:\/\/translate.inpsyde.com\/products\/api\/translations\/%projectName%"
+                            "inpsyde\/*": "https:\/\/translate.syde.com\/products\/api\/translations\/%projectName%"
                         }
                     },
                     "directories": {
@@ -937,7 +830,6 @@
                     "Syde\\Vendor\\Inpsyde\\PaymentGateway\\Test\\": "tests\/PHPUnit\/Helper"
                 }
             },
-            "notification-url": "https:\/\/repo.packagist.com\/inpsyde\/downloads\/",
             "scripts": {
                 "phpcs": [
                     "@php .\/vendor\/bin\/phpcs -n -s --parallel=24"
@@ -973,26 +865,25 @@
             ],
             "authors": [
                 {
-                    "name": "Inpsyde GmbH",
-                    "homepage": "https:\/\/inpsyde.com\/",
-                    "email": "hello@inpsyde.com",
+                    "name": "Syde GmbH",
+                    "homepage": "https:\/\/syde.com\/",
+                    "email": "hello@syde.com",
                     "role": "Company"
                 }
             ],
-            "support": {
-                "source": "https:\/\/github.com\/inpsyde\/payment-gateway\/tree\/2.8.0",
-                "issues": "https:\/\/github.com\/inpsyde\/payment-gateway\/issues"
+            "transport-options": {
+                "relative": true
             },
             "install-path": "..\/..\/modules\/inpsyde\/payment-gateway"
         },
         {
             "name": "inpsyde\/payoneer-admin-banner",
-            "version": "dev-dev\/develop",
-            "version_normalized": "dev-dev\/develop",
+            "version": "dev-main",
+            "version_normalized": "dev-main",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/admin-banner",
-                "reference": "9fbfb5ad20c6f3eded0540fa088393a6f5ba01a2"
+                "reference": "226e514edcd4ebd68df892aa46ed4b8963f97f99"
             },
             "require": {
                 "dhii\/services": "^0.1.1-alpha2",
@@ -1004,7 +895,7 @@
             },
             "require-dev": {
                 "brain\/monkey": "^2",
-                "inpsyde\/php-coding-standards": "^1.0-beta.9",
+                "inpsyde\/php-coding-standards": "*",
                 "php-stubs\/woocommerce-stubs": "^5.0",
                 "php-stubs\/wordpress-stubs": "^5.0",
                 "phpunit\/phpunit": "^8.0 | ^9.0",
@@ -1027,8 +918,8 @@
             ],
             "authors": [
                 {
-                    "name": "Inpsyde GmbH",
-                    "email": "hello@inpsyde.com"
+                    "name": "Syde GmbH",
+                    "email": "hello@syde.com"
                 }
             ],
             "description": "Payoneer banner module for WooCommerce",
@@ -1039,12 +930,12 @@
         },
         {
             "name": "inpsyde\/payoneer-analytics",
-            "version": "dev-dev\/develop",
-            "version_normalized": "dev-dev\/develop",
+            "version": "dev-main",
+            "version_normalized": "dev-main",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/analytics",
-                "reference": "cea259f74a42805a8c8c824975ecf7ebd4d6854c"
+                "reference": "0552daf358bc6fa546296adf501309c672d90763"
             },
             "require": {
                 "dhii\/services": "^0.1.0-alpha2",
@@ -1054,7 +945,7 @@
             },
             "require-dev": {
                 "brain\/monkey": "^2",
-                "inpsyde\/php-coding-standards": "^1.0-beta9",
+                "inpsyde\/php-coding-standards": "*",
                 "phpunit\/phpunit": "^9.6.17",
                 "symfony\/polyfill-php80": "^1.19",
                 "vimeo\/psalm": "^4.6"
@@ -1076,8 +967,8 @@
             ],
             "authors": [
                 {
-                    "name": "Inpsyde GmbH",
-                    "email": "hello@inpsyde.com"
+                    "name": "Syde GmbH",
+                    "email": "hello@syde.com"
                 }
             ],
             "description": "Payoneer analytics",
@@ -1088,12 +979,12 @@
         },
         {
             "name": "inpsyde\/payoneer-api",
-            "version": "dev-dev\/develop",
-            "version_normalized": "dev-dev\/develop",
+            "version": "dev-main",
+            "version_normalized": "dev-main",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/api",
-                "reference": "3141a286544a5828ba411f19187ecbc0776d1198"
+                "reference": "1ece9a68dd478cc2488a95728da9255ef44ef286"
             },
             "require": {
                 "dhii\/services": "^0.1.0-alpha2",
@@ -1103,7 +994,7 @@
             },
             "require-dev": {
                 "brain\/monkey": "^2",
-                "inpsyde\/php-coding-standards": "^1.0-beta9",
+                "inpsyde\/php-coding-standards": "*",
                 "phpunit\/phpunit": "^9.6.17",
                 "symfony\/polyfill-php80": "^1.19",
                 "vimeo\/psalm": "^4.6"
@@ -1125,8 +1016,8 @@
             ],
             "authors": [
                 {
-                    "name": "Inpsyde GmbH",
-                    "email": "hello@inpsyde.com"
+                    "name": "Syde GmbH",
+                    "email": "hello@syde.com"
                 }
             ],
             "description": "Payoneer API",
@@ -1137,12 +1028,12 @@
         },
         {
             "name": "inpsyde\/payoneer-embedded-payment",
-            "version": "dev-dev\/develop",
-            "version_normalized": "dev-dev\/develop",
+            "version": "dev-main",
+            "version_normalized": "dev-main",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/embedded-payment",
-                "reference": "6ce354bfcb78e98026dc6c5b152b4e0b13af1ae0"
+                "reference": "066115e1b6a384f3a42c6304a7a6a2d386bf45fc"
             },
             "require": {
                 "dhii\/services": "^0.1.0-alpha2",
@@ -1156,7 +1047,7 @@
             },
             "require-dev": {
                 "brain\/monkey": "^2",
-                "inpsyde\/php-coding-standards": "^1.0-beta.9",
+                "inpsyde\/php-coding-standards": "*",
                 "php-stubs\/woocommerce-stubs": "^5.0",
                 "php-stubs\/wordpress-stubs": "^5.0",
                 "phpunit\/phpunit": "^9.6.17",
@@ -1179,8 +1070,8 @@
             ],
             "authors": [
                 {
-                    "name": "Inpsyde GmbH",
-                    "email": "hello@inpsyde.com"
+                    "name": "Syde GmbH",
+                    "email": "hello@syde.com"
                 }
             ],
             "description": "Payoneer Embedded Payment module",
@@ -1191,12 +1082,12 @@
         },
         {
             "name": "inpsyde\/payoneer-hosted-payment",
-            "version": "dev-dev\/develop",
-            "version_normalized": "dev-dev\/develop",
+            "version": "dev-main",
+            "version_normalized": "dev-main",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/hosted-payment",
-                "reference": "786b9784805e8830d240d21f8ea93bbc2a4818e3"
+                "reference": "c301a0eac241b0aa0d4a87e376cbf57639b42ac6"
             },
             "require": {
                 "dhii\/services": "^0.1.0-alpha2",
@@ -1209,7 +1100,7 @@
             },
             "require-dev": {
                 "brain\/monkey": "^2",
-                "inpsyde\/php-coding-standards": "^1.0-beta.9",
+                "inpsyde\/php-coding-standards": "*",
                 "php-stubs\/woocommerce-stubs": "^5.0",
                 "php-stubs\/wordpress-stubs": "^5.0",
                 "phpunit\/phpunit": "^9.6.17",
@@ -1232,8 +1123,8 @@
             ],
             "authors": [
                 {
-                    "name": "Inpsyde GmbH",
-                    "email": "hello@inpsyde.com"
+                    "name": "Syde GmbH",
+                    "email": "hello@syde.com"
                 }
             ],
             "description": "Payoneer Hosted Payment module",
@@ -1244,12 +1135,12 @@
         },
         {
             "name": "inpsyde\/payoneer-list-session",
-            "version": "dev-dev\/develop",
-            "version_normalized": "dev-dev\/develop",
+            "version": "dev-main",
+            "version_normalized": "dev-main",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/list-session",
-                "reference": "76755c87c3df513673d5b74ca3877e66f07abda4"
+                "reference": "2a1f5102e8febb45dd62e0de8ae3d31c845b25df"
             },
             "require": {
                 "dhii\/services": "^0.1.0-alpha2",
@@ -1258,7 +1149,7 @@
                 "psr\/container": "^1.0"
             },
             "require-dev": {
-                "inpsyde\/php-coding-standards": "^1.0-beta.9",
+                "inpsyde\/php-coding-standards": "*",
                 "phpunit\/phpunit": "^9.6.17",
                 "vimeo\/psalm": "^4.6"
             },
@@ -1274,8 +1165,8 @@
             ],
             "authors": [
                 {
-                    "name": "Inpsyde GmbH",
-                    "email": "hello@inpsyde.com"
+                    "name": "Syde GmbH",
+                    "email": "hello@syde.com"
                 }
             ],
             "description": "Payoneer Checkout plugin module responsible for creating and handling of LIST session",
@@ -1286,12 +1177,12 @@
         },
         {
             "name": "inpsyde\/payoneer-migrator",
-            "version": "dev-dev\/develop",
-            "version_normalized": "dev-dev\/develop",
+            "version": "dev-main",
+            "version_normalized": "dev-main",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/migration",
-                "reference": "fa868f933c3e348befcfaf459735e300ca7b5350"
+                "reference": "9d8afc0b26b1af4c2a40d2bb70e3b8040605ecbe"
             },
             "require": {
                 "dhii\/services": "^0.1.0-alpha2",
@@ -1301,7 +1192,7 @@
                 "wp-oop\/containers": "^0.1.1-alpha2"
             },
             "require-dev": {
-                "inpsyde\/php-coding-standards": "^1.0-beta9",
+                "inpsyde\/php-coding-standards": "*",
                 "phpunit\/phpunit": "^9.6.17",
                 "vimeo\/psalm": "^4.6"
             },
@@ -1322,8 +1213,8 @@
             ],
             "authors": [
                 {
-                    "name": "Inpsyde GmbH",
-                    "email": "hello@inpsyde.com"
+                    "name": "Syde GmbH",
+                    "email": "hello@syde.com"
                 }
             ],
             "description": "Responsible for migrations when the plugin is updated.",
@@ -1334,12 +1225,12 @@
         },
         {
             "name": "inpsyde\/payoneer-page-detector",
-            "version": "dev-dev\/develop",
-            "version_normalized": "dev-dev\/develop",
+            "version": "dev-main",
+            "version_normalized": "dev-main",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/page-detector",
-                "reference": "0a3c51c69790735837a4e7884d74cd0656f6fe99"
+                "reference": "cb50d5be1e1d25084cdf17f957c6d4130c90ffb4"
             },
             "require": {
                 "dhii\/services": "^0.1.0-alpha2",
@@ -1349,7 +1240,7 @@
                 "psr\/http-message": "^1.0"
             },
             "require-dev": {
-                "inpsyde\/php-coding-standards": "^1.0-beta9",
+                "inpsyde\/php-coding-standards": "*",
                 "phpunit\/phpunit": "^9.6.17",
                 "vimeo\/psalm": "^4.6"
             },
@@ -1370,8 +1261,8 @@
             ],
             "authors": [
                 {
-                    "name": "Inpsyde GmbH",
-                    "email": "hello@inpsyde.com"
+                    "name": "Syde GmbH",
+                    "email": "hello@syde.com"
                 }
             ],
             "description": "Payoneer page detector",
@@ -1382,12 +1273,12 @@
         },
         {
             "name": "inpsyde\/payoneer-payment-gateway-checkout",
-            "version": "dev-dev\/develop",
-            "version_normalized": "dev-dev\/develop",
+            "version": "dev-main",
+            "version_normalized": "dev-main",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/checkout",
-                "reference": "9db2a7daa57ba440f50de2e0345faa3d8db5babe"
+                "reference": "f02dc68c9baf7b3bc4e0255dcdc6410bdcdce5c2"
             },
             "require": {
                 "dhii\/services": "^0.1.0-alpha2",
@@ -1398,7 +1289,7 @@
             },
             "require-dev": {
                 "brain\/monkey": "^2",
-                "inpsyde\/php-coding-standards": "^1.0-beta.9",
+                "inpsyde\/php-coding-standards": "*",
                 "php-stubs\/woocommerce-stubs": "^5.0",
                 "php-stubs\/wordpress-stubs": "^5.0",
                 "phpunit\/phpunit": "^9.6.17",
@@ -1421,8 +1312,8 @@
             ],
             "authors": [
                 {
-                    "name": "Inpsyde GmbH",
-                    "email": "hello@inpsyde.com"
+                    "name": "Syde GmbH",
+                    "email": "hello@syde.com"
                 }
             ],
             "description": "Payoneer Checkout checkout module",
@@ -1433,12 +1324,12 @@
         },
         {
             "name": "inpsyde\/payoneer-payment-methods",
-            "version": "dev-dev\/develop",
-            "version_normalized": "dev-dev\/develop",
+            "version": "dev-main",
+            "version_normalized": "dev-main",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/payment-methods",
-                "reference": "5ce35ddeeb2f88faea898b97d6ebc2988874eb84"
+                "reference": "49a878ee72936fa708c63af0151b3fe0f55ed0fc"
             },
             "require": {
                 "dhii\/services": "^0.1.1-alpha2",
@@ -1448,7 +1339,7 @@
             },
             "require-dev": {
                 "brain\/monkey": "^2",
-                "inpsyde\/php-coding-standards": "^1.0-beta.9",
+                "inpsyde\/php-coding-standards": "*",
                 "php-stubs\/woocommerce-stubs": "^5.0",
                 "php-stubs\/wordpress-stubs": "^5.0",
                 "phpunit\/phpunit": "^9.6.17",
@@ -1472,8 +1363,8 @@
             ],
             "authors": [
                 {
-                    "name": "Inpsyde GmbH",
-                    "email": "hello@inpsyde.com"
+                    "name": "Syde GmbH",
+                    "email": "hello@syde.com"
                 }
             ],
             "description": "Payoneer payment methods",
@@ -1484,54 +1375,16 @@
         },
         {
             "name": "inpsyde\/payoneer-sdk",
-            "version": "v4.1.0",
-            "version_normalized": "4.1.0.0",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:inpsyde\/payoneer-sdk.git",
-                "reference": "096f3db439f7d77bef2d165dbecd406cc4210550"
-            },
+            "version": "dev-main",
+            "version_normalized": "dev-main",
             "dist": {
-                "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/inpsyde\/payoneer-sdk\/zipball\/096f3db439f7d77bef2d165dbecd406cc4210550",
-                "reference": "096f3db439f7d77bef2d165dbecd406cc4210550",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https:\/\/repo.packagist.com\/inpsyde\/dists\/%package%\/%version%\/r%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "type": "path",
+                "url": ".\/modules.local\/payoneer-sdk",
+                "reference": "3007e33962330f9cd63c608c5e94bb7c5a0c0461"
             },
             "require": {
-                "ext-json": "*",
-                "inpsyde\/modularity": "^1.3.0",
-                "php": "^7.4 | ^8.0",
-                "psr\/container": "^1.0",
-                "psr\/http-client": "^1.0",
-                "psr\/http-client-implementation": "*",
-                "psr\/http-factory": "^1.0",
-                "psr\/http-factory-implementation": "*",
-                "psr\/http-message": "^1.0",
-                "psr\/http-message-implementation": "*"
+                "php": "^7.4 | ^8.0"
             },
-            "require-dev": {
-                "brain\/monkey": "^2",
-                "composer\/installers": "^2",
-                "dhii\/containers": "^0.1.4-alpha2",
-                "dhii\/delimited-token-template": "^0.2.0-alpha2",
-                "dms\/phpunit-arraysubset-asserts": "^0.3 ",
-                "guzzlehttp\/guzzle": "^6.5 | ^7.0",
-                "http-interop\/http-factory-guzzle": "^1.0",
-                "inpsyde\/php-coding-standards": "^1.0",
-                "nyholm\/psr7": "^1.8",
-                "php-stubs\/woocommerce-stubs": "^5.0",
-                "php-stubs\/wordpress-stubs": "^5.3",
-                "phpunit\/phpunit": "^8 | ^9",
-                "vimeo\/psalm": "^4.0",
-                "webmozart\/path-util": "^2.3@stable"
-            },
-            "time": "2025-06-23T07:27:08+00:00",
             "type": "inpsyde-module",
             "installation-source": "dist",
             "autoload": {
@@ -1539,38 +1392,23 @@
                     "Syde\\Vendor\\Inpsyde\\PayoneerSdk\\": "src\/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Syde\\Vendor\\Inpsyde\\PayoneerSdk\\Test\\Functional\\": "tests\/php\/Functional"
-                }
-            },
-            "notification-url": "https:\/\/repo.packagist.com\/inpsyde\/downloads\/",
             "license": [
                 "GPL-2.0-or-later"
             ],
-            "authors": [
-                {
-                    "name": "Syde GmbH",
-                    "homepage": "https:\/\/syde.com\/",
-                    "email": "hello@syde.com",
-                    "role": "Company"
-                }
-            ],
-            "description": "Payoneer SDK module for inpsyde\/modularity.",
-            "support": {
-                "source": "https:\/\/github.com\/inpsyde\/payoneer-sdk\/tree\/v4.1.0",
-                "issues": "https:\/\/github.com\/inpsyde\/payoneer-sdk\/issues"
+            "description": "SDK for server-side interaction with the Payoneer's Payment API",
+            "transport-options": {
+                "relative": true
             },
             "install-path": "..\/..\/modules\/inpsyde\/payoneer-sdk"
         },
         {
             "name": "inpsyde\/payoneer-settings",
-            "version": "dev-dev\/develop",
-            "version_normalized": "dev-dev\/develop",
+            "version": "dev-main",
+            "version_normalized": "dev-main",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/settings",
-                "reference": "cb601f00438927dad370ce92c403744c8fa35cf7"
+                "reference": "34c406bd2b767e3376c000d09af738cd038f7f3a"
             },
             "require": {
                 "dhii\/services": "^0.1.0-alpha2",
@@ -1580,7 +1418,7 @@
             },
             "require-dev": {
                 "brain\/monkey": "^2",
-                "inpsyde\/php-coding-standards": "^1.0-beta9",
+                "inpsyde\/php-coding-standards": "*",
                 "phpunit\/phpunit": "^9.6.17",
                 "symfony\/polyfill-php80": "^1.19",
                 "vimeo\/psalm": "^4.6"
@@ -1602,8 +1440,8 @@
             ],
             "authors": [
                 {
-                    "name": "Inpsyde GmbH",
-                    "email": "hello@inpsyde.com"
+                    "name": "Syde GmbH",
+                    "email": "hello@syde.com"
                 }
             ],
             "description": "Payoneer Settings",
@@ -1614,12 +1452,12 @@
         },
         {
             "name": "inpsyde\/payoneer-status-report",
-            "version": "dev-dev\/develop",
-            "version_normalized": "dev-dev\/develop",
+            "version": "dev-main",
+            "version_normalized": "dev-main",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/status-report",
-                "reference": "78bc7cf91e905f1d99ca13478d4af2842796c328"
+                "reference": "262e37313fc0be467d7f40f75b2a62b67b6e24e6"
             },
             "require": {
                 "inpsyde\/modularity": "^1.3.0",
@@ -1627,7 +1465,7 @@
                 "psr\/container": "^1.0"
             },
             "require-dev": {
-                "inpsyde\/php-coding-standards": "^1.0-beta9",
+                "inpsyde\/php-coding-standards": "*",
                 "phpunit\/phpunit": "^8.0 | ^9.0",
                 "symfony\/polyfill-php80": "^1.19",
                 "vimeo\/psalm": "^4.6"
@@ -1649,8 +1487,8 @@
             ],
             "authors": [
                 {
-                    "name": "Inpsyde GmbH",
-                    "email": "hello@inpsyde.com"
+                    "name": "Syde GmbH",
+                    "email": "hello@syde.com"
                 }
             ],
             "description": "Payoneer Status Report module",
@@ -1661,12 +1499,12 @@
         },
         {
             "name": "inpsyde\/payoneer-third-party-compat",
-            "version": "dev-dev\/develop",
-            "version_normalized": "dev-dev\/develop",
+            "version": "dev-main",
+            "version_normalized": "dev-main",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/third-party-compat",
-                "reference": "cd3262cd2bac6f6d5b253abf0edda9051a1cedd5"
+                "reference": "1449ffa2c8d84be17fc84d45b8150e698c2f9933"
             },
             "require": {
                 "inpsyde\/modularity": "^1.3.0",
@@ -1674,7 +1512,7 @@
                 "psr\/container": "^1.0"
             },
             "require-dev": {
-                "inpsyde\/php-coding-standards": "^1.0-beta.9",
+                "inpsyde\/php-coding-standards": "*",
                 "vimeo\/psalm": "^4.6"
             },
             "type": "inpsyde-module",
@@ -1689,8 +1527,8 @@
             ],
             "authors": [
                 {
-                    "name": "Inpsyde GmbH",
-                    "email": "hello@inpsyde.com"
+                    "name": "Syde GmbH",
+                    "email": "hello@syde.com"
                 }
             ],
             "description": "Payoneer third party compatibility module",
@@ -1701,12 +1539,12 @@
         },
         {
             "name": "inpsyde\/payoneer-webhooks",
-            "version": "dev-dev\/develop",
-            "version_normalized": "dev-dev\/develop",
+            "version": "dev-main",
+            "version_normalized": "dev-main",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/webhooks",
-                "reference": "3e8c63f9a746abfc79234e7ad85d4e58790b6276"
+                "reference": "38be50ecee20bfa57a0b9c2b96b5012c68dbd875"
             },
             "require": {
                 "dhii\/services": "^0.1.0-alpha2",
@@ -1719,7 +1557,7 @@
             },
             "require-dev": {
                 "brain\/monkey": "^2",
-                "inpsyde\/php-coding-standards": "^1.0-beta.9",
+                "inpsyde\/php-coding-standards": "*",
                 "php-stubs\/woocommerce-stubs": "^5.0",
                 "php-stubs\/wordpress-stubs": "^5.0",
                 "phpunit\/phpunit": "^9.6.17",
@@ -1742,8 +1580,8 @@
             ],
             "authors": [
                 {
-                    "name": "Inpsyde GmbH",
-                    "email": "hello@inpsyde.com"
+                    "name": "Syde GmbH",
+                    "email": "hello@syde.com"
                 }
             ],
             "description": "Payoneer Checkout webhooks module",
@@ -1754,12 +1592,12 @@
         },
         {
             "name": "inpsyde\/payoneer-websdk",
-            "version": "dev-dev\/develop",
-            "version_normalized": "dev-dev\/develop",
+            "version": "dev-main",
+            "version_normalized": "dev-main",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/websdk",
-                "reference": "fd04181b18ca9ef28d66c267bcbcbe1991105e07"
+                "reference": "ce02ac0bbfc65f555b0d5953edc0c244cc55fa04"
             },
             "require": {
                 "dhii\/services": "^0.1.0-alpha2",
@@ -1769,7 +1607,7 @@
             },
             "require-dev": {
                 "brain\/monkey": "^2",
-                "inpsyde\/php-coding-standards": "^1.0-beta.9",
+                "inpsyde\/php-coding-standards": "*",
                 "php-stubs\/woocommerce-stubs": "^5.0",
                 "php-stubs\/wordpress-stubs": "^5.0",
                 "phpunit\/phpunit": "^9.6.17",
@@ -1792,8 +1630,8 @@
             ],
             "authors": [
                 {
-                    "name": "Inpsyde GmbH",
-                    "email": "hello@inpsyde.com"
+                    "name": "Syde GmbH",
+                    "email": "hello@syde.com"
                 }
             ],
             "description": "Payoneer Checkout websdk module",
@@ -1804,12 +1642,12 @@
         },
         {
             "name": "inpsyde\/payoneer-wp",
-            "version": "dev-dev\/develop",
-            "version_normalized": "dev-dev\/develop",
+            "version": "dev-main",
+            "version_normalized": "dev-main",
             "dist": {
                 "type": "path",
                 "url": ".\/modules.local\/wp",
-                "reference": "f6967b69c11ee362a2c20e7c240f4fe5f2cf5d0f"
+                "reference": "8b0e104d46c066f8919315ec2783c81595f6486c"
             },
             "require": {
                 "dhii\/services": "^0.1.0-alpha2",
@@ -1819,7 +1657,7 @@
                 "wp-oop\/containers": "^0.1.1-alpha2"
             },
             "require-dev": {
-                "inpsyde\/php-coding-standards": "^1.0-beta9",
+                "inpsyde\/php-coding-standards": "*",
                 "phpunit\/phpunit": "^9.6.17",
                 "vimeo\/psalm": "^4.6"
             },
@@ -1840,8 +1678,8 @@
             ],
             "authors": [
                 {
-                    "name": "Inpsyde GmbH",
-                    "email": "hello@inpsyde.com"
+                    "name": "Syde GmbH",
+                    "email": "hello@syde.com"
                 }
             ],
             "description": "Core WP features for Payoneer",
@@ -1852,24 +1690,12 @@
         },
         {
             "name": "inpsyde\/psr-18-wp-http-client",
-            "version": "v0.1.0-alpha4",
-            "version_normalized": "0.1.0.0-alpha4",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:inpsyde\/psr-18-wp-http-client.git",
-                "reference": "8dd172262c95fc3fb4716b14a54c9406254ba441"
-            },
+            "version": "dev-main",
+            "version_normalized": "dev-main",
             "dist": {
-                "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/inpsyde\/psr-18-wp-http-client\/zipball\/8dd172262c95fc3fb4716b14a54c9406254ba441",
-                "reference": "8dd172262c95fc3fb4716b14a54c9406254ba441",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https:\/\/repo.packagist.com\/inpsyde\/dists\/%package%\/%version%\/r%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "type": "path",
+                "url": ".\/dev\/psr-18-wp-http-client",
+                "reference": "be3e8860d4aa68004d36e008f61fc3a59125f508"
             },
             "require": {
                 "php": "^7.0 | ^8.0",
@@ -1882,13 +1708,12 @@
             },
             "require-dev": {
                 "brain\/monkey": "2.*",
-                "inpsyde\/php-coding-standards": "^1.0.0-beta1",
+                "inpsyde\/php-coding-standards": "*",
                 "johnpbloch\/wordpress-core": "^5.0",
                 "phpunit\/phpunit": "^6.0 | ^7.0 | ^8.0 | ^9.0",
                 "squizlabs\/php_codesniffer": "^3.4",
                 "voku\/httpful": "^2.4"
             },
-            "time": "2021-10-01T10:22:17+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1906,26 +1731,19 @@
                     "Syde\\Vendor\\Inpsyde\\Wp\\HttpClient\\Test\\Func\\": "tests\/functional"
                 }
             },
-            "notification-url": "https:\/\/repo.packagist.com\/inpsyde\/downloads\/",
             "license": [
                 "GPL-2.0-or-later"
             ],
             "authors": [
                 {
-                    "name": "Inpsyde GmbH",
-                    "email": "hello@inpsyde.com",
+                    "name": "Syde GmbH",
+                    "email": "hello@syde.com",
                     "role": "Company"
-                },
-                {
-                    "name": "Anton Ukhanev",
-                    "email": "xedin.unknown@gmail.com",
-                    "role": "Developer"
                 }
             ],
             "description": "A PSR-18 compatible wrapper for WordPress HTTP requests",
-            "support": {
-                "source": "https:\/\/github.com\/inpsyde\/psr-18-wp-http-client\/tree\/v0.1.0-alpha4",
-                "issues": "https:\/\/github.com\/inpsyde\/psr-18-wp-http-client\/issues"
+            "transport-options": {
+                "relative": true
             },
             "install-path": "..\/inpsyde\/psr-18-wp-http-client"
         },
@@ -1942,13 +1760,7 @@
                 "type": "zip",
                 "url": "https:\/\/api.github.com\/repos\/inpsyde\/wp-context\/zipball\/1350ada72517f5d374bff9409b4ea5a02377ec1a",
                 "reference": "1350ada72517f5d374bff9409b4ea5a02377ec1a",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https:\/\/repo.packagist.com\/inpsyde\/dists\/%package%\/%version%\/r%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "shasum": ""
             },
             "require": {
                 "php": ">=7.1"
@@ -2039,13 +1851,7 @@
                 "type": "zip",
                 "url": "https:\/\/api.github.com\/repos\/Nyholm\/psr7\/zipball\/a71f2b11690f4b24d099d6b16690a90ae14fc6f3",
                 "reference": "a71f2b11690f4b24d099d6b16690a90ae14fc6f3",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https:\/\/repo.packagist.com\/inpsyde\/dists\/%package%\/%version%\/r%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "shasum": ""
             },
             "require": {
                 "php": ">=7.2",
@@ -2126,13 +1932,7 @@
                 "type": "zip",
                 "url": "https:\/\/api.github.com\/repos\/oomphinc\/composer-installers-extender\/zipball\/cbf4b6f9a24153b785d09eee755b995ba87bd5f9",
                 "reference": "cbf4b6f9a24153b785d09eee755b995ba87bd5f9",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https:\/\/repo.packagist.com\/inpsyde\/dists\/%package%\/%version%\/r%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "shasum": ""
             },
             "require": {
                 "composer-plugin-api": "^1.1 || ^2.0",
@@ -2192,13 +1992,7 @@
                 "type": "zip",
                 "url": "https:\/\/api.github.com\/repos\/php-fig\/container\/zipball\/513e0666f7216c7459170d56df27dfcefe1689ea",
                 "reference": "513e0666f7216c7459170d56df27dfcefe1689ea",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https:\/\/repo.packagist.com\/inpsyde\/dists\/%package%\/%version%\/r%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "shasum": ""
             },
             "require": {
                 "php": ">=7.4.0"
@@ -2249,13 +2043,7 @@
                 "type": "zip",
                 "url": "https:\/\/api.github.com\/repos\/php-fig\/http-client\/zipball\/bb5906edc1c324c9a05aa0873d40117941e5fa90",
                 "reference": "bb5906edc1c324c9a05aa0873d40117941e5fa90",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https:\/\/repo.packagist.com\/inpsyde\/dists\/%package%\/%version%\/r%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "shasum": ""
             },
             "require": {
                 "php": "^7.0 || ^8.0",
@@ -2310,13 +2098,7 @@
                 "type": "zip",
                 "url": "https:\/\/api.github.com\/repos\/php-fig\/http-factory\/zipball\/2b4765fddfe3b508ac62f829e852b1501d3f6e8a",
                 "reference": "2b4765fddfe3b508ac62f829e852b1501d3f6e8a",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https:\/\/repo.packagist.com\/inpsyde\/dists\/%package%\/%version%\/r%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "shasum": ""
             },
             "require": {
                 "php": ">=7.1",
@@ -2374,13 +2156,7 @@
                 "type": "zip",
                 "url": "https:\/\/api.github.com\/repos\/php-fig\/http-message\/zipball\/cb6ce4845ce34a8ad9e68117c10ee90a29919eba",
                 "reference": "cb6ce4845ce34a8ad9e68117c10ee90a29919eba",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https:\/\/repo.packagist.com\/inpsyde\/dists\/%package%\/%version%\/r%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "shasum": ""
             },
             "require": {
                 "php": "^7.2 || ^8.0"
@@ -2436,13 +2212,7 @@
                 "type": "zip",
                 "url": "https:\/\/api.github.com\/repos\/php-fig\/http-server-handler\/zipball\/84c4fb66179be4caaf8e97bd239203245302e7d4",
                 "reference": "84c4fb66179be4caaf8e97bd239203245302e7d4",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https:\/\/repo.packagist.com\/inpsyde\/dists\/%package%\/%version%\/r%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "shasum": ""
             },
             "require": {
                 "php": ">=7.0",
@@ -2501,13 +2271,7 @@
                 "type": "zip",
                 "url": "https:\/\/api.github.com\/repos\/php-fig\/http-server-middleware\/zipball\/c1481f747daaa6a0782775cd6a8c26a1bf4a3829",
                 "reference": "c1481f747daaa6a0782775cd6a8c26a1bf4a3829",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https:\/\/repo.packagist.com\/inpsyde\/dists\/%package%\/%version%\/r%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "shasum": ""
             },
             "require": {
                 "php": ">=7.0",
@@ -2567,13 +2331,7 @@
                 "type": "zip",
                 "url": "https:\/\/api.github.com\/repos\/php-fig\/log\/zipball\/d49695b909c3b7628b6289db5479a1c204601f11",
                 "reference": "d49695b909c3b7628b6289db5479a1c204601f11",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https:\/\/repo.packagist.com\/inpsyde\/dists\/%package%\/%version%\/r%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
@@ -2626,13 +2384,7 @@
                 "type": "zip",
                 "url": "https:\/\/api.github.com\/repos\/snicco\/php-scoper-wordpress-excludes\/zipball\/40ab73f3def963304e23e44596baf49441f00512",
                 "reference": "40ab73f3def963304e23e44596baf49441f00512",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https:\/\/repo.packagist.com\/inpsyde\/dists\/%package%\/%version%\/r%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "shasum": ""
             },
             "require-dev": {
                 "php": "^7.4",
@@ -2682,13 +2434,7 @@
                 "type": "zip",
                 "url": "https:\/\/api.github.com\/repos\/symfony\/polyfill-php80\/zipball\/0cc9dd0f17f61d8131e7df6b84bd344899fe2608",
                 "reference": "0cc9dd0f17f61d8131e7df6b84bd344899fe2608",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https:\/\/repo.packagist.com\/inpsyde\/dists\/%package%\/%version%\/r%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "shasum": ""
             },
             "require": {
                 "php": ">=7.2"
@@ -2775,13 +2521,7 @@
                 "type": "zip",
                 "url": "https:\/\/api.github.com\/repos\/wp-oop\/containers\/zipball\/01f52a9bb347e28aa25e80bd777d6e8b56451d9e",
                 "reference": "01f52a9bb347e28aa25e80bd777d6e8b56451d9e",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https:\/\/repo.packagist.com\/inpsyde\/dists\/%package%\/%version%\/r%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "shasum": ""
             },
             "require": {
                 "dhii\/collections-interface": "^0.3.0-alpha1",

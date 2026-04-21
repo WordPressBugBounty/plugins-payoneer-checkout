@@ -100,7 +100,7 @@ class EmbeddedPaymentModule implements ExecutableModule, ServiceModule, Extendin
      *
      * @return void
      */
-    public function beforeOrderPay(WC_Order $order, ListSessionManager $listSessionManager, string $onBeforeServerErrorFlag): void
+    public function beforeOrderPay(WC_Order $order, ListSessionManager $listSessionManager, string $onBeforeServerErrorFlag, string $awaitingWebhookFieldName = ''): void
     {
         $interactionCode = filter_input(\INPUT_GET, 'interactionCode', \FILTER_CALLBACK, ['options' => 'sanitize_text_field']);
         $onBeforeServerError = filter_input(\INPUT_GET, $onBeforeServerErrorFlag, \FILTER_CALLBACK, ['options' => 'sanitize_text_field']);
@@ -116,6 +116,21 @@ class EmbeddedPaymentModule implements ExecutableModule, ServiceModule, Extendin
         }
         if (!in_array($interactionCode, ['RETRY', 'ABORT'], \true)) {
             return;
+        }
+        /**
+         * Clear the awaiting webhook flag so the customer can retry payment
+         * after a failed embedded payment attempt (e.g. 3DS challenge failure).
+         * This method exits via wp_safe_redirect, so CheckoutModule::beforeOrderPay
+         * will not run — we must clear the flag here.
+         *
+         * We intentionally do NOT set the order to 'failed' here: the redirect
+         * takes the customer to a clean pay page where they can retry immediately
+         * from the current 'pending' status. Setting 'failed' would trigger
+         * failure emails and is unnecessary since the customer is actively retrying.
+         */
+        if ($awaitingWebhookFieldName) {
+            $order->delete_meta_data($awaitingWebhookFieldName);
+            $order->save();
         }
         /**
          * Since we went here directly from the checkout page (redirect during client-side CHARGE),
@@ -156,7 +171,8 @@ class EmbeddedPaymentModule implements ExecutableModule, ServiceModule, Extendin
             $listSessionManager = $container->get('list_session.manager');
             assert($listSessionManager instanceof ListSessionManager);
             $onBeforeServerErrorFlag = (string) $container->get('embedded_payment.pay_order_error_flag');
-            $this->beforeOrderPay($wcOrder, $listSessionManager, $onBeforeServerErrorFlag);
+            $awaitingWebhookFieldName = (string) $container->get('checkout.order.awaiting_webhook_field_name');
+            $this->beforeOrderPay($wcOrder, $listSessionManager, $onBeforeServerErrorFlag, $awaitingWebhookFieldName);
         }, 0);
     }
     protected function registerSendingListDataToFrontend(ContainerInterface $container): void
@@ -285,10 +301,14 @@ class EmbeddedPaymentModule implements ExecutableModule, ServiceModule, Extendin
                 do_action('payoneer-checkout.embedded-payment.list-mismatch');
             }
             /**
-             * This may be not needed as webhook notifying about failed payment already arrived
-             * in most cases. But it may be delayed, and we need to have an order in failed
-             * state for the next try immediately.
+             * AJAX callback from JS onPaymentFailure/onPaymentDeclined — set
+             * 'failed' immediately since the webhook may be delayed and the
+             * customer needs to retry.
              */
+            $awaitingWebhookFieldName = (string) $container->get('checkout.order.awaiting_webhook_field_name');
+            if ($awaitingWebhookFieldName) {
+                $order->delete_meta_data($awaitingWebhookFieldName);
+            }
             $order->update_status('failed', sprintf('Setting order failed after payment %1$s.%2$s', $paymentResult, \PHP_EOL));
             $order->save();
             $errorTitle = (string) filter_input(\INPUT_POST, 'errorTitleToDisplay', \FILTER_CALLBACK, ['options' => 'sanitize_text_field']);

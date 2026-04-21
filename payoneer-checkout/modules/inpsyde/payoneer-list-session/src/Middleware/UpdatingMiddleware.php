@@ -143,9 +143,38 @@ class UpdatingMiddleware implements ListSessionProviderMiddleware
      */
     protected function updateList(UpdateListCommandInterface $command, ListInterface $list): ListInterface
     {
-        do_action('payoneer-checkout.before_update_list', ['longId' => $list->getIdentification()->getLongId(), 'list' => $list]);
-        $updatedList = $command->execute();
-        do_action('payoneer-checkout.list_session_updated', ['longId' => $updatedList->getIdentification()->getLongId(), 'list' => $updatedList]);
-        return $updatedList;
+        $longId = $list->getIdentification()->getLongId();
+        /**
+         * If process_payment has already claimed this LIST (set a transient),
+         * skip this session-based UPDATE to prevent overwriting the real order
+         * data (reference, invoiceId, security token) with dummy session data.
+         *
+         * @see PayoneerCommonPaymentProcessor::processPayment()
+         */
+        $claimKey = 'payoneer_claimed_' . md5($longId);
+        if (get_transient($claimKey)) {
+            do_action('payoneer-checkout.list_update_skipped', ['longId' => $longId, 'reason' => 'list_claimed_by_order']);
+            return $list;
+        }
+        /**
+         * Try to acquire an advisory lock to prevent concurrent LIST UPDATEs.
+         * If process_payment currently holds the lock, skip this UPDATE.
+         * Timeout = 0 means non-blocking: return immediately if lock is unavailable.
+         */
+        global $wpdb;
+        $lockName = 'payoneer_list_' . substr(md5($longId), 0, 20);
+        $acquired = (bool) $wpdb->get_var($wpdb->prepare("SELECT GET_LOCK(%s, 0)", $lockName));
+        if (!$acquired) {
+            do_action('payoneer-checkout.list_update_skipped', ['longId' => $longId, 'reason' => 'concurrent_lock_held']);
+            return $list;
+        }
+        try {
+            do_action('payoneer-checkout.before_update_list', ['longId' => $longId, 'list' => $list, 'source' => 'UpdatingMiddleware', 'hasSecurityToken' => \false, 'reference' => 'Checkout payment']);
+            $updatedList = $command->execute();
+            do_action('payoneer-checkout.list_session_updated', ['longId' => $updatedList->getIdentification()->getLongId(), 'list' => $updatedList, 'source' => 'UpdatingMiddleware']);
+            return $updatedList;
+        } finally {
+            $wpdb->query($wpdb->prepare("SELECT RELEASE_LOCK(%s)", $lockName));
+        }
     }
 }

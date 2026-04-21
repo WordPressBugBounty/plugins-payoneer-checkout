@@ -521,6 +521,7 @@ return static function (string $rootPath): array {
         'core.payment_gateway.order.merchant_id_field_name' => new Value('_payoneer_merchant_id'),
         'core.payment_gateway.order.transaction_id_field_name' => new Value('_payoneer_payment_transaction_id'),
         'core.payment_gateway.order.security_header_field_name' => new Value('_payoneer_security_header_value'),
+        'core.payment_gateway.order.awaiting_webhook_field_name' => new Value('_payoneer_awaiting_webhook'),
         'core.payment_gateway.not_supported_countries' => new Value([
             'AF',
             //Afghanistan
@@ -550,6 +551,7 @@ return static function (string $rootPath): array {
         # --------------------------
         'checkout.notification_url' => new Alias('core.webhooks.notification_url'),
         'checkout.order.security_header_field_name' => new Alias('core.payment_gateway.order.security_header_field_name'),
+        'checkout.order.awaiting_webhook_field_name' => new Alias('core.payment_gateway.order.awaiting_webhook_field_name'),
         'checkout.header_factory' => new Alias('payoneer_sdk.header_factory'),
         'checkout.style_factory' => new Alias('core.style_factory'),
         'checkout.payment_gateway_options' => new Alias('inpsyde_payment_gateway.options'),
@@ -583,6 +585,7 @@ return static function (string $rootPath): array {
         'webhooks.order.charge_id_field_name' => new Alias('core.payment_gateway.order.charge_id_field_name'),
         'webhooks.order.transaction_id_field_name' => new Alias('core.payment_gateway.order.transaction_id_field_name'),
         'webhooks.order.security_header_field_name' => new Alias('core.payment_gateway.order.security_header_field_name'),
+        'webhooks.order.awaiting_webhook_field_name' => new Alias('core.payment_gateway.order.awaiting_webhook_field_name'),
         'webhooks.order_refund.payout_id_field_name' => new Alias('core.payout_id_field_name'),
         'webhooks.order.processed_id_field_name' => new Alias('core.webhook_received_field_name'),
         'webhooks.payment_gateway_options' => new Alias('inpsyde_payment_gateway.options'),
@@ -685,6 +688,7 @@ return static function (string $rootPath): array {
         'payment_methods.options' => new Alias('payoneer_settings.options'),
         'payment_methods.order.transaction_id_field_name' => new Alias('core.payment_gateway.order.transaction_id_field_name'),
         'payment_methods.order.charge_id_field_name' => new Alias('core.payment_gateway.order.charge_id_field_name'),
+        'payment_methods.order.awaiting_webhook_field_name' => new Alias('core.payment_gateway.order.awaiting_webhook_field_name'),
         'payment_methods.payout_id_field_name' => new Alias('core.payout_id_field_name'),
         'payment_methods.not_supported_countries' => new Alias('core.payment_gateway.not_supported_countries'),
     ];

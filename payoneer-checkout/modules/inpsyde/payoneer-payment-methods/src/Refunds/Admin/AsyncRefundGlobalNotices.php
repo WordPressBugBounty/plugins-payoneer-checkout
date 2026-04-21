@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\Refunds\Admin;
 
-use Automattic\WooCommerce\Enums\OrderStatus;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\Refunds\RefundTextContents;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\Refunds\Storage\AsyncFailedRefundRegistryInterface;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Wp\AdminNotice\AdminNotice;
@@ -75,7 +74,7 @@ class AsyncRefundGlobalNotices
             $this->registry->removeFailedOrder($orderId);
             return 0;
         }
-        if ($wcOrder->has_status([OrderStatus::AUTO_DRAFT, OrderStatus::TRASH])) {
+        if ($wcOrder->has_status(['auto-draft', 'trash'])) {
             $this->registry->removeFailedOrder($orderId);
             return 0;
         }

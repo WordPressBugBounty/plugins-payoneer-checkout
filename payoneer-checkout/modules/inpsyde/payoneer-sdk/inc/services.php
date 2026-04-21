@@ -7,12 +7,13 @@ use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\ChargeCommand;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\ChargeCommandInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\CommandInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\CreateListCommand;
-use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\Fetch;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\CreateListCommandInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\Error\InteractionErrorFactory;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\Error\InteractionErrorFactoryInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\Error\InteractionErrorInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\Exception\InteractionException;
+use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\FetchChargeCommand;
+use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\FetchChargeCommandInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\FetchListCommand;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\PayoutCommand;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\PayoutCommandInterface;
@@ -417,6 +418,10 @@ return static function (): array {
         /** @var array<string, InteractionErrorInterface> */
         $errors = $container->get('payoneer_sdk.command_response_validator.errors');
         return new FetchListCommand($apiClient, $listDeserializer, $requestPathTemplate, $responseValidator, $errors);
+    }, 'payoneer_sdk.commands.fetch_charge' => static function (ContainerInterface $container): FetchChargeCommandInterface {
+        /** @var ApiClientInterface $apiClient */
+        $apiClient = $container->get('payoneer_sdk.api_client');
+        return new FetchChargeCommand($apiClient);
     }, 'payoneer_sdk.commands.update' => static function (ContainerInterface $container): UpdateListCommandInterface {
         /** @var ApiClientInterface $apiClient */
         $apiClient = $container->get('payoneer_sdk.api_client');

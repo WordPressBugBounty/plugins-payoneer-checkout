@@ -69,8 +69,8 @@ class HostedPaymentProcessor implements PaymentProcessorInterface
         $this->commonProcessor->updateOrderWithSessionData($order, $list);
         $redirectUrl = $this->createRedirectUrl($list);
         /* translators: Order note added when processing an order in hosted flow */
-        $note = __('The customer is being redirected to the hosted payment page.', 'payoneer-checkout');
-        $this->commonProcessor->putOrderOnHold($order, $note);
+        $note = __('Awaiting payment confirmation. The customer is being redirected to the hosted payment page.', 'payoneer-checkout');
+        $this->commonProcessor->putOrderAwaitingPayment($order, $note);
         return ['result' => 'success', 'redirect' => $redirectUrl];
     }
     /**

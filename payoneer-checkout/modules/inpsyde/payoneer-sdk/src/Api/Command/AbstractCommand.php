@@ -14,7 +14,6 @@ use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\ResponseValidator\ResponseValida
 use Syde\Vendor\Psr\Http\Message\ResponseInterface;
 use RangeException;
 use RuntimeException;
-use Syde\Vendor\Inpsyde\PayoneerSdk\Client\Command\ValidationFailure;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Client\Command\ValidatorFailureInterface;
 /**
  * phpcs:disable Inpsyde.CodeQuality.ElementNameMinimalLength

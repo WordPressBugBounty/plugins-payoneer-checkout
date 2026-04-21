@@ -4,7 +4,7 @@ Tags: payment, woocommerce, checkout
 Requires at least: 6.5
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 3.5.6
+Stable tag: 3.5.7
 License: MPL-2.0
 License URI: https://www.mozilla.org/en-US/MPL/2.0/
 
@@ -59,7 +59,15 @@ Our global banking and payment networks stretch around the world so we can suppo
 
 == Changelog ==
 
-= [3.5.6] - 2026-02-23 =
+= [3.5.7] - 2026-04-21 =
+* Fixed:
+    * Addressed issues related to orders stuck in on-hold status.
+    * Resolved issue with ghost orders showing up with the inv_ prefix in the Payoneer dashboard.
+
+* Changed:
+    * Raised WC required version to 8.6, which was wrongly noted as 8.0 in the previous release.
+
+= [3.5.6] - 2026-03-02 =
 * Fixed:
     * No longer creating List sessions for logged in users before visiting relevant cart or checkout pages
     * No longer creating duplicate List sessions on the pay-for-order page, reducing webhook calls

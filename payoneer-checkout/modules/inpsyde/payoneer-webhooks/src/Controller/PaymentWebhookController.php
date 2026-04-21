@@ -54,25 +54,47 @@ class PaymentWebhookController implements WpRestApiControllerInterface
     {
         $transactionId = (string) $request->get_param('transactionId');
         $orders = $this->orderFinder->findOrdersByTransactionId($transactionId, 20);
+        $longId = (string) $request->get_param('longId');
+        $statusCode = (string) $request->get_param('statusCode');
+        $entity = (string) $request->get_param('entity');
+        $reference = (string) $request->get_param('reference');
+        $network = (string) $request->get_param('network');
         if (count($orders) > 1) {
-            do_action('payoneer-checkout.webhook_request.multiple_orders_found_for_transaction_id', ['transactionId' => $transactionId, 'orders' => array_map(static fn(WC_Order $order) => $order->get_id(), $orders)]);
+            do_action('payoneer-checkout.webhook_request.multiple_orders_found_for_transaction_id', ['transactionId' => $transactionId, 'longId' => $longId, 'orders' => array_map(static fn(WC_Order $order) => $order->get_id(), $orders), 'statusCode' => $statusCode, 'entity' => $entity]);
         }
         $order = $orders[0];
-        $longId = (string) $request->get_param('longId');
         if (!$order instanceof WC_Order) {
-            do_action('payoneer-checkout.webhook_request.order_not_found', ['transactionId' => $transactionId, 'longId' => $longId]);
+            do_action('payoneer-checkout.webhook_request.order_not_found', ['transactionId' => $transactionId, 'longId' => $longId, 'reference' => $reference, 'statusCode' => $statusCode, 'entity' => $entity, 'network' => $network]);
             return new WP_REST_Response(null, 200);
         }
         if (!$this->authHeaderIsCorrect($order, $request)) {
-            do_action('payoneer-checkout.webhook_request.order_auth_header_is_incorrect', ['orderId' => $order->get_id(), 'longId' => $longId]);
+            do_action('payoneer-checkout.webhook_request.order_auth_header_is_incorrect', ['orderId' => $order->get_id(), 'longId' => $longId, 'tokenPresent' => $request->get_header('List-Security-Token') !== null, 'reference' => $reference, 'statusCode' => $statusCode, 'entity' => $entity, 'network' => $network]);
             return new WP_REST_Response(null, 200);
         }
         if ($this->isWebhookProcessed($request, $order)) {
-            do_action('payoneer-checkout.webhook_request.webhook_already_processed', ['orderId' => $order->get_id(), 'longId' => $longId]);
+            do_action('payoneer-checkout.webhook_request.webhook_already_processed', ['orderId' => $order->get_id(), 'longId' => $longId, 'statusCode' => $statusCode, 'entity' => $entity]);
             return new WP_REST_Response(null, 200);
         }
-        $this->orderPaymentWebhookStrategyHandler->handleStrategies($request, $order);
-        $this->saveOrderWebhookProcessedMeta($request, $order);
+        // Per-order lock serializes webhook processing with the thank-you
+        // page handler to prevent duplicate payment_complete() calls and
+        // double emails when both run concurrently.
+        global $wpdb;
+        $lockName = 'payoneer_order_' . $order->get_id();
+        $acquired = $wpdb->get_var($wpdb->prepare("SELECT GET_LOCK(%s, 15)", $lockName));
+        if (!$acquired) {
+            return new WP_REST_Response(null, 200);
+        }
+        try {
+            // Re-read order inside the lock to see the latest state.
+            $order = wc_get_order($order->get_id());
+            if (!$order instanceof \WC_Order) {
+                return new WP_REST_Response(null, 200);
+            }
+            $this->orderPaymentWebhookStrategyHandler->handleStrategies($request, $order);
+            $this->saveOrderWebhookProcessedMeta($request, $order);
+        } finally {
+            $wpdb->query($wpdb->prepare("SELECT RELEASE_LOCK(%s)", $lockName));
+        }
         return new WP_REST_Response(null, 200);
     }
     /**

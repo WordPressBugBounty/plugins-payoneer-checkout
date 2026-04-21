@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Customer;
 
-use Syde\Vendor\Inpsyde\PayoneerSdk\Api\ApiException;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Address\AddressDeserializerInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Name\NameDeserializerInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Entities\Phone\PhoneDeserializerInterface;

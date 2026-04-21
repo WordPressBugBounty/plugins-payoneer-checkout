@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit70df6077bd49683f1ac2456b34d71d8e
+class ComposerStaticInit7b53c6f64ac263e2c93db2e396cea5d0
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -773,6 +773,8 @@ class ComposerStaticInit70df6077bd49683f1ac2456b34d71d8e
         'Syde\\Vendor\\Inpsyde\\PayoneerSdk\\Api\\Command\\Exception\\CommandExecutionExceptionInterface' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-sdk/src/Api/Command/Exception/CommandExecutionExceptionInterface.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerSdk\\Api\\Command\\Exception\\InteractionException' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-sdk/src/Api/Command/Exception/InteractionException.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerSdk\\Api\\Command\\Exception\\InteractionExceptionInterface' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-sdk/src/Api/Command/Exception/InteractionExceptionInterface.php',
+        'Syde\\Vendor\\Inpsyde\\PayoneerSdk\\Api\\Command\\FetchChargeCommand' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-sdk/src/Api/Command/FetchChargeCommand.php',
+        'Syde\\Vendor\\Inpsyde\\PayoneerSdk\\Api\\Command\\FetchChargeCommandInterface' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-sdk/src/Api/Command/FetchChargeCommandInterface.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerSdk\\Api\\Command\\FetchListCommand' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-sdk/src/Api/Command/FetchListCommand.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerSdk\\Api\\Command\\ListAwareCommandInterface' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-sdk/src/Api/Command/ListAwareCommandInterface.php',
         'Syde\\Vendor\\Inpsyde\\PayoneerSdk\\Api\\Command\\ListCommandInterface' => __DIR__ . '/../..' . '/modules/inpsyde/payoneer-sdk/src/Api/Command/ListCommandInterface.php',
@@ -1012,9 +1014,9 @@ class ComposerStaticInit70df6077bd49683f1ac2456b34d71d8e
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit70df6077bd49683f1ac2456b34d71d8e::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit70df6077bd49683f1ac2456b34d71d8e::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit70df6077bd49683f1ac2456b34d71d8e::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit7b53c6f64ac263e2c93db2e396cea5d0::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit7b53c6f64ac263e2c93db2e396cea5d0::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit7b53c6f64ac263e2c93db2e396cea5d0::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\PayoneerSdk\Api\Error;
 
-use Exception;
 use RuntimeException;
 use Throwable;
 /**

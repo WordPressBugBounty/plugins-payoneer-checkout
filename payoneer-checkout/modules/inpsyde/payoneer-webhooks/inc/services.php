@@ -34,10 +34,10 @@ return static function (): array {
         'webhooks.controller.payment_webhook_controller' => new Constructor(PaymentWebhookController::class, ['webhooks.order.security_header_field_name', 'wp.order_finder', 'webhooks.order_webhook_finder', 'webhooks.order.processed_id_field_name', 'webhooks.controller.payment_webhook_strategy_handler']),
         'webhooks.controller.payment_webhook_strategy_handler' => new Constructor(OrderPaymentWebhookStrategyHandler::class, ['webhooks.failed_payment_handler', 'webhooks.chargeback_payment_handler', 'webhooks.refunded_payment_handler', 'webhooks.charged_payment_handler', 'webhooks.customer_registration_handler']),
         'webhooks.log_incoming_webhooks_request' => new Constructor(LogIncomingWebhookRequest::class, ['webhooks.security_header_name']),
-        'webhooks.failed_payment_handler' => new Constructor(FailedPaymentHandler::class),
+        'webhooks.failed_payment_handler' => new Constructor(FailedPaymentHandler::class, ['webhooks.order.awaiting_webhook_field_name']),
         'webhooks.chargeback_payment_handler' => new Constructor(ChargeBackPaymentHandler::class),
         'webhooks.refunded_payment_handler' => new Constructor(RefundedPaymentHandler::class, ['wp.refund.service.orchestrator']),
-        'webhooks.charged_payment_handler' => new Constructor(ChargedPaymentHandler::class, ['webhooks.order.charge_id_field_name']),
+        'webhooks.charged_payment_handler' => new Constructor(ChargedPaymentHandler::class, ['webhooks.order.charge_id_field_name', 'webhooks.order.awaiting_webhook_field_name']),
         'webhooks.customer_registration_handler' => new Constructor(CustomerRegistrationHandler::class, ['webhooks.customer_registration_id_field_name']),
         'webhooks.order_webhook_finder' => new Constructor(OrderWebhookFinder::class, ['webhooks.order.processed_id_field_name']),
         'webhooks.controller.webhooks_controller' => new Factory(['webhooks.controller.payment_webhook_controller'], static function (WpRestApiControllerInterface $paymentWebhookController): WpRestApiControllerInterface {

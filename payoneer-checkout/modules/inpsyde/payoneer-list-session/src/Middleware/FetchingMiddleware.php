@@ -84,6 +84,42 @@ class FetchingMiddleware implements ListSessionProviderMiddleware
             if (is_string($sessionLongId) && !empty($sessionLongId)) {
                 return $sessionLongId;
             }
+            /**
+             * Session longId is empty (cleared after process_payment to prevent
+             * duplicate orders). Check if there's a pending draft/awaiting order
+             * in the WC session that already has a longId we can recover.
+             *
+             * This handles the case where process_payment succeeded but the
+             * client dropped the connection before the Stripe charge was
+             * initiated. The order has a longId in its transaction_id, but the
+             * session copy was cleared. Restoring it here ensures the page-load
+             * provide() call reuses the same LIST that process_payment will use
+             * when the customer retries, avoiding a "payment has expired" mismatch.
+             *
+             * Only restore when the cart hash matches — if the cart changed,
+             * WC will create a new order and we must NOT leak the old longId.
+             */
+            $draftOrderId = $session->get('store_api_draft_order', 0);
+            if (!$draftOrderId) {
+                $draftOrderId = $session->get('order_awaiting_payment', 0);
+            }
+            if ($draftOrderId) {
+                $draftOrder = wc_get_order($draftOrderId);
+                if ($draftOrder instanceof \WC_Order) {
+                    $draftLongId = $draftOrder->get_transaction_id();
+                    if (!empty($draftLongId)) {
+                        // Only restore if the cart hash still matches the order.
+                        // If the cart changed, WC will create a new order and
+                        // we must not leak this longId to a different checkout.
+                        $cart = WC()->cart;
+                        $cartHash = $cart ? $cart->get_cart_hash() : '';
+                        if (empty($cartHash) || $draftOrder->has_cart_hash($cartHash)) {
+                            $session->set(self::LONG_ID_KEY, $draftLongId);
+                            return (string) $draftLongId;
+                        }
+                    }
+                }
+            }
         }
         return null;
     }

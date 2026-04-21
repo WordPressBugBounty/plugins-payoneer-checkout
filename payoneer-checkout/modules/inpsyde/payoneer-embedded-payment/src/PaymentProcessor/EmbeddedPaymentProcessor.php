@@ -68,8 +68,8 @@ class EmbeddedPaymentProcessor implements PaymentProcessorInterface
             $result['redirect'] = add_query_arg([$this->hostedModeOverrideFlag => \true], $order->get_checkout_payment_url());
         }
         /* translators: Order note added when processing an order in embedded flow */
-        $note = __('Backend processing finished, frontend processing is about to start.', 'payoneer-checkout');
-        $this->commonProcessor->putOrderOnHold($order, $note . \PHP_EOL);
+        $note = __('Awaiting payment confirmation. Backend processing finished, frontend processing is about to start.', 'payoneer-checkout');
+        $this->commonProcessor->putOrderAwaitingPayment($order, $note . \PHP_EOL);
         return $result;
     }
 }

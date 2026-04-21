@@ -13,9 +13,14 @@ class ChargedPaymentHandler implements OrderPaymentWebhookHandlerInterface
      * @var string
      */
     protected $chargeIdOrderFieldName;
-    public function __construct(string $chargeIdOrderFieldName)
+    /**
+     * @var string
+     */
+    protected $awaitingWebhookFieldName;
+    public function __construct(string $chargeIdOrderFieldName, string $awaitingWebhookFieldName)
     {
         $this->chargeIdOrderFieldName = $chargeIdOrderFieldName;
+        $this->awaitingWebhookFieldName = $awaitingWebhookFieldName;
     }
     /**
      * @inheritDoc
@@ -43,6 +48,13 @@ class ChargedPaymentHandler implements OrderPaymentWebhookHandlerInterface
          */
         $chargeId = (string) $request->get_param('longId');
         $order->update_meta_data($this->chargeIdOrderFieldName, $chargeId);
+        /**
+         * Webhook confirmed successful charge — payment_complete() transitions
+         * to 'processing' or 'completed' based on product type.
+         */
+        if ($this->awaitingWebhookFieldName) {
+            $order->delete_meta_data($this->awaitingWebhookFieldName);
+        }
         $order->payment_complete();
         $notificationId = (string) $request->get_param('notificationId');
         $order->add_order_note(sprintf('Order marked as paid on incoming webhook. Notification ID is %1$s', $notificationId));
