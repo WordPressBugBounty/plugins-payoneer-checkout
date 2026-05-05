@@ -94,8 +94,31 @@ class UpdatingMiddleware implements ListSessionProviderMiddleware
      */
     protected function updateBasedOnOrder(ListInterface $list, \WC_Order $order): ListInterface
     {
+        /**
+         * Mirror of the session-based hash dedup. Order-pay renders iterate every
+         * gateway (icons, availability, fields) and each one calls provide() with
+         * a fresh PaymentContext, so without this guard the same LIST gets PUT to
+         * the API once per gateway. Storing the hash on order meta also dedups
+         * across page reloads when the order data hasn't changed.
+         */
+        $currentHash = $this->provideOrderHash($order);
+        $storedHash = (string) $order->get_meta($this->sessionHashKey, \true);
+        if ($storedHash === $currentHash) {
+            return $list;
+        }
         $command = $this->orderBasedUpdateCommandFactory->createUpdateCommand($order, $list);
-        return $this->updateList($command, $list);
+        $updated = $this->updateList($command, $list);
+        $order->update_meta_data($this->sessionHashKey, $currentHash);
+        $order->save();
+        return $updated;
+    }
+    /**
+     * Hash of the order data that the LIST UPDATE depends on. Mirrors the cart
+     * fields hashed by CheckoutHashProvider.
+     */
+    protected function provideOrderHash(\WC_Order $order): string
+    {
+        return md5(serialize([$order->get_total('edit'), $order->get_currency(), $order->get_billing_country(), $order->get_shipping_country()]));
     }
     /**
      * @throws \Throwable

@@ -27,8 +27,22 @@ class ApiListSessionProvider implements ListSessionProvider
      * @var callable
      */
     private $canCreateList;
-    protected bool $isCheckout;
-    protected bool $isBlockCart;
+    /**
+     * Late-evaluated callable returning whether the current request is a checkout.
+     *
+     * Must be a callable (not a bool) because consumers of this provider can be
+     * constructed in the DI container before the `wp` action fires — at which
+     * point `is_checkout()` / `get_the_ID()` have no page context and would
+     * resolve to `false`. Evaluating lazily at `provide()` time ensures the
+     * check runs with current WP state.
+     *
+     * @var callable
+     */
+    private $isCheckout;
+    /**
+     * @var callable
+     */
+    private $isBlockCart;
     /**
      * @var string|null
      */
@@ -38,11 +52,13 @@ class ApiListSessionProvider implements ListSessionProvider
      * @param OrderBasedListSessionFactory $listFactory
      * @param string $integrationType
      * @param callable $canCreateList
+     * @param callable $isCheckout
+     * @param callable $isBlockCart
      * @param string|null $hostedVersion
      *
      * @psalm-param PayoneerIntegrationTypes::* $integrationType
      */
-    public function __construct(WcBasedListSessionFactoryInterface $checkoutFactory, OrderBasedListSessionFactory $listFactory, string $integrationType, callable $canCreateList, bool $isCheckout, bool $isBlockCart, string $hostedVersion = null)
+    public function __construct(WcBasedListSessionFactoryInterface $checkoutFactory, OrderBasedListSessionFactory $listFactory, string $integrationType, callable $canCreateList, callable $isCheckout, callable $isBlockCart, string $hostedVersion = null)
     {
         $this->checkoutFactory = $checkoutFactory;
         $this->listFactory = $listFactory;
@@ -66,7 +82,7 @@ class ApiListSessionProvider implements ListSessionProvider
          * We allow creating a List on a block cart page because we need to display icons there
          * depending on the available networks in List. Classic cart doesn't have this feature.
          */
-        if (!$this->isCheckout && !$this->isBlockCart) {
+        if (!($this->isCheckout)() && !($this->isBlockCart)()) {
             throw new \RuntimeException('Creating LIST outside of checkout and block cart is not allowed.');
         }
         if (!($this->canCreateList)()) {

@@ -16,6 +16,7 @@ use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\AjaxOrderPay\Orde
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionManager;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionProvider;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\PaymentContext;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\Security\StableNonce;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\WebSdk\Security\SdkIntegrityService;
 use Syde\Vendor\Psr\Container\ContainerExceptionInterface;
 use Syde\Vendor\Psr\Container\ContainerInterface;
@@ -282,7 +283,10 @@ class EmbeddedPaymentModule implements ExecutableModule, ServiceModule, Extendin
     {
         add_action('wc_ajax_payoneer-checkout-payment-unsuccessful', function () use ($container) {
             $nonceAction = (string) $container->get('embedded_payment.nonce.action.on_payment_unsuccessful');
-            check_ajax_referer($nonceAction);
+            $submittedNonce = (string) ($_REQUEST['_ajax_nonce'] ?? $_REQUEST['_wpnonce'] ?? '');
+            if (!StableNonce::verify($submittedNonce, $nonceAction)) {
+                wp_send_json_error('Invalid nonce.', 403);
+            }
             try {
                 $orderId = $this->getOrderIdForPaymentUnsuccessfulRequest($container);
             } catch (\Throwable $exception) {
@@ -316,7 +320,23 @@ class EmbeddedPaymentModule implements ExecutableModule, ServiceModule, Extendin
             if ($errorTitle || $errorText) {
                 wc_add_notice(sprintf('<b>%1$s</b></br>%2$s', $errorTitle, $errorText), 'error');
             }
-            wp_send_json_success(['message' => 'Order status was set to failed.', 'nonce' => wp_create_nonce($nonceAction)]);
+            wp_send_json_success([
+                'message' => 'Order status was set to failed.',
+                'nonce' => StableNonce::create($nonceAction),
+                /**
+                 * WC expects checkout_place_order success to end with
+                 * a redirect to the thank-you page, after which the
+                 * checkout page is never reused. Our gateway stays on
+                 * the page for 3DS authentication, so a failed 3DS
+                 * challenge triggers update_order_review again. If
+                 * "create an account" was ticked, WC created the user
+                 * and set auth cookies during the same process_checkout
+                 * request, making all uid-bound nonces on the page
+                 * stale. We return fresh ones here so the client can
+                 * patch wc_checkout_params before the next retry.
+                 */
+                'wcNonces' => ['update_order_review' => wp_create_nonce('update-order-review'), 'process_checkout' => wp_create_nonce('woocommerce-process_checkout')],
+            ]);
         });
     }
     /**

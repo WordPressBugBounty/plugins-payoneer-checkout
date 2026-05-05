@@ -4,7 +4,7 @@ Tags: payment, woocommerce, checkout
 Requires at least: 6.5
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 3.5.7
+Stable tag: 3.5.8
 License: MPL-2.0
 License URI: https://www.mozilla.org/en-US/MPL/2.0/
 
@@ -58,6 +58,15 @@ Our global banking and payment networks stretch around the world so we can suppo
 == Screenshots ==
 
 == Changelog ==
+
+= [3.5.8] - 2026-05-05 =
+* Fixed:
+    * Slow response time on order pay page for orders that were generated manually on the admin.
+    * Compatibility with some multi-currency plugins ("CURCY – Multi Currency", "WPML Multilingual & Multicurrency" and possibly others), which was preventing the widget from loading for some users.
+    * 3DS failure handling while creating an account.
+
+* Changed:
+    * Improved the UX when paying with non-CC payment methods, blocking the UI from being interactive while the redirect to the external payment page is being processed.
 
 = [3.5.7] - 2026-04-21 =
 * Fixed:

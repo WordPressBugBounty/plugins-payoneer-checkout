@@ -13,6 +13,7 @@ use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\AjaxOrderPay\Ajax
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\AjaxOrderPay\OrderPayload;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\EnvironmentProvider;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\ListUrlEnvironmentExtractor;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\Security\StableNonce;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\PaymentFieldsRenderer\HiddenInputRenderer;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\PaymentFieldsRenderer\ListDebugFieldRenderer;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\PaymentFieldsRenderer\RenderOnceFieldRenderer;
@@ -56,7 +57,7 @@ return static function (): array {
         'embedded_payment.widget.payment_fields_attribute_list_id' => new Value('data-long-id'),
         'embedded_payment.widget.payment_fields_attribute_list_env' => new Value('data-env'),
         'embedded_payment.widget_script_data' => new Factory(['embedded_payment.widget.payment_fields_container_id', 'embedded_payment.widget.payment_fields_attribute_component', 'checkout.payment_flow_override_flag', 'embedded_payment.pay_order_error_flag', 'embedded_payment.assets.websdk.umd.url.template', 'embedded_payment.widget.websdk_styles', 'wc.is_block_checkout', 'wc.pay_for_order_id', 'embedded_payment.nonce.action.on_payment_unsuccessful'], static function (string $paymentFieldsContainerId, string $paymentFieldsComponentAttribute, string $hostedFlowOverrideFlag, string $payOrderErrorFlag, string $webSdkUmdUrlTemplate, array $websdkStyles, bool $isBlockCheckout, int $payForOrderId, string $onPaymentUnsuccessfulNonceAction): array {
-            return ['paymentFieldsContainerId' => $paymentFieldsContainerId, 'paymentFieldsComponentAttribute' => $paymentFieldsComponentAttribute, 'isPayForOrder' => is_wc_endpoint_url('order-pay'), 'hostedFlowOverrideFlag' => $hostedFlowOverrideFlag, 'payOrderErrorFlag' => $payOrderErrorFlag, 'webSdkUmdUrlTemplate' => $webSdkUmdUrlTemplate, 'websdkStyles' => (object) $websdkStyles, 'isBlockCheckout' => $isBlockCheckout, 'payForOrderId' => $payForOrderId ?: '', 'onPaymentUnsuccessfulNonce' => \wp_create_nonce($onPaymentUnsuccessfulNonceAction), 'dontRefreshCheckoutMessage' => \__('Please wait, and do not refresh the page', 'payoneer-checkout')];
+            return ['paymentFieldsContainerId' => $paymentFieldsContainerId, 'paymentFieldsComponentAttribute' => $paymentFieldsComponentAttribute, 'isPayForOrder' => is_wc_endpoint_url('order-pay'), 'hostedFlowOverrideFlag' => $hostedFlowOverrideFlag, 'payOrderErrorFlag' => $payOrderErrorFlag, 'webSdkUmdUrlTemplate' => $webSdkUmdUrlTemplate, 'websdkStyles' => (object) $websdkStyles, 'isBlockCheckout' => $isBlockCheckout, 'payForOrderId' => $payForOrderId ?: '', 'onPaymentUnsuccessfulNonce' => StableNonce::create($onPaymentUnsuccessfulNonceAction), 'dontRefreshCheckoutMessage' => \__('Please wait, and do not refresh the page', 'payoneer-checkout')];
         }),
         'embedded_payment.nonce.action.on_payment_unsuccessful' => fn() => 'payoneer-checkout-payment-unsuccessful',
         'embedded_payment.pay_order_error_flag' => new Value('payoneer-checkout-on-before-server-error'),
