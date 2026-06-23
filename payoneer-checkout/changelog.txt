@@ -2,6 +2,13 @@
 
 = [next-version] - yyyy-mm-dd =
 
+= [3.5.9] - 2026-06-23 =
+* Fixed:
+    * Edge case where double payment was possible leaving no trace in Woo about it.
+
+* Changed:
+    * Increased default TTL to reduce the chance of issues with checkout needing a refresh after a LIST expired.
+
 = [3.5.8] - 2026-05-05 =
 * Fixed:
     * Slow response time on order pay page for orders that were generated manually on the admin.

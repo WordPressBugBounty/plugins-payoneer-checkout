@@ -80,7 +80,7 @@ class OrderBasedListCommandFactory implements OrderBasedListCommandFactoryInterf
         if ($hostedVersion) {
             $style = $style->withHostedVersion($hostedVersion);
         }
-        $command = $command->withTransactionId($transactionId)->withCountry(($order->get_billing_country() ?: $order->get_shipping_country()) ?: $this->fallbackCountry)->withCallback($this->callbackFactory->createCallback($order))->withCustomer($this->customerFactory->createCustomer($order))->withPayment($this->paymentFactory->createPayment($order))->withStyle($style)->withSystem($this->system)->withIntegrationType($integrationType)->withProducts($this->wcOrderBasedProductsFactory->createProductsFromWcOrder($order));
+        $command = $command->withTransactionId($transactionId)->withCountry(($order->get_billing_country() ?: $order->get_shipping_country()) ?: $this->fallbackCountry)->withCallback($this->callbackFactory->createCallback($order))->withCustomer($this->customerFactory->createCustomer($order))->withPayment($this->paymentFactory->createPayment($order))->withStyle($style)->withSystem($this->system)->withIntegrationType($integrationType)->withTtl(240)->withProducts($this->wcOrderBasedProductsFactory->createProductsFromWcOrder($order));
         if (is_string($this->division)) {
             $command = $command->withDivision($this->division);
         }

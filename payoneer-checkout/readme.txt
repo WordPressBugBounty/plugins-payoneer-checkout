@@ -4,7 +4,7 @@ Tags: payment, woocommerce, checkout
 Requires at least: 6.5
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 3.5.8
+Stable tag: 3.5.9
 License: MPL-2.0
 License URI: https://www.mozilla.org/en-US/MPL/2.0/
 
@@ -58,6 +58,13 @@ Our global banking and payment networks stretch around the world so we can suppo
 == Screenshots ==
 
 == Changelog ==
+
+= [3.5.9] - 2026-06-23 =
+* Fixed:
+    * Edge case where double payment was possible leaving no trace in Woo about it.
+
+* Changed:
+    * Increased default TTL to reduce the chance of issues with checkout needing a refresh after a LIST expired.
 
 = [3.5.8] - 2026-05-05 =
 * Fixed:

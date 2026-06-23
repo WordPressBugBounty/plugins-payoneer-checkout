@@ -279,6 +279,69 @@ class CheckoutModule implements ServiceModule, ExecutableModule, ExtendingModule
             return \false;
         }, 10, 2);
         /**
+         * Force a fresh order when checkout submit would otherwise resume a
+         * Payoneer order whose LIST is already past 'listed'.
+         *
+         * WC_Checkout::process_checkout() reads $session['order_awaiting_payment']
+         * and resumes that order if the cart hash still matches. When the
+         * resumed order is awaiting a Payoneer webhook AND the LIST has moved
+         * past 'listed' (customer interacted with a BNPL/hosted page that
+         * advances the LIST on session init), WC's subsequent needs_payment()
+         * check sees our filter return false and silently calls
+         * $order->payment_complete() via process_order_without_payment() —
+         * marking the order paid with an empty _payoneer_charge_long_id.
+         *
+         * Clear the session pointer here, before create_order runs, so WC
+         * generates a new order with its own LIST. The old order is left as
+         * pending payment (the webhook may still arrive and complete it).
+         *
+         * Mirrors the pattern in PayoneerCommonPaymentProcessor::processPayment
+         * which clears $sessionLongIdKey for the same reason (ClickUp 86e0euaqw).
+         *
+         * @see https://app.clickup.com/t/86e19qm1a
+         */
+        add_action('woocommerce_checkout_process', static function () use ($payoneerGatewayIds, $awaitingWebhookFieldName, $container): void {
+            $session = function_exists('WC') && WC() ? WC()->session : null;
+            if (!$session instanceof \WC_Session) {
+                return;
+            }
+            $orderId = (int) $session->get('order_awaiting_payment');
+            if (!$orderId) {
+                return;
+            }
+            $order = wc_get_order($orderId);
+            if (!$order instanceof WC_Order) {
+                return;
+            }
+            if (!in_array($order->get_payment_method(), $payoneerGatewayIds, \true)) {
+                return;
+            }
+            if ($order->get_meta($awaitingWebhookFieldName, \true) !== 'yes') {
+                return;
+            }
+            $longId = $order->get_transaction_id();
+            if (empty($longId)) {
+                return;
+            }
+            try {
+                $fetchListCommand = $container->get('payoneer_sdk.commands.fetch');
+                $list = $fetchListCommand->withLongId($longId)->execute();
+                $status = $list->getStatus()->getCode();
+            } catch (\Throwable $e) {
+                return;
+            }
+            if ($status === 'listed') {
+                // LIST not yet charged — order is still safely resumable.
+                return;
+            }
+            // LIST has moved past 'listed' — abandon the session pointer so
+            // WC_Checkout::create_order() creates a fresh order with its
+            // own new LIST instead of resuming and silently completing this
+            // one. The old order is left untouched as pending payment.
+            $session->set('order_awaiting_payment', null);
+            $order->add_order_note(__('Checkout was re-submitted while this order had a LIST past "listed". A new order will be created to avoid silently marking this one as paid; this order is left pending and may still be completed by an incoming webhook.', 'payoneer-checkout'));
+        }, 5);
+        /**
          * Prevent WooCommerce from auto-cancelling orders awaiting asynchronous
          * webhook confirmation.
          *

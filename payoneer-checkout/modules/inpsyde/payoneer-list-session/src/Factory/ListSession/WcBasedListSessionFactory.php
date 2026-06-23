@@ -101,7 +101,7 @@ class WcBasedListSessionFactory implements WcBasedListSessionFactoryInterface, W
         $products = $this->productListFactory->createProductListFromWcCart($cart);
         try {
             $payment = $this->createPayment($cart);
-            $createListCommand = $this->payoneer->getListCommand()->withTransactionId($transactionId)->withCallback($callback)->withCustomer($customer)->withPayment($payment)->withStyle($style)->withOperationType('CHARGE')->withProducts($products)->withSystem($this->system)->withIntegrationType($integrationType)->withDivision($this->division);
+            $createListCommand = $this->payoneer->getListCommand()->withTransactionId($transactionId)->withCallback($callback)->withCustomer($customer)->withPayment($payment)->withStyle($style)->withOperationType('CHARGE')->withProducts($products)->withSystem($this->system)->withIntegrationType($integrationType)->withTtl(240)->withDivision($this->division);
             if ($country) {
                 $createListCommand = $createListCommand->withCountry($country);
             }
