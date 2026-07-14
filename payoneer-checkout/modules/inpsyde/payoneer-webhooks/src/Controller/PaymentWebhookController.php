@@ -90,6 +90,7 @@ class PaymentWebhookController implements WpRestApiControllerInterface
             if (!$order instanceof \WC_Order) {
                 return new WP_REST_Response(null, 200);
             }
+            $order->get_data_store()->read($order);
             $this->orderPaymentWebhookStrategyHandler->handleStrategies($request, $order);
             $this->saveOrderWebhookProcessedMeta($request, $order);
         } finally {

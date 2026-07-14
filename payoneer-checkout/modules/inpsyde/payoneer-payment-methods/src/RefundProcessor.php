@@ -58,8 +58,10 @@ class RefundProcessor implements RefundProcessorInterface
         if (!$wcOrder instanceof WC_Order) {
             return;
         }
-        $context = $this->prepareRefundContext($wcOrder, (float) $wcRefund->get_amount(), $wcRefund->get_reason());
-        $result = $this->processRefundContextOnce($context, $wcOrder, $wcRefund);
+        $result = $this->withOrderLock($orderId, function () use ($wcOrder, $wcRefund): RefundHandlerResult {
+            $context = $this->prepareRefundContext($wcOrder, (float) $wcRefund->get_amount(), $wcRefund->get_reason());
+            return $this->processRefundContextOnce($context, $wcOrder, $wcRefund);
+        });
         if ($result->failed()) {
             throw new Exception('Failed to refund order payment.', 0);
         }
@@ -115,6 +117,25 @@ class RefundProcessor implements RefundProcessorInterface
         }
         $payoutCommand = $this->payoneer->getPayoutCommand();
         return $payoutCommand->withLongId((string) $chargeId)->withTransactionId($transactionId)->withPayment($payment);
+    }
+    /**
+     * Run a callback while holding the per-order refund lock.
+     *
+     * @param int      $orderId The order ID to lock on.
+     * @param callable $fn      The critical section to execute.
+     *
+     * @return RefundHandlerResult
+     */
+    private function withOrderLock(int $orderId, callable $fn): RefundHandlerResult
+    {
+        global $wpdb;
+        $lockName = 'payoneer_order_' . $orderId;
+        $wpdb->get_var($wpdb->prepare('SELECT GET_LOCK(%s, 15)', $lockName));
+        try {
+            return $fn();
+        } finally {
+            $wpdb->query($wpdb->prepare('SELECT RELEASE_LOCK(%s)', $lockName));
+        }
     }
     /**
      * Reset the internal refund processing cache, for the unlikely case that a second

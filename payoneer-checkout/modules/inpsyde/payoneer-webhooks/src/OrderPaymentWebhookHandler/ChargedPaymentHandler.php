@@ -55,6 +55,7 @@ class ChargedPaymentHandler implements OrderPaymentWebhookHandlerInterface
         if ($this->awaitingWebhookFieldName) {
             $order->delete_meta_data($this->awaitingWebhookFieldName);
         }
+        $order->save_meta_data();
         $order->payment_complete();
         $notificationId = (string) $request->get_param('notificationId');
         $order->add_order_note(sprintf('Order marked as paid on incoming webhook. Notification ID is %1$s', $notificationId));

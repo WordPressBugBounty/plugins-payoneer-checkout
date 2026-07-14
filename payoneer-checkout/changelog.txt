@@ -2,6 +2,11 @@
 
 = [next-version] - yyyy-mm-dd =
 
+= [3.5.10] - 2026-07-14 =
+* Fixed:
+    * Updated WebSDK to version 1.29 to properly handle an issue with Apple Pay.
+    * Fixed a race condition when handling refunds which prevented them from being properly recorded.
+
 = [3.5.9] - 2026-06-23 =
 * Fixed:
     * Edge case where double payment was possible leaving no trace in Woo about it.

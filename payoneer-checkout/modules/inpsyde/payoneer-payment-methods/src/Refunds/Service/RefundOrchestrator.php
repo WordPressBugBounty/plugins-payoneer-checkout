@@ -87,6 +87,7 @@ class RefundOrchestrator implements RefundOrchestratorInterface
         if (!$this->isOrderPaidWithPayoneer($wcOrder)) {
             return RefundHandlerResult::notHandled('Not eligible: order was not paid with Payoneer');
         }
+        wc_delete_shop_order_transients($wcOrder);
         $state = $this->refundStateFromOrder($wcOrder);
         $isPending = $state->isRefundPending();
         // Async refund waiting for confirmation.
