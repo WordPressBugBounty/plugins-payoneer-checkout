@@ -2,6 +2,10 @@
 
 = [next-version] - yyyy-mm-dd =
 
+= [3.5.11] - 2026-09-28 =
+* Fixed:
+    * Prevent a double payment when creating an account during the checkout retrying a cancelled payment.
+
 = [3.5.10] - 2026-07-14 =
 * Fixed:
     * Updated WebSDK to version 1.29 to properly handle an issue with Apple Pay.

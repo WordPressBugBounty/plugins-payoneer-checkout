@@ -2,9 +2,9 @@
 Contributors: payoneercheckout, inpsyde
 Tags: payment, woocommerce, checkout
 Requires at least: 6.5
-Tested up to: 6.9
+Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 3.5.10
+Stable tag: 3.5.11
 License: MPL-2.0
 License URI: https://www.mozilla.org/en-US/MPL/2.0/
 
@@ -58,6 +58,10 @@ Our global banking and payment networks stretch around the world so we can suppo
 == Screenshots ==
 
 == Changelog ==
+
+= [3.5.11] - 2026-09-28 =
+* Fixed:
+    * Prevent a double payment when creating an account during the checkout retrying a cancelled payment.
 
 = [3.5.10] - 2026-07-14 =
 * Fixed:

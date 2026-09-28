@@ -341,6 +341,9 @@ class CheckoutModule implements ServiceModule, ExecutableModule, ExtendingModule
             // own new LIST instead of resuming and silently completing this one. The
             // old order is left untouched as pending payment.
             $session->set('order_awaiting_payment', null);
+            if (is_callable([$session, 'save_data'])) {
+                $session->save_data();
+            }
             $order->add_order_note(__('Checkout was re-submitted while this order\'s Payoneer payment session could not be confirmed as un-started ("listed"). A new order will be created to avoid silently marking this one as paid; this order is left pending and may still be completed by an incoming webhook.', 'payoneer-checkout'));
         }, 5);
         /**
