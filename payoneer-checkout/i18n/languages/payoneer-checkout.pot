@@ -1,0 +1,815 @@
+# Copyright (C) 2026 Payoneer
+# This file is distributed under the GPL-2.0+.
+msgid ""
+msgstr ""
+"Project-Id-Version: Payoneer Checkout 4.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/payoneer-checkout\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-10-28T07:09:48+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: payoneer-checkout\n"
+
+#. Plugin Name of the plugin
+#: payoneer-checkout.php:3
+#: includes/Admin/Notices.php:81
+#: includes/Admin/Notices.php:114
+#: includes/Admin/Notices.php:149
+#: includes/Admin/Notices.php:178
+#: includes/Admin/Notices.php:222
+#: includes/Admin/Notices.php:267
+msgid "Payoneer Checkout"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: payoneer-checkout.php:4
+msgid "https://wordpress.org/plugins/payoneer-checkout"
+msgstr ""
+
+#. Description of the plugin
+#: payoneer-checkout.php:5
+msgid "Payoneer Checkout for WooCommerce"
+msgstr ""
+
+#. Author of the plugin
+#: payoneer-checkout.php:7
+msgid "Payoneer"
+msgstr ""
+
+#. Author URI of the plugin
+#: payoneer-checkout.php:8
+msgid "https://www.payoneer.com/"
+msgstr ""
+
+#: includes/Admin/LogsExport.php:69
+#: includes/Admin/LogsExport.php:96
+#: includes/Admin/Metabox.php:118
+msgid "You do not have permission to perform this action."
+msgstr ""
+
+#: includes/Admin/LogsExport.php:85
+msgid "Invalid export type."
+msgstr ""
+
+#: includes/Admin/LogsExport.php:151
+msgid "Invalid date."
+msgstr ""
+
+#: includes/Admin/LogsExport.php:172
+msgid "A custom log handler is in use; export is not available."
+msgstr ""
+
+#: includes/Admin/LogsExport.php:569
+msgid "There was an error exporting the log file."
+msgstr ""
+
+#: includes/Admin/Metabox.php:76
+msgid "Payoneer Payment Status"
+msgstr ""
+
+#: includes/Admin/Metabox.php:99
+msgid "The payment webhook has not been received yet. Click below to manually check the payment status."
+msgstr ""
+
+#: includes/Admin/Metabox.php:101
+msgid "Refresh Payment Status"
+msgstr ""
+
+#: includes/Admin/Metabox.php:114
+#: includes/Admin/Metabox.php:128
+msgid "Invalid order."
+msgstr ""
+
+#: includes/Admin/Metabox.php:122
+msgid "Security check failed."
+msgstr ""
+
+#. translators: %s: plugin title wrapped in <strong> tags.
+#: includes/Admin/Notices.php:80
+#, php-format
+msgid "%s is installed but not yet configured."
+msgstr ""
+
+#. translators: %1$s: opening anchor tag, %2$s: closing anchor tag.
+#: includes/Admin/Notices.php:86
+#, php-format
+msgid "Configure it %1$shere%2$s to start accepting payments."
+msgstr ""
+
+#. translators: %s: plugin title wrapped in <strong> tags.
+#: includes/Admin/Notices.php:113
+#, php-format
+msgid "%s - The credentials are either empty or not valid."
+msgstr ""
+
+#. translators: %1$s: opening anchor tag, %2$s: closing anchor tag.
+#: includes/Admin/Notices.php:120
+#, php-format
+msgid "Verify your connection %1$shere%2$s"
+msgstr ""
+
+#. translators: %s: plugin title wrapped in <strong> tags.
+#: includes/Admin/Notices.php:148
+#, php-format
+msgid "%s - Credentials are validated but no store is selected."
+msgstr ""
+
+#: includes/Admin/Notices.php:153
+msgid "Select a Store to start accepting payments."
+msgstr ""
+
+#. translators: %1$s: opening anchor tag, %2$s: closing anchor tag.
+#: includes/Admin/Notices.php:157
+#, php-format
+msgid "Select a Store %1$shere%2$s to start accepting payments."
+msgstr ""
+
+#. translators: %s: plugin title wrapped in <strong> tags.
+#: includes/Admin/Notices.php:177
+#, php-format
+msgid "%s is enabled but a SSL certificate is not detected. Please ensure your server has a valid SSL certificate to get the plugin working properly."
+msgstr ""
+
+#. translators: 1: plugin title, 2: comma-separated list of order links.
+#: includes/Admin/Notices.php:216
+#, php-format
+msgid "%1$s: a refund failed and was removed. Review order: %2$s"
+msgid_plural "%1$s: refunds failed and have been removed. Review orders: %2$s"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: plugin title, 2: comma-separated list of order links.
+#: includes/Admin/Notices.php:261
+#, php-format
+msgid "%1$s: a payment was charged back. Review order: %2$s"
+msgid_plural "%1$s: payments were charged back. Review orders: %2$s"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/Admin/Settings.php:110
+msgid "General"
+msgstr ""
+
+#: includes/Admin/Settings.php:111
+msgid "Enable or disable Payoneer Checkout on your store."
+msgstr ""
+
+#: includes/Admin/Settings.php:115
+msgid "Credentials"
+msgstr ""
+
+#: includes/Admin/Settings.php:116
+msgid "Configure the API credentials from your Payoneer merchant account."
+msgstr ""
+
+#: includes/Admin/Settings.php:120
+msgid "Payment configuration"
+msgstr ""
+
+#: includes/Admin/Settings.php:121
+msgid "Configure how the payment form is displayed to customers."
+msgstr ""
+
+#: includes/Admin/Settings.php:126
+msgid "Payment methods"
+msgstr ""
+
+#: includes/Admin/Settings.php:127
+msgid "Enable or disable the payment methods available to your customers."
+msgstr ""
+
+#: includes/Admin/Settings.php:133
+msgid "Advanced settings"
+msgstr ""
+
+#: includes/Admin/Settings.php:134
+msgid "Configure logging and diagnostic options."
+msgstr ""
+
+#: includes/Admin/Settings.php:138
+msgid "Logs export"
+msgstr ""
+
+#: includes/Admin/Settings.php:139
+msgid "Download the WooCommerce status report or plugin log entries for support."
+msgstr ""
+
+#: includes/Admin/Settings.php:160
+msgid "Enable/Disable"
+msgstr ""
+
+#: includes/Admin/Settings.php:161
+msgid "Enable"
+msgstr ""
+
+#: includes/Admin/Settings.php:167
+#: includes/Admin/Settings.php:642
+#: includes/Admin/Settings.php:689
+#: includes/Admin/Settings.php:746
+#: includes/Admin/Settings.php:821
+msgid "Title"
+msgstr ""
+
+#: includes/Admin/Settings.php:169
+msgid "The payment method title displayed during checkout."
+msgstr ""
+
+#: includes/Admin/Settings.php:170
+#: includes/Admin/Settings.php:182
+#: includes/Admin/Settings.php:734
+#: includes/Admin/Settings.php:735
+msgid "Credit / Debit cards"
+msgstr ""
+
+#: includes/Admin/Settings.php:174
+#: includes/Admin/Settings.php:649
+#: includes/Admin/Settings.php:696
+#: includes/Admin/Settings.php:753
+#: includes/Admin/Settings.php:828
+msgid "Description"
+msgstr ""
+
+#: includes/Admin/Settings.php:176
+msgid "The description displayed when this payment method is selected."
+msgstr ""
+
+#: includes/Admin/Settings.php:189
+msgid "Hosted Title"
+msgstr ""
+
+#: includes/Admin/Settings.php:191
+msgid "Go to Payment Page"
+msgstr ""
+
+#: includes/Admin/Settings.php:194
+msgid "Hosted Description"
+msgstr ""
+
+#: includes/Admin/Settings.php:199
+msgid "Live Mode"
+msgstr ""
+
+#: includes/Admin/Settings.php:200
+msgid "Enable live mode"
+msgstr ""
+
+#: includes/Admin/Settings.php:202
+msgid "Disable to keep the gateway in test/sandbox mode (real payments will not be taken)."
+msgstr ""
+
+#: includes/Admin/Settings.php:206
+msgid "Merchant Code"
+msgstr ""
+
+#: includes/Admin/Settings.php:208
+msgid "Your live Payoneer merchant code (API username)."
+msgstr ""
+
+#: includes/Admin/Settings.php:218
+msgid "Merchant Token"
+msgstr ""
+
+#: includes/Admin/Settings.php:220
+msgid "Your live API payment token."
+msgstr ""
+
+#: includes/Admin/Settings.php:230
+msgid "Sandbox Merchant Code"
+msgstr ""
+
+#: includes/Admin/Settings.php:232
+msgid "Your test / sandbox Payoneer merchant code (API username)."
+msgstr ""
+
+#: includes/Admin/Settings.php:242
+msgid "Sandbox Merchant Token"
+msgstr ""
+
+#: includes/Admin/Settings.php:244
+msgid "Your test / sandbox API payment token."
+msgstr ""
+
+#: includes/Admin/Settings.php:469
+msgid "Return to payments"
+msgstr ""
+
+#: includes/Admin/Settings.php:532
+msgid "Validate Credentials"
+msgstr ""
+
+#: includes/Admin/Settings.php:643
+#: includes/Admin/Settings.php:747
+#: includes/Admin/Settings.php:822
+msgid "The payment method title displayed to customers during checkout."
+msgstr ""
+
+#: includes/Admin/Settings.php:650
+#: includes/Admin/Settings.php:754
+#: includes/Admin/Settings.php:829
+msgid "The description shown when this payment method is selected."
+msgstr ""
+
+#: includes/Admin/Settings.php:672
+msgid "Toggle details for Hosted Payment Page"
+msgstr ""
+
+#: includes/Admin/Settings.php:677
+#: includes/Admin/Settings.php:678
+#: includes/Gateways/WC_Payoneer_Gateway.php:221
+msgid "Payoneer - Hosted Payment Page"
+msgstr ""
+
+#: includes/Admin/Settings.php:690
+msgid "The payment method title displayed to customers during checkout in hosted mode."
+msgstr ""
+
+#: includes/Admin/Settings.php:697
+msgid "The description shown when this payment method is selected in hosted mode."
+msgstr ""
+
+#: includes/Admin/Settings.php:729
+msgid "Toggle details for Credit / Debit cards"
+msgstr ""
+
+#. translators: %s: payment method name
+#: includes/Admin/Settings.php:792
+#, php-format
+msgid "Toggle details for %s"
+msgstr ""
+
+#. translators: %s: payment method name
+#: includes/Admin/Settings.php:810
+#, php-format
+msgid "Enable %s"
+msgstr ""
+
+#: includes/Admin/Settings.php:873
+msgid "Store Code"
+msgstr ""
+
+#: includes/Admin/Settings.php:877
+msgid "Select the merchant store to use for transactions."
+msgstr ""
+
+#: includes/Admin/Settings.php:886
+msgid "Sandbox Store Code"
+msgstr ""
+
+#: includes/Admin/Settings.php:890
+msgid "Select the sandbox store to use for transactions."
+msgstr ""
+
+#: includes/Admin/Settings.php:899
+msgid "Integration Type"
+msgstr ""
+
+#: includes/Admin/Settings.php:902
+msgid "Embedded Payment Page"
+msgstr ""
+
+#: includes/Admin/Settings.php:903
+msgid "Hosted Payment Page"
+msgstr ""
+
+#: includes/Admin/Settings.php:906
+msgid "Embedded renders the payment form directly on your checkout page for a seamless experience. Hosted redirects customers to a Payoneer-managed payment page, minimizing PCI compliance requirements."
+msgstr ""
+
+#: includes/Admin/Settings.php:931
+msgid "Validate credentials first"
+msgstr ""
+
+#: includes/Admin/Settings.php:957
+msgid "No divisions available"
+msgstr ""
+
+#: includes/Admin/Settings.php:959
+#: assets/js/admin/payoneer-checkout-admin.js:192
+msgid "Select Store Code"
+msgstr ""
+
+#: includes/Admin/Settings.php:976
+msgid "Logging"
+msgstr ""
+
+#: includes/Admin/Settings.php:977
+msgid "Enable logging"
+msgstr ""
+
+#: includes/Admin/Settings.php:979
+msgid "Log payment events and API interactions to WooCommerce &rarr; Status &rarr; Logs."
+msgstr ""
+
+#: includes/Admin/Views/logs-export.php:23
+msgid "Report type"
+msgstr ""
+
+#: includes/Admin/Views/logs-export.php:26
+msgid "Choose System Report"
+msgstr ""
+
+#: includes/Admin/Views/logs-export.php:27
+msgid "WooCommerce System Status Report"
+msgstr ""
+
+#: includes/Admin/Views/logs-export.php:28
+msgid "Logs for a Specific Date"
+msgstr ""
+
+#: includes/Admin/Views/logs-export.php:34
+msgid "Status report"
+msgstr ""
+
+#: includes/Admin/Views/logs-export.php:44
+msgid "Download status report"
+msgstr ""
+
+#: includes/Admin/Views/logs-export.php:52
+msgid "Date"
+msgstr ""
+
+#: includes/Admin/Views/logs-export.php:63
+msgid "Download"
+msgstr ""
+
+#: includes/API.php:216
+msgid "Empty response code."
+msgstr ""
+
+#. translators: %1$s: response code or cause, %2$s: explanation message.
+#: includes/API.php:228
+#, php-format
+msgid "Request failed with status code %1$s and message: %2$s"
+msgstr ""
+
+#: includes/Blocks/PayoneerCheckoutBlocksSupport.php:61
+msgid "Hash of the current Payoneer LIST payload; changes when the LIST is updated server-side."
+msgstr ""
+
+#: includes/Gateways/WC_Payoneer_Gateway.php:64
+msgid "Accept secure payments on your WooCommerce store."
+msgstr ""
+
+#: includes/Gateways/WC_Payoneer_Gateway.php:224
+msgid "Payoneer - Credit / Debit cards"
+msgstr ""
+
+#: includes/Gateways/WC_Payoneer_Gateway.php:336
+#: includes/Plugin.php:1655
+msgid "Merchant Code and Payment Code are required."
+msgstr ""
+
+#: includes/Gateways/WC_Payoneer_Gateway.php:398
+msgid "Failed to validate API credentials. Please verify your credentials and save again."
+msgstr ""
+
+#: includes/Gateways/WC_Payoneer_Gateway.php:552
+#: includes/Gateways/WC_Payoneer_Gateway.php:947
+#: includes/Gateways/WC_Payoneer_Gateway.php:1063
+msgid "Payment pending confirmation from Payoneer."
+msgstr ""
+
+#: includes/Gateways/WC_Payoneer_Gateway.php:596
+msgid "There was an error processing your payment. Please try again."
+msgstr ""
+
+#: includes/Gateways/WC_Payoneer_Gateway.php:668
+#: includes/Gateways/WC_Payoneer_Gateway.php:710
+#: includes/Gateways/WC_Payoneer_Gateway.php:1039
+#: includes/Gateways/WC_Payoneer_Gateway.php:1048
+msgid "A payment for this order is already in progress. Please wait for it to complete, or contact support if the issue persists."
+msgstr ""
+
+#: includes/Gateways/WC_Payoneer_Gateway.php:750
+msgid "Order not found."
+msgstr ""
+
+#: includes/Gateways/WC_Payoneer_Gateway.php:756
+msgid "Cannot process refund: missing charge reference. The payment may not have been confirmed yet."
+msgstr ""
+
+#: includes/Gateways/WC_Payoneer_Gateway.php:761
+msgid "A previous refund is still awaiting confirmation from Payoneer. Please wait for it to be confirmed before issuing another refund."
+msgstr ""
+
+#: includes/Gateways/WC_Payoneer_Gateway.php:766
+msgid "Invalid refund amount."
+msgstr ""
+
+#: includes/Gateways/WC_Payoneer_Gateway.php:792
+msgid "Refund request failed."
+msgstr ""
+
+#. translators: %s: refund amount
+#: includes/Gateways/WC_Payoneer_Gateway.php:802
+#, php-format
+msgid "Refunded %s processed, pending confirmation from Payoneer."
+msgstr ""
+
+#. translators: %s: refund reason
+#: includes/Gateways/WC_Payoneer_Gateway.php:809
+#, php-format
+msgid "Reason: %s"
+msgstr ""
+
+#: includes/Gateways/WC_Payoneer_Gateway.php:929
+#: includes/Gateways/WC_Payoneer_Gateway.php:940
+#: includes/Gateways/WC_Payoneer_Gateway.php:1053
+#: includes/Gateways/WC_Payoneer_Network_Gateway.php:225
+msgid "Payment processing failed. Please try again."
+msgstr ""
+
+#: includes/Gateways/WC_Payoneer_Gateway.php:1121
+#: includes/Gateways/WC_Payoneer_Gateway.php:1133
+#: assets/js/frontend/payoneer-checkout.js:456
+#: assets/js/payment-methods/index.js:561
+msgid "Payment session expired. Please try again."
+msgstr ""
+
+#: includes/Gateways/WC_Payoneer_Gateway.php:1430
+msgid "Payoneer payment charged back."
+msgstr ""
+
+#. translators: %s: transaction ID
+#: includes/Gateways/WC_Payoneer_Gateway.php:1449
+#, php-format
+msgid "Transaction ID: %s"
+msgstr ""
+
+#. translators: %s: payment network name
+#: includes/Gateways/WC_Payoneer_Gateway.php:1454
+#, php-format
+msgid "Network: %s"
+msgstr ""
+
+#: includes/Gateways/WC_Payoneer_Gateway.php:1512
+msgid "Payoneer payment complete."
+msgstr ""
+
+#. translators: %s: refund amount
+#: includes/Gateways/WC_Payoneer_Gateway.php:1548
+#, php-format
+msgid "Refunded %s confirmed."
+msgstr ""
+
+#: includes/Gateways/WC_Payoneer_Gateway.php:1559
+msgid "Payoneer refund webhook received but order is already fully refunded; no WC refund created."
+msgstr ""
+
+#: includes/Gateways/WC_Payoneer_Gateway.php:1575
+msgid "Payoneer refund webhook ignored: this refund had previously failed and been removed. No duplicate refund created."
+msgstr ""
+
+#: includes/Gateways/WC_Payoneer_Gateway.php:1629
+msgid "Payoneer refund received from merchant portal."
+msgstr ""
+
+#: includes/Gateways/WC_Payoneer_Gateway.php:1678
+#: includes/Gateways/WC_Payoneer_Gateway.php:1890
+msgid "Payoneer refund failed. The refund has been reversed."
+msgstr ""
+
+#: includes/Gateways/WC_Payoneer_Gateway.php:1681
+msgid "Order status restored after refund failure."
+msgstr ""
+
+#: includes/Gateways/WC_Payoneer_Gateway.php:1706
+msgid "Payoneer payment failed."
+msgstr ""
+
+#: includes/Gateways/WC_Payoneer_Gateway.php:1715
+msgid "(Ignored: order is already fully refunded.)"
+msgstr ""
+
+#: includes/Gateways/WC_Payoneer_Gateway.php:1723
+msgid "(Ignored: order already completed.)"
+msgstr ""
+
+#: includes/Gateways/WC_Payoneer_Gateway.php:1748
+msgid "Payoneer preauthorized webhook ignored: order is already fully refunded."
+msgstr ""
+
+#: includes/Gateways/WC_Payoneer_Gateway.php:1769
+msgid "Payoneer payment preauthorized."
+msgstr ""
+
+#: includes/Gateways/WC_Payoneer_Gateway.php:1855
+msgid "Payoneer refund confirmed."
+msgstr ""
+
+#: includes/Gateways/WC_Payoneer_Network_Gateway.php:42
+msgid "Payoneer Checkout payment method managed through Payoneer Checkout settings."
+msgstr ""
+
+#: includes/Gateways/WC_Payoneer_Network_Gateway.php:92
+msgid "Payoneer Checkout settings page"
+msgstr ""
+
+#. translators: %s: link to the main Payoneer Checkout settings page
+#: includes/Gateways/WC_Payoneer_Network_Gateway.php:100
+#, php-format
+msgid "This payment method is managed through the %s."
+msgstr ""
+
+#: includes/Gateways/WC_Payoneer_Network_Gateway.php:249
+msgid "Payoneer gateway unavailable."
+msgstr ""
+
+#: includes/Main.php:68
+#: includes/Main.php:76
+msgid "Cheatin&#8217; huh?"
+msgstr ""
+
+#: includes/Main.php:166
+msgid "Settings"
+msgstr ""
+
+#. Translators: The minimum PHP version
+#: includes/Main.php:182
+#, php-format
+msgid "Payoneer Checkout requires a minimum PHP version of %s."
+msgstr ""
+
+#. Translators: The minimum WP version
+#: includes/Main.php:187
+#, php-format
+msgid "Payoneer Checkout requires a minimum WordPress version of %s."
+msgstr ""
+
+#. Translators: The minimum WC version
+#: includes/Main.php:192
+#, php-format
+msgid "Payoneer Checkout requires a minimum WooCommerce version of %s."
+msgstr ""
+
+#: includes/Payment/PayloadHelper.php:414
+msgid "Shipping"
+msgstr ""
+
+#: includes/Payment/PayloadHelper.php:438
+msgid "Discount"
+msgstr ""
+
+#: includes/Plugin.php:983
+msgid "A parallel payment attempt was detected while this order had a payment already in progress. A new order is being created for the new attempt; this order is left pending and may still be completed by an incoming webhook."
+msgstr ""
+
+#: includes/Plugin.php:1278
+msgid "Customer returned from Payoneer hosted page with interactionCode=PROCEED after a prior declined attempt; holding for webhook confirmation."
+msgstr ""
+
+#. translators: 1: interaction code, 2: interaction reason
+#: includes/Plugin.php:1305
+#, php-format
+msgid "Customer returned from Payoneer hosted page (interactionCode=%1$s, interactionReason=%2$s)."
+msgstr ""
+
+#: includes/Plugin.php:1328
+msgid "Payment was not completed. Please try again."
+msgstr ""
+
+#: includes/Plugin.php:1330
+#: assets/js/frontend/payoneer-checkout.js:429
+#: assets/js/payment-methods/index.js:534
+msgid "Payment was cancelled. Please try again or choose a different payment method."
+msgstr ""
+
+#: includes/Plugin.php:1332
+msgid "Payment was cancelled or could not be completed. Please choose a different payment method or contact support."
+msgstr ""
+
+#: includes/Plugin.php:1334
+msgid "Payment was not completed or failed. Please try again or choose a different payment method."
+msgstr ""
+
+#. translators: %d: minutes until the customer can retry the payment.
+#: includes/Plugin.php:1387
+#, php-format
+msgid "A payment process is in progress for this order, you can retry in %d minute."
+msgid_plural "A payment process is in progress for this order, you can retry in %d minutes."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/Plugin.php:1445
+msgid "Cleared awaiting webhook flag: order was awaiting confirmation but no LIST longId was stored. Order is now retryable."
+msgstr ""
+
+#: includes/Plugin.php:1465
+msgid "Cleared awaiting webhook flag: Payoneer reports the stored LIST does not exist. Order is now retryable."
+msgstr ""
+
+#: includes/Plugin.php:1482
+msgid "Cleared awaiting webhook flag: payment charge was never initiated (LIST still in \"listed\" status). Order is now retryable."
+msgstr ""
+
+#. translators: %s: terminal LIST status code reported by Payoneer.
+#: includes/Plugin.php:1493
+#, php-format
+msgid "Cleared awaiting webhook flag: Payoneer reports the LIST as \"%s\". Order is now retryable."
+msgstr ""
+
+#: includes/Plugin.php:1645
+msgid "Permission denied."
+msgstr ""
+
+#: includes/Plugin.php:1707
+#: assets/js/admin/payoneer-checkout-admin.js:167
+#: assets/js/admin/payoneer-checkout-admin.js:171
+msgid "Invalid credentials. Please check your Merchant Code and Payment Code."
+msgstr ""
+
+#. translators: 1: composer command. 2: plugin directory
+#: payoneer-checkout.php:41
+#, php-format
+msgid "Your installation of Payoneer Checkout plugin is incomplete. Please run %1$s within the %2$s directory."
+msgstr ""
+
+#: assets/js/admin/payoneer-checkout-admin.js:150
+msgid "Please enter your credentials."
+msgstr ""
+
+#: assets/js/admin/payoneer-checkout-admin.js:181
+msgid "No stores found for these credentials."
+msgstr ""
+
+#: assets/js/admin/payoneer-checkout-admin.js:212
+msgid "Credentials validated. Save your settings to apply changes."
+msgstr ""
+
+#. translators: %s: selected date.
+#: assets/js/admin/payoneer-checkout-admin.js:368
+#, js-format
+msgid "No logs found for %s."
+msgstr ""
+
+#: assets/js/admin/payoneer-checkout-admin.js:399
+msgid "Export failed."
+msgstr ""
+
+#: assets/js/admin/payoneer-checkout-admin.js:408
+msgid "Could not generate the status report."
+msgstr ""
+
+#: assets/js/admin/payoneer-checkout-admin.js:416
+msgid "Network error. Please try again."
+msgstr ""
+
+#: assets/js/admin/payoneer-checkout-admin.js:427
+msgid "Please select a date."
+msgstr ""
+
+#: assets/js/frontend/payoneer-checkout.js:280
+#: assets/js/payment-methods/index.js:385
+msgid "No payment method selected."
+msgstr ""
+
+#: assets/js/frontend/payoneer-checkout.js:288
+#: assets/js/payment-methods/index.js:393
+#: assets/js/payment-methods/index.js:927
+msgid "Your payment information is incomplete. Please review your payment information before placing your order."
+msgstr ""
+
+#: assets/js/frontend/payoneer-checkout.js:295
+#: assets/js/frontend/payoneer-checkout.js:358
+#: assets/js/frontend/payoneer-checkout.js:380
+#: assets/js/frontend/payoneer-checkout.js:391
+#: assets/js/payment-methods/index.js:400
+#: assets/js/payment-methods/index.js:463
+#: assets/js/payment-methods/index.js:485
+#: assets/js/payment-methods/index.js:496
+msgid "Payment confirmation timed out. Please check your order status before retrying."
+msgstr ""
+
+#: assets/js/frontend/payoneer-checkout.js:303
+#: assets/js/frontend/payoneer-checkout.js:449
+#: assets/js/frontend/payoneer-checkout.js:729
+#: assets/js/payment-methods/index.js:408
+#: assets/js/payment-methods/index.js:554
+#: assets/js/payment-methods/index.js:834
+#: assets/js/payment-methods/index.js:967
+msgid "A payment processing error occurred. Please try again."
+msgstr ""
+
+#: assets/js/frontend/payoneer-checkout.js:369
+#: assets/js/payment-methods/index.js:474
+msgid "This order has already been paid. Redirecting…"
+msgstr ""
+
+#: assets/js/frontend/payoneer-checkout.js:435
+#: assets/js/payment-methods/index.js:540
+msgid "Payment was declined. Please try a different payment method."
+msgstr ""
+
+#: assets/js/frontend/payoneer-checkout.js:442
+#: assets/js/payment-methods/index.js:547
+msgid "Payment failed. Please try again."
+msgstr ""
+
+#: assets/js/frontend/payoneer-checkout.js:589
+#: assets/js/payment-methods/index.js:694
+msgid "Your checkout session has expired. Please refresh the page and try again."
+msgstr ""

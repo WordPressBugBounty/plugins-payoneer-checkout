@@ -1,6 +1,16 @@
 == Changelog ==
 
-= [next-version] - yyyy-mm-dd =
+= [4.0.0] - 2026-10-28 =
+* Changed:
+    * Refactored plugin code base.
+    * Rebranded settings interface.
+
+* Added:
+    * Export Logs feature.
+
+* Compatibility:
+    * Tested up to WP 7.1.
+    * Tested up to WC 11.2.
 
 = [3.5.11] - 2026-09-28 =
 * Fixed:
