@@ -4,7 +4,7 @@ Tags: payment, woocommerce, checkout
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 4.0.0
+Stable tag: 4.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -59,7 +59,12 @@ Our global banking and payment networks stretch around the world so we can suppo
 
 == Changelog ==
 
-= [4.0.0] - 2026-10-28 =
+= [4.0.1] - 2026-11-16 =
+* Fixed:
+    * Incompatibility with sequential order numbers.
+    * Missing tax amount in embedded mode.
+
+= [4.0.0] - 2026-08-28 =
 * Changed:
     * Refactored plugin code base.
     * Rebranded settings interface.

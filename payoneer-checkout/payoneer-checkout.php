@@ -3,7 +3,7 @@
  * Plugin Name: Payoneer Checkout
  * Plugin URI:  https://wordpress.org/plugins/payoneer-checkout
  * Description: Payoneer Checkout for WooCommerce
- * Version:     4.0.0
+ * Version:     4.0.1
  * Author:      Payoneer
  * Author URI:  https://www.payoneer.com/
  * Requires Plugins: woocommerce
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define constants.
-const VERSION     = '4.0.0';
+const VERSION     = '4.0.1';
 const PLUGIN_FILE = __FILE__;
 
 

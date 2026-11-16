@@ -115,7 +115,7 @@ final class PayloadHelper {
 		return array(
 			'country'  => $country,
 			'customer' => self::build_customer_payload( $order ),
-			'payment'  => self::build_payment_from_order( $order, $integration ),
+			'payment'  => self::build_payment_from_order( $order ),
 			'products' => self::build_products_from_order( $order, $integration ),
 			'callback' => self::build_callbacks_from_order( $order, $security_token ),
 			'system'   => self::build_system(),
@@ -346,12 +346,16 @@ final class PayloadHelper {
 	 * @return array
 	 */
 	private static function build_payment_from_cart() {
-		$cart = WC()->cart;
+		$cart  = WC()->cart;
+		$total = self::normalize_amount( $cart->get_total( false ) );
+		$tax   = self::normalize_amount( $cart->get_total_tax() );
 
 		return array(
 			'reference' => wp_generate_uuid4(),
-			'amount'    => self::normalize_amount( $cart->get_total( false ) ),
+			'amount'    => $total,
 			'currency'  => get_woocommerce_currency(),
+			'taxAmount' => $tax,
+			'netAmount' => self::normalize_amount( $total - $tax ),
 		);
 	}
 
@@ -359,28 +363,22 @@ final class PayloadHelper {
 	/**
 	 * Build payment data from a WC order.
 	 *
-	 * @param \WC_Order $order       The order.
-	 * @param string    $integration Integration type.
+	 * @param \WC_Order $order The order.
 	 *
 	 * @return array
 	 */
-	private static function build_payment_from_order( $order, $integration = 'HOSTED' ) {
+	private static function build_payment_from_order( $order ) {
 		$total = self::normalize_amount( $order->get_total() );
+		$tax   = self::normalize_amount( $order->get_total_tax() );
 
-		$payment = array(
-			'invoiceId' => $order->get_id(),
+		return array(
+			'invoiceId' => (string) $order->get_order_number(),
 			'reference' => $order->get_order_number(),
 			'amount'    => $total,
 			'currency'  => $order->get_currency(),
+			'taxAmount' => $tax,
+			'netAmount' => self::normalize_amount( $total - $tax ),
 		);
-
-		if ( 'HOSTED' === $integration ) {
-			$tax                  = self::normalize_amount( $order->get_total_tax() );
-			$payment['taxAmount'] = $tax;
-			$payment['netAmount'] = self::normalize_amount( $total - $tax );
-		}
-
-		return $payment;
 	}
 
 
@@ -399,47 +397,60 @@ final class PayloadHelper {
 			$net        = (float) $item['line_subtotal'];
 			$tax        = (float) $item['line_subtotal_tax'];
 			$products[] = array(
-				'code'     => (string) $product->get_id(),
-				'name'     => $product->get_name(),
-				'amount'   => self::normalize_amount( $net + $tax ),
-				'currency' => $currency,
-				'quantity' => $item['quantity'],
-				'type'     => $product->is_virtual() ? 'DIGITAL' : 'PHYSICAL',
+				'code'      => (string) $product->get_id(),
+				'name'      => $product->get_name(),
+				'amount'    => self::normalize_amount( $net + $tax ),
+				'currency'  => $currency,
+				'quantity'  => $item['quantity'],
+				'type'      => $product->is_virtual() ? 'DIGITAL' : 'PHYSICAL',
+				'taxAmount' => self::normalize_amount( $tax ),
+				'netAmount' => self::normalize_amount( $net ),
 			);
 		}
 
 		if ( $cart->get_shipping_total() > 0 ) {
+			$net        = (float) $cart->get_shipping_total();
+			$tax        = (float) $cart->get_shipping_tax();
 			$products[] = array(
-				'code'     => 'SHIPPING',
-				'name'     => __( 'Shipping', 'payoneer-checkout' ),
-				'amount'   => self::normalize_amount( (float) $cart->get_shipping_total() + (float) $cart->get_shipping_tax() ),
-				'currency' => $currency,
-				'quantity' => 1,
-				'type'     => 'SERVICE',
+				'code'      => 'SHIPPING',
+				'name'      => __( 'Shipping', 'payoneer-checkout' ),
+				'amount'    => self::normalize_amount( $net + $tax ),
+				'currency'  => $currency,
+				'quantity'  => 1,
+				'type'      => 'SERVICE',
+				'taxAmount' => self::normalize_amount( $tax ),
+				'netAmount' => self::normalize_amount( $net ),
 			);
 		}
 
 		foreach ( (array) $cart->get_fees() as $fee ) {
+			$net        = (float) $fee->total;
+			$tax        = (float) $fee->tax;
 			$products[] = array(
-				'code'     => 'FEE',
-				'name'     => $fee->name,
-				'amount'   => self::normalize_amount( (float) $fee->total + (float) $fee->tax ),
-				'currency' => $currency,
-				'quantity' => 1,
-				'type'     => 'OTHER',
+				'code'      => 'FEE',
+				'name'      => $fee->name,
+				'amount'    => self::normalize_amount( $net + $tax ),
+				'currency'  => $currency,
+				'quantity'  => 1,
+				'type'      => 'OTHER',
+				'taxAmount' => self::normalize_amount( $tax ),
+				'netAmount' => self::normalize_amount( $net ),
 			);
 		}
 
-		$discount_sum = (float) $cart->get_discount_total() + (float) $cart->get_discount_tax();
+		$net = (float) $cart->get_discount_total();
+		$tax = (float) $cart->get_discount_tax();
 
-		if ( $discount_sum > 0 ) {
+		if ( $net + $tax > 0 ) {
 			$products[] = array(
-				'code'     => 'DISCOUNT',
-				'name'     => __( 'Discount', 'payoneer-checkout' ),
-				'amount'   => self::normalize_amount( -1 * $discount_sum ),
-				'currency' => $currency,
-				'quantity' => 1,
-				'type'     => 'DISCOUNT',
+				'code'      => 'DISCOUNT',
+				'name'      => __( 'Discount', 'payoneer-checkout' ),
+				'amount'    => self::normalize_amount( -1 * ( $net + $tax ) ),
+				'currency'  => $currency,
+				'quantity'  => 1,
+				'type'      => 'DISCOUNT',
+				'taxAmount' => self::normalize_amount( -1 * $tax ),
+				'netAmount' => self::normalize_amount( -1 * $net ),
 			);
 		}
 
@@ -511,25 +522,22 @@ final class PayloadHelper {
 			}
 
 			$entry = array(
-				'code'     => $code,
-				'name'     => $item->get_name(),
-				'amount'   => self::normalize_amount( $net + $tax ),
-				'currency' => $currency,
-				'quantity' => $qty,
-				'type'     => $type,
+				'code'      => $code,
+				'name'      => $item->get_name(),
+				'amount'    => self::normalize_amount( $net + $tax ),
+				'currency'  => $currency,
+				'quantity'  => $qty,
+				'type'      => $type,
+				'taxAmount' => self::normalize_amount( $tax ),
+				'netAmount' => self::normalize_amount( $net ),
 			);
 
-			if ( $is_hosted ) {
-				$entry['taxAmount'] = self::normalize_amount( $tax );
-				$entry['netAmount'] = self::normalize_amount( $net );
-
-				if ( $product ) {
-					$image_id                       = $product->get_image_id();
-					$short                          = trim( wp_strip_all_tags( (string) $product->get_short_description() ) );
-					$entry['productDescriptionUrl'] = $product->get_permalink();
-					$entry['productImageUrl']       = $image_id ? wp_get_attachment_url( $image_id ) : null;
-					$entry['description']           = '' === $short ? null : $short;
-				}
+			if ( $is_hosted && $product ) {
+				$image_id                       = $product->get_image_id();
+				$short                          = trim( wp_strip_all_tags( (string) $product->get_short_description() ) );
+				$entry['productDescriptionUrl'] = $product->get_permalink();
+				$entry['productImageUrl']       = $image_id ? wp_get_attachment_url( $image_id ) : null;
+				$entry['description']           = '' === $short ? null : $short;
 			}
 
 			$products[] = $entry;
@@ -585,6 +593,13 @@ final class PayloadHelper {
 
 		$callbacks['returnUrl'] = $gateway ? $gateway->get_return_url( $order ) : $order->get_checkout_order_received_url();
 		$callbacks['cancelUrl'] = $order->get_checkout_payment_url();
+
+		if ( isset( $callbacks['notificationHeaders'] ) ) {
+			$callbacks['notificationHeaders'][] = array(
+				'name'  => 'Payoneer-Order-ID',
+				'value' => (string) $order->get_id(),
+			);
+		}
 
 		return $callbacks;
 	}

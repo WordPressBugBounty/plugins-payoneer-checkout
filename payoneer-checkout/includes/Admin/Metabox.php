@@ -190,7 +190,7 @@ final class Metabox {
 
 		if ( ! $gateway ) {
 			$this->plugin->logger()->log(
-				sprintf( 'Gateway unavailable; cannot apply LIST status for order #%d', $order->get_id() ),
+				sprintf( 'Gateway unavailable; cannot apply LIST status for order #%s', $order->get_order_number() ),
 				'error'
 			);
 			return;

@@ -80,7 +80,7 @@ final class WebhookHandler {
 			);
 		}
 
-		$order = $this->get_order( $data );
+		$order = $this->get_order( $data, $request );
 
 		if ( ! $order ) {
 			Plugin::instance()->logger()->log(
@@ -94,7 +94,7 @@ final class WebhookHandler {
 
 		if ( empty( $expected_token ) ) {
 			Plugin::instance()->logger()->log(
-				sprintf( 'Webhook for order #%d has no _payoneer_security_header_value on the order', $order->get_id() ),
+				sprintf( 'Webhook for order #%s has no _payoneer_security_header_value on the order', $order->get_order_number() ),
 				'error'
 			);
 			return new WP_REST_Response( array( 'status' => 'security_header_missing' ), 410 );
@@ -104,7 +104,7 @@ final class WebhookHandler {
 
 		if ( empty( $token_header ) || ! hash_equals( $expected_token, $token_header ) ) {
 			Plugin::instance()->logger()->log(
-				sprintf( 'Webhook auth failed for order #%d (token mismatch)', $order->get_id() ),
+				sprintf( 'Webhook auth failed for order #%s (token mismatch)', $order->get_order_number() ),
 				'error'
 			);
 			return new WP_REST_Response( array( 'status' => 'auth_failed' ), 401 );
@@ -126,12 +126,11 @@ final class WebhookHandler {
 			return new WP_REST_Response( array( 'status' => 'already_processed' ), 200 );
 		}
 
-		$order_id = $order->get_id();
-		$gateway  = Plugin::instance()->gateway();
+		$gateway = Plugin::instance()->gateway();
 
 		if ( ! $gateway ) {
 			Plugin::instance()->logger()->log(
-				sprintf( 'Gateway unavailable; cannot process webhook for order #%d', $order_id ),
+				sprintf( 'Gateway unavailable; cannot process webhook for order #%s', $order->get_order_number() ),
 				'error'
 			);
 			delete_transient( $dedup_key );
@@ -139,7 +138,7 @@ final class WebhookHandler {
 		}
 
 		Plugin::instance()->logger()->log(
-			$this->build_received_log_line( $order_id, $notification_id, $entity, $data ),
+			$this->build_received_log_line( $order->get_order_number(), $notification_id, $entity, $data ),
 			'debug'
 		);
 
@@ -152,7 +151,7 @@ final class WebhookHandler {
 			$order->save();
 		} catch ( \Exception $e ) {
 			Plugin::instance()->logger()->log(
-				sprintf( 'Webhook processing failed for order #%d: %s', $order_id, $e->getMessage() ),
+				sprintf( 'Webhook processing failed for order #%s: %s', $order->get_order_number(), $e->getMessage() ),
 				'error'
 			);
 			delete_transient( $dedup_key );
@@ -167,14 +166,14 @@ final class WebhookHandler {
 	/**
 	 * Build the structured "Webhook received" log line.
 	 *
-	 * @param int    $order_id        Resolved WC order id.
+	 * @param string $order_number    WC order number.
 	 * @param string $notification_id Payoneer notificationId.
 	 * @param string $entity          Webhook entity (already sanitized).
 	 * @param array  $data            Webhook payload.
 	 *
 	 * @return string
 	 */
-	private function build_received_log_line( $order_id, $notification_id, $entity, $data ) {
+	private function build_received_log_line( $order_number, $notification_id, $entity, $data ) {
 		$fields = array(
 			'notificationId'     => $notification_id,
 			'longId'             => sanitize_text_field( $data['longId'] ?? '' ),
@@ -204,7 +203,7 @@ final class WebhookHandler {
 			$parts[] = $key . '=' . ( false === strpos( $value, ' ' ) ? $value : '"' . $value . '"' );
 		}
 
-		return sprintf( 'Webhook received for order #%d [%s]', $order_id, implode( ', ', $parts ) );
+		return sprintf( 'Webhook received for order #%s [%s]', $order_number, implode( ', ', $parts ) );
 	}
 
 
@@ -263,37 +262,48 @@ final class WebhookHandler {
 	/**
 	 * Resolve the WooCommerce order from a webhook payload.
 	 *
-	 * @param array $data Webhook payload.
+	 * @param array           $data    Webhook payload.
+	 * @param WP_REST_Request $request Incoming request.
 	 *
 	 * @return \WC_Order|null
 	 */
-	private function get_order( $data ) {
+	private function get_order( $data, $request ) {
 		$order = $this->get_order_by_meta_lookup( $data );
 		if ( $order ) {
 			return $order;
 		}
 
-		return $this->get_order_by_reference( $data );
+		return $this->get_order_by_reference( $data, $request );
 	}
 
 
 	/**
-	 * Resolve the order via the payload reference (order number); the security token authenticates.
+	 * Resolve the order via the Payoneer-Order-ID header or the order number.
 	 *
-	 * @param array $data Webhook payload.
+	 * @param array           $data    Webhook payload.
+	 * @param WP_REST_Request $request Incoming request.
 	 *
 	 * @return \WC_Order|null
 	 */
-	private function get_order_by_reference( $data ) {
-		$reference = sanitize_text_field( $data['payment']['reference'] ?? ( $data['reference'] ?? '' ) );
+	private function get_order_by_reference( $data, $request ) {
+		$order = wc_get_order( absint( $request->get_header( 'Payoneer-Order-ID' ) ) );
+		if ( $order instanceof \WC_Order ) {
+			return $order;
+		}
 
+		$reference = sanitize_text_field( $data['payment']['reference'] ?? ( $data['reference'] ?? '' ) );
 		if ( '' === $reference ) {
 			return null;
 		}
 
 		$order = wc_get_order( absint( $reference ) );
+		if ( $order instanceof \WC_Order && (string) $order->get_order_number() === $reference ) {
+			return $order;
+		}
 
-		return $order instanceof \WC_Order ? $order : null;
+		$order = $this->find_order_by_meta( array( '_order_number' ), $reference );
+
+		return $order ?? null;
 	}
 
 

@@ -1,5 +1,10 @@
 == Changelog ==
 
+= [4.0.1] - 2026-11-16 =
+* Fixed:
+    * Incompatibility with sequential order numbers.
+    * Missing tax amount in embedded mode.
+
 = [4.0.0] - 2026-10-28 =
 * Changed:
     * Refactored plugin code base.

@@ -927,8 +927,6 @@ final class Plugin {
 			return false;
 		}
 
-		$pending_order_id = $order->get_id();
-
 		$response = self::fetch_list_state( $order_long_id );
 		if ( empty( $response ) || empty( $response['success'] ) ) {
 			return false;
@@ -949,9 +947,9 @@ final class Plugin {
 
 		$this->logger()->log(
 			sprintf(
-				'Detected in-flight LIST %s for order #%d (state: %s). Detaching the session order markers so checkout creates a new order; the original order is left pending for the webhook.',
+				'Detected in-flight LIST %s for order #%s (state: %s). Detaching the session order markers so checkout creates a new order; the original order is left pending for the webhook.',
 				$order_long_id,
-				$pending_order_id,
+				$order->get_order_number(),
 				$status_code
 			),
 			'warning'
@@ -1437,7 +1435,7 @@ final class Plugin {
 		$long_id = $order->get_meta( '_payoneer-long-id', true );
 		if ( empty( $long_id ) ) {
 			self::instance()->logger()->log(
-				sprintf( 'Order #%d had _payoneer_awaiting_webhook set but no _payoneer-long-id; clearing flag for retry', $order->get_id() ),
+				sprintf( 'Order #%s had _payoneer_awaiting_webhook set but no _payoneer-long-id; clearing flag for retry', $order->get_order_number() ),
 				'error'
 			);
 			OrderHelper::clear_awaiting_webhook_flag( $order );

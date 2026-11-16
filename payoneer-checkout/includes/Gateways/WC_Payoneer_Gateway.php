@@ -641,9 +641,9 @@ final class WC_Payoneer_Gateway extends WC_Payment_Gateway_CC {
 			if ( ! empty( $redirect_url ) ) {
 				Plugin::instance()->logger()->log(
 					sprintf(
-						'Resuming hosted LIST %s for order #%d (state: %s) instead of minting a new one.',
+						'Resuming hosted LIST %s for order #%s (state: %s) instead of minting a new one.',
 						$existing_long_id,
-						$order->get_id(),
+						$order->get_order_number(),
 						$status_code
 					)
 				);
@@ -656,8 +656,8 @@ final class WC_Payoneer_Gateway extends WC_Payment_Gateway_CC {
 
 			Plugin::instance()->logger()->log(
 				sprintf(
-					'Refusing parallel hosted payment for order #%d: LIST %s is in non-terminal state "%s" with no resumable redirect URL.',
-					$order->get_id(),
+					'Refusing parallel hosted payment for order #%s: LIST %s is in non-terminal state "%s" with no resumable redirect URL.',
+					$order->get_order_number(),
 					$existing_long_id,
 					$status_code
 				),
@@ -683,9 +683,9 @@ final class WC_Payoneer_Gateway extends WC_Payment_Gateway_CC {
 
 			Plugin::instance()->logger()->log(
 				sprintf(
-					'Allowing retry on LIST %s for order #%d after payment lock expired (state: %s).',
+					'Allowing retry on LIST %s for order #%s after payment lock expired (state: %s).',
 					$existing_long_id,
-					$order->get_id(),
+					$order->get_order_number(),
 					$status_code
 				),
 				'warning'
@@ -698,8 +698,8 @@ final class WC_Payoneer_Gateway extends WC_Payment_Gateway_CC {
 
 		Plugin::instance()->logger()->log(
 			sprintf(
-				'Refusing parallel payment attempt for order #%d: LIST %s is in non-terminal state "%s".',
-				$order->get_id(),
+				'Refusing parallel payment attempt for order #%s: LIST %s is in non-terminal state "%s".',
+				$order->get_order_number(),
 				$existing_long_id,
 				$status_code
 			),
@@ -777,6 +777,7 @@ final class WC_Payoneer_Gateway extends WC_Payment_Gateway_CC {
 			$payload = array(
 				'transactionId' => $pending_txn_id,
 				'payment'       => array(
+					'invoiceId' => (string) $order->get_order_number(),
 					'reference' => $order->get_order_number(),
 					'amount'    => (float) $amount,
 					'currency'  => $currency,
@@ -1022,7 +1023,7 @@ final class WC_Payoneer_Gateway extends WC_Payment_Gateway_CC {
 				}
 				if ( $list_expires_at && time() >= $list_expires_at ) {
 					$this->plugin->logger()->log(
-						sprintf( 'LIST %s for order #%d returned ABORT on update after the session expired; treating as expired session.', $long_id, $order->get_id() ),
+						sprintf( 'LIST %s for order #%s returned ABORT on update after the session expired; treating as expired session.', $long_id, $order->get_order_number() ),
 						'info'
 					);
 					return $this->session_expired_failure( $this->plugin->reset_session() );
@@ -1030,9 +1031,9 @@ final class WC_Payoneer_Gateway extends WC_Payment_Gateway_CC {
 
 				$this->plugin->logger()->log(
 					sprintf(
-						'LIST %s for order #%d returned ABORT on update (likely pending/functioning at Payoneer). Keeping the LIST intact and refusing the parallel attempt so it can settle.',
+						'LIST %s for order #%s returned ABORT on update (likely pending/functioning at Payoneer). Keeping the LIST intact and refusing the parallel attempt so it can settle.',
 						$long_id,
-						$order->get_id()
+						$order->get_order_number()
 					),
 					'warning'
 				);
@@ -1042,7 +1043,7 @@ final class WC_Payoneer_Gateway extends WC_Payment_Gateway_CC {
 
 			if ( 'RELOAD' === $interaction_code ) {
 				$this->plugin->logger()->log(
-					sprintf( 'LIST update for order #%d returned RELOAD interaction (LIST is busy). Surfacing failure to the customer without resetting the session.', $order->get_id() ),
+					sprintf( 'LIST update for order #%s returned RELOAD interaction (LIST is busy). Surfacing failure to the customer without resetting the session.', $order->get_order_number() ),
 					'info'
 				);
 				wc_add_notice( __( 'A payment for this order is already in progress. Please wait for it to complete, or contact support if the issue persists.', 'payoneer-checkout' ), 'error' );
@@ -1275,8 +1276,8 @@ final class WC_Payoneer_Gateway extends WC_Payment_Gateway_CC {
 
 		Plugin::instance()->logger()->log(
 			sprintf(
-				'Recovered LIST session from order #%d [longId=%s]',
-				$draft_order->get_id(),
+				'Recovered LIST session from order #%s [longId=%s]',
+				$draft_order->get_order_number(),
 				$draft_long_id
 			)
 		);
@@ -1380,8 +1381,8 @@ final class WC_Payoneer_Gateway extends WC_Payment_Gateway_CC {
 		if ( $this->is_parent_charge_refund_event( $order, $incoming_long, $reason_code ) ) {
 			$this->plugin->logger()->log(
 				sprintf(
-					'Parent-charge refund event for order #%d ignored [reasonCode=%s, longId=%s]',
-					$order->get_id(),
+					'Parent-charge refund event for order #%s ignored [reasonCode=%s, longId=%s]',
+					$order->get_order_number(),
 					$reason_code,
 					$incoming_long
 				),
@@ -1475,7 +1476,7 @@ final class WC_Payoneer_Gateway extends WC_Payment_Gateway_CC {
 
 		if ( $order->has_status( 'refunded' ) ) {
 			$this->plugin->logger()->log(
-				sprintf( 'Charge webhook for refunded order #%d ignored [longId=%s]', $order->get_id(), $incoming_long ),
+				sprintf( 'Charge webhook for refunded order #%s ignored [longId=%s]', $order->get_order_number(), $incoming_long ),
 				'warning'
 			);
 			return;
@@ -1485,8 +1486,8 @@ final class WC_Payoneer_Gateway extends WC_Payment_Gateway_CC {
 			$this->persist_charge_long_id( $order, $incoming_long );
 			$this->plugin->logger()->log(
 				sprintf(
-					'Charge webhook for already-paid order #%d skipped [reasonCode=%s, longId=%s]',
-					$order->get_id(),
+					'Charge webhook for already-paid order #%s skipped [reasonCode=%s, longId=%s]',
+					$order->get_order_number(),
 					$reason_code,
 					$incoming_long
 				),
@@ -1498,8 +1499,8 @@ final class WC_Payoneer_Gateway extends WC_Payment_Gateway_CC {
 		if ( $order->has_status( 'failed' ) ) {
 			$this->plugin->logger()->log(
 				sprintf(
-					'Out-of-order charged webhook arriving after failed status; order #%d upgraded to paid',
-					$order->get_id()
+					'Out-of-order charged webhook arriving after failed status; order #%s upgraded to paid',
+					$order->get_order_number()
 				),
 				'warning'
 			);
@@ -1567,7 +1568,7 @@ final class WC_Payoneer_Gateway extends WC_Payment_Gateway_CC {
 		$failed_history = (array) $order->get_meta( '_payoneer_failed_refund_long_ids', true );
 		if ( '' !== $long_id && in_array( $long_id, $failed_history, true ) ) {
 			$this->plugin->logger()->log(
-				sprintf( 'Refund webhook for order #%d ignored: longId %s previously force-deleted by handle_refund_failure', $order->get_id(), $long_id ),
+				sprintf( 'Refund webhook for order #%s ignored: longId %s previously force-deleted by handle_refund_failure', $order->get_order_number(), $long_id ),
 				'warning'
 			);
 			$order->add_order_note(
@@ -1586,8 +1587,8 @@ final class WC_Payoneer_Gateway extends WC_Payment_Gateway_CC {
 		if ( $amount <= 0 ) {
 			$this->plugin->logger()->log(
 				sprintf(
-					'Merchant-portal refund webhook for order #%d skipped: missing or invalid amount',
-					$order->get_id()
+					'Merchant-portal refund webhook for order #%s skipped: missing or invalid amount',
+					$order->get_order_number()
 				),
 				'warning'
 			);
@@ -1605,8 +1606,8 @@ final class WC_Payoneer_Gateway extends WC_Payment_Gateway_CC {
 		if ( is_wp_error( $new_refund ) ) {
 			$this->plugin->logger()->log(
 				sprintf(
-					'Failed to create WC refund for merchant-initiated Payoneer refund on order #%d: %s',
-					$order->get_id(),
+					'Failed to create WC refund for merchant-initiated Payoneer refund on order #%s: %s',
+					$order->get_order_number(),
 					$new_refund->get_error_message()
 				),
 				'error'
@@ -1740,7 +1741,7 @@ final class WC_Payoneer_Gateway extends WC_Payment_Gateway_CC {
 	private function handle_preauthorized_webhook( $order, $data ) {
 		if ( $order->has_status( 'refunded' ) ) {
 			$this->plugin->logger()->log(
-				sprintf( 'Preauthorized webhook for refunded order #%d ignored', $order->get_id() ),
+				sprintf( 'Preauthorized webhook for refunded order #%s ignored', $order->get_order_number() ),
 				'warning'
 			);
 			$order->add_order_note(
@@ -1758,7 +1759,7 @@ final class WC_Payoneer_Gateway extends WC_Payment_Gateway_CC {
 		if ( $order->is_paid() ) {
 			$this->persist_charge_long_id( $order, $long_id );
 			$this->plugin->logger()->log(
-				sprintf( 'Preauthorized webhook for already-paid order #%d ignored', $order->get_id() ),
+				sprintf( 'Preauthorized webhook for already-paid order #%s ignored', $order->get_order_number() ),
 				'info'
 			);
 			return;
@@ -1950,7 +1951,7 @@ final class WC_Payoneer_Gateway extends WC_Payment_Gateway_CC {
 		$this->clear_legacy_refund_intent( $order );
 		$order->save();
 		$this->plugin->logger()->log(
-			sprintf( 'Refund intent on order #%d references missing WC refund ID %d.', $order->get_id(), $refund_id ),
+			sprintf( 'Refund intent on order #%s references missing WC refund ID %d.', $order->get_order_number(), $refund_id ),
 			'error'
 		);
 	}

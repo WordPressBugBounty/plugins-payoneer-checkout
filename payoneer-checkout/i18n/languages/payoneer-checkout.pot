@@ -2,14 +2,14 @@
 # This file is distributed under the GPL-2.0+.
 msgid ""
 msgstr ""
-"Project-Id-Version: Payoneer Checkout 4.0.0\n"
+"Project-Id-Version: Payoneer Checkout 4.0.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/payoneer-checkout\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-28T07:09:48+00:00\n"
+"POT-Creation-Date: 2026-11-16T08:10:07+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: payoneer-checkout\n"
@@ -459,7 +459,7 @@ msgid "Payoneer - Credit / Debit cards"
 msgstr ""
 
 #: includes/Gateways/WC_Payoneer_Gateway.php:336
-#: includes/Plugin.php:1655
+#: includes/Plugin.php:1653
 msgid "Merchant Code and Payment Code are required."
 msgstr ""
 
@@ -468,8 +468,8 @@ msgid "Failed to validate API credentials. Please verify your credentials and sa
 msgstr ""
 
 #: includes/Gateways/WC_Payoneer_Gateway.php:552
-#: includes/Gateways/WC_Payoneer_Gateway.php:947
-#: includes/Gateways/WC_Payoneer_Gateway.php:1063
+#: includes/Gateways/WC_Payoneer_Gateway.php:948
+#: includes/Gateways/WC_Payoneer_Gateway.php:1064
 msgid "Payment pending confirmation from Payoneer."
 msgstr ""
 
@@ -479,8 +479,8 @@ msgstr ""
 
 #: includes/Gateways/WC_Payoneer_Gateway.php:668
 #: includes/Gateways/WC_Payoneer_Gateway.php:710
-#: includes/Gateways/WC_Payoneer_Gateway.php:1039
-#: includes/Gateways/WC_Payoneer_Gateway.php:1048
+#: includes/Gateways/WC_Payoneer_Gateway.php:1040
+#: includes/Gateways/WC_Payoneer_Gateway.php:1049
 msgid "A payment for this order is already in progress. Please wait for it to complete, or contact support if the issue persists."
 msgstr ""
 
@@ -500,104 +500,104 @@ msgstr ""
 msgid "Invalid refund amount."
 msgstr ""
 
-#: includes/Gateways/WC_Payoneer_Gateway.php:792
+#: includes/Gateways/WC_Payoneer_Gateway.php:793
 msgid "Refund request failed."
 msgstr ""
 
 #. translators: %s: refund amount
-#: includes/Gateways/WC_Payoneer_Gateway.php:802
+#: includes/Gateways/WC_Payoneer_Gateway.php:803
 #, php-format
 msgid "Refunded %s processed, pending confirmation from Payoneer."
 msgstr ""
 
 #. translators: %s: refund reason
-#: includes/Gateways/WC_Payoneer_Gateway.php:809
+#: includes/Gateways/WC_Payoneer_Gateway.php:810
 #, php-format
 msgid "Reason: %s"
 msgstr ""
 
-#: includes/Gateways/WC_Payoneer_Gateway.php:929
-#: includes/Gateways/WC_Payoneer_Gateway.php:940
-#: includes/Gateways/WC_Payoneer_Gateway.php:1053
+#: includes/Gateways/WC_Payoneer_Gateway.php:930
+#: includes/Gateways/WC_Payoneer_Gateway.php:941
+#: includes/Gateways/WC_Payoneer_Gateway.php:1054
 #: includes/Gateways/WC_Payoneer_Network_Gateway.php:225
 msgid "Payment processing failed. Please try again."
 msgstr ""
 
-#: includes/Gateways/WC_Payoneer_Gateway.php:1121
-#: includes/Gateways/WC_Payoneer_Gateway.php:1133
+#: includes/Gateways/WC_Payoneer_Gateway.php:1122
+#: includes/Gateways/WC_Payoneer_Gateway.php:1134
 #: assets/js/frontend/payoneer-checkout.js:456
 #: assets/js/payment-methods/index.js:561
 msgid "Payment session expired. Please try again."
 msgstr ""
 
-#: includes/Gateways/WC_Payoneer_Gateway.php:1430
+#: includes/Gateways/WC_Payoneer_Gateway.php:1431
 msgid "Payoneer payment charged back."
 msgstr ""
 
 #. translators: %s: transaction ID
-#: includes/Gateways/WC_Payoneer_Gateway.php:1449
+#: includes/Gateways/WC_Payoneer_Gateway.php:1450
 #, php-format
 msgid "Transaction ID: %s"
 msgstr ""
 
 #. translators: %s: payment network name
-#: includes/Gateways/WC_Payoneer_Gateway.php:1454
+#: includes/Gateways/WC_Payoneer_Gateway.php:1455
 #, php-format
 msgid "Network: %s"
 msgstr ""
 
-#: includes/Gateways/WC_Payoneer_Gateway.php:1512
+#: includes/Gateways/WC_Payoneer_Gateway.php:1513
 msgid "Payoneer payment complete."
 msgstr ""
 
 #. translators: %s: refund amount
-#: includes/Gateways/WC_Payoneer_Gateway.php:1548
+#: includes/Gateways/WC_Payoneer_Gateway.php:1549
 #, php-format
 msgid "Refunded %s confirmed."
 msgstr ""
 
-#: includes/Gateways/WC_Payoneer_Gateway.php:1559
+#: includes/Gateways/WC_Payoneer_Gateway.php:1560
 msgid "Payoneer refund webhook received but order is already fully refunded; no WC refund created."
 msgstr ""
 
-#: includes/Gateways/WC_Payoneer_Gateway.php:1575
+#: includes/Gateways/WC_Payoneer_Gateway.php:1576
 msgid "Payoneer refund webhook ignored: this refund had previously failed and been removed. No duplicate refund created."
 msgstr ""
 
-#: includes/Gateways/WC_Payoneer_Gateway.php:1629
+#: includes/Gateways/WC_Payoneer_Gateway.php:1630
 msgid "Payoneer refund received from merchant portal."
 msgstr ""
 
-#: includes/Gateways/WC_Payoneer_Gateway.php:1678
-#: includes/Gateways/WC_Payoneer_Gateway.php:1890
+#: includes/Gateways/WC_Payoneer_Gateway.php:1679
+#: includes/Gateways/WC_Payoneer_Gateway.php:1891
 msgid "Payoneer refund failed. The refund has been reversed."
 msgstr ""
 
-#: includes/Gateways/WC_Payoneer_Gateway.php:1681
+#: includes/Gateways/WC_Payoneer_Gateway.php:1682
 msgid "Order status restored after refund failure."
 msgstr ""
 
-#: includes/Gateways/WC_Payoneer_Gateway.php:1706
+#: includes/Gateways/WC_Payoneer_Gateway.php:1707
 msgid "Payoneer payment failed."
 msgstr ""
 
-#: includes/Gateways/WC_Payoneer_Gateway.php:1715
+#: includes/Gateways/WC_Payoneer_Gateway.php:1716
 msgid "(Ignored: order is already fully refunded.)"
 msgstr ""
 
-#: includes/Gateways/WC_Payoneer_Gateway.php:1723
+#: includes/Gateways/WC_Payoneer_Gateway.php:1724
 msgid "(Ignored: order already completed.)"
 msgstr ""
 
-#: includes/Gateways/WC_Payoneer_Gateway.php:1748
+#: includes/Gateways/WC_Payoneer_Gateway.php:1749
 msgid "Payoneer preauthorized webhook ignored: order is already fully refunded."
 msgstr ""
 
-#: includes/Gateways/WC_Payoneer_Gateway.php:1769
+#: includes/Gateways/WC_Payoneer_Gateway.php:1770
 msgid "Payoneer payment preauthorized."
 msgstr ""
 
-#: includes/Gateways/WC_Payoneer_Gateway.php:1855
+#: includes/Gateways/WC_Payoneer_Gateway.php:1856
 msgid "Payoneer refund confirmed."
 msgstr ""
 
@@ -646,77 +646,77 @@ msgstr ""
 msgid "Payoneer Checkout requires a minimum WooCommerce version of %s."
 msgstr ""
 
-#: includes/Payment/PayloadHelper.php:414
+#: includes/Payment/PayloadHelper.php:416
 msgid "Shipping"
 msgstr ""
 
-#: includes/Payment/PayloadHelper.php:438
+#: includes/Payment/PayloadHelper.php:447
 msgid "Discount"
 msgstr ""
 
-#: includes/Plugin.php:983
+#: includes/Plugin.php:981
 msgid "A parallel payment attempt was detected while this order had a payment already in progress. A new order is being created for the new attempt; this order is left pending and may still be completed by an incoming webhook."
 msgstr ""
 
-#: includes/Plugin.php:1278
+#: includes/Plugin.php:1276
 msgid "Customer returned from Payoneer hosted page with interactionCode=PROCEED after a prior declined attempt; holding for webhook confirmation."
 msgstr ""
 
 #. translators: 1: interaction code, 2: interaction reason
-#: includes/Plugin.php:1305
+#: includes/Plugin.php:1303
 #, php-format
 msgid "Customer returned from Payoneer hosted page (interactionCode=%1$s, interactionReason=%2$s)."
 msgstr ""
 
-#: includes/Plugin.php:1328
+#: includes/Plugin.php:1326
 msgid "Payment was not completed. Please try again."
 msgstr ""
 
-#: includes/Plugin.php:1330
+#: includes/Plugin.php:1328
 #: assets/js/frontend/payoneer-checkout.js:429
 #: assets/js/payment-methods/index.js:534
 msgid "Payment was cancelled. Please try again or choose a different payment method."
 msgstr ""
 
-#: includes/Plugin.php:1332
+#: includes/Plugin.php:1330
 msgid "Payment was cancelled or could not be completed. Please choose a different payment method or contact support."
 msgstr ""
 
-#: includes/Plugin.php:1334
+#: includes/Plugin.php:1332
 msgid "Payment was not completed or failed. Please try again or choose a different payment method."
 msgstr ""
 
 #. translators: %d: minutes until the customer can retry the payment.
-#: includes/Plugin.php:1387
+#: includes/Plugin.php:1385
 #, php-format
 msgid "A payment process is in progress for this order, you can retry in %d minute."
 msgid_plural "A payment process is in progress for this order, you can retry in %d minutes."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/Plugin.php:1445
+#: includes/Plugin.php:1443
 msgid "Cleared awaiting webhook flag: order was awaiting confirmation but no LIST longId was stored. Order is now retryable."
 msgstr ""
 
-#: includes/Plugin.php:1465
+#: includes/Plugin.php:1463
 msgid "Cleared awaiting webhook flag: Payoneer reports the stored LIST does not exist. Order is now retryable."
 msgstr ""
 
-#: includes/Plugin.php:1482
+#: includes/Plugin.php:1480
 msgid "Cleared awaiting webhook flag: payment charge was never initiated (LIST still in \"listed\" status). Order is now retryable."
 msgstr ""
 
 #. translators: %s: terminal LIST status code reported by Payoneer.
-#: includes/Plugin.php:1493
+#: includes/Plugin.php:1491
 #, php-format
 msgid "Cleared awaiting webhook flag: Payoneer reports the LIST as \"%s\". Order is now retryable."
 msgstr ""
 
-#: includes/Plugin.php:1645
+#: includes/Plugin.php:1643
 msgid "Permission denied."
 msgstr ""
 
-#: includes/Plugin.php:1707
+#: includes/Plugin.php:1705
 #: assets/js/admin/payoneer-checkout-admin.js:167
 #: assets/js/admin/payoneer-checkout-admin.js:171
 msgid "Invalid credentials. Please check your Merchant Code and Payment Code."
